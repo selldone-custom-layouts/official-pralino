@@ -13,65 +13,67 @@
   -->
 
 <!--
-  Bakini Noir — the address book (bakio-design/addresses-b.html): each
-  saved address as the mockup's card (its name in the serif with an icon,
-  who receives it, the address in lines, the phone; Edit and Delete —
-  Delete asks once, in the card), and the dashed "Add an address" card.
-  Add and Edit open Kalio's address sheet (KalioAddressSheet, `titled`,
-  dressed like map-b), the same fields as the checkout's: the name of the
-  address, the map with its pin when the shop uses maps, every field,
-  saved in one step. Selldone keeps no "default" address, so none is shown.
+  Domino — the address book (domino-design/addresses-b.html): "Address
+  book" with "Add an address", then each saved address as the mockup's row
+  (the pin, its name — or who receives it — the address on one line, the
+  phone; Edit and Remove, Remove asks once in the row). No address yet: the
+  mockup's empty card. Add and Edit open the address sheet (KalioAddressSheet,
+  `titled`): the same fields as the checkout's, the map with its pin when
+  the shop uses maps ("Find on the map"), typed in when it does not; saved
+  in one step. Selldone keeps no "default" address, so none is marked.
 -->
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <div class="nx-abook">
-    <div v-if="busy && !loaded" aria-busy="true" class="ab-grid">
-      <div class="gcard ab-card nx-abook__wait"></div>
+<template>
+  <div class="acc-p dm-abook">
+    <div class="ab-hd">
+      <h2 class="h3x">{{ t("domino.acc.book", "Address book") }}</h2>
+      <button class="btn sm soft" type="button" @click="showAdd"><dm-icon name="plus" />{{ t("domino.acc.addAddress", "Add an address") }}</button>
     </div>
-    <div v-else class="ab-grid">
-      <div v-for="address in addresses" :key="address.id" class="gcard ab-card">
-        <div class="ab-top">
-          <span class="dm-ic"><nx-icon :name="iconOf(address)" /></span><b>{{ address.title || t("bakini.n.acc.addressUntitled", "Address") }}</b>
+    <div v-if="busy && !loaded" :aria-label="t('domino.acc.loadingBook', 'Loading your addresses')" class="dm-od-load" role="status"><span class="dm-od-sk -row"></span></div>
+    <ul v-else class="abl">
+      <li v-for="address in addresses" :key="address.id" class="ab">
+        <span class="mc-ic"><dm-icon :name="iconOf(address)" /></span>
+        <div class="ab-tx">
+          <b>{{ address.title || address.name || t("domino.acc.address", "Address") }}</b>
+          <p v-if="address.title && address.name">{{ address.name }}</p>
+          <p>{{ linesOf(address).join(", ") }}</p>
+          <p v-if="address.phone">{{ address.phone }}</p>
+          <p v-if="address.message" class="dm-od-note">“{{ address.message }}”</p>
         </div>
-        <p>
-          <b v-if="address.name">{{ address.name }}</b
-          ><template v-for="(line, i) in linesOf(address)" :key="i"><br v-if="i || address.name" />{{ line }}</template>
-        </p>
-        <p v-if="address.phone" class="muted">{{ address.phone }}</p>
-        <p v-if="address.message" class="muted nx-abook__note">“{{ address.message }}”</p>
-        <div class="ab-acts">
+        <div class="ab-a">
           <template v-if="confirming === address.id">
-            <span class="nx-abook__ask">{{ t("bakini.n.acc.deleteAsk", "Delete this address?") }}</span>
-            <button :disabled="busy_delete" class="btn sm nx-abook__del" type="button" @click="remove(address)">{{ t("bakini.n.acc.delete", "Delete") }}</button>
-            <button class="btn ghost sm" type="button" @click="confirming = null">{{ t("bakini.n.acc.keep", "Keep") }}</button>
+            <span class="dm-ab-ask">{{ t("domino.acc.deleteAsk", "Remove this address?") }}</span>
+            <button :aria-disabled="busy_delete ? 'true' : undefined" class="qlink dm-danger" type="button" @click="busy_delete || remove(address)">{{ t("domino.acc.remove", "Remove") }}</button>
+            <button class="qlink" type="button" @click="confirming = null">{{ t("domino.acc.keep", "Keep") }}</button>
           </template>
           <template v-else>
-            <button class="btn ghost sm" type="button" @click="showEdit(address)"><nx-icon name="edit" />{{ t("bakini.n.acc.edit", "Edit") }}</button>
+            <button class="qlink" type="button" @click="showEdit(address)"><dm-icon name="edit" />{{ t("domino.acc.edit", "Edit") }}</button>
             <button
-              :aria-label="address.title ? t('bakini.n.acc.deleteNamed', 'Delete {name}', { name: address.title }) : t('bakini.n.acc.deleteThis', 'Delete this address')"
-              class="btn quiet sm"
+              :aria-label="address.title ? t('domino.acc.removeNamed', 'Remove {name}', { name: address.title }) : t('domino.acc.removeThis', 'Remove this address')"
+              class="qlink"
               type="button"
               @click="confirming = address.id"
             >
-              <nx-icon name="trash" />
+              <dm-icon name="trash" />{{ t("domino.acc.remove", "Remove") }}
             </button>
           </template>
         </div>
-      </div>
-
-      <button class="ab-add" type="button" @click="showAdd">
-        <span class="ch-plus"><nx-icon name="plus" /></span>
-        <b>{{ t("bakini.n.acc.addAddress", "Add an address") }}</b>
-        <span class="muted">{{ noMap ? t("bakini.n.acc.addTyped", "Type it in, as at checkout") : t("bakini.n.acc.addMap", "Set it on the map or type it in") }}</span>
-      </button>
-    </div>
+      </li>
+      <li v-if="!addresses.length" class="ab-empty">
+        <dm-empty :text="t('domino.acc.noAddressP', 'Add an address once and choose it at checkout next time.')" :title="t('domino.acc.noAddressT', 'No saved addresses')" icon="pin">
+          <template #acts
+            ><button class="btn" type="button" @click="showAdd"><dm-icon name="plus" />{{ t("domino.acc.addAddress", "Add an address") }}</button></template
+          >
+        </dm-empty>
+      </li>
+    </ul>
 
     <kalio-address-sheet
       v-model="sheet"
       :busy="busy_save"
       :center="center"
       :countries="$shop?.countries?.length ? $shop.countries : null"
-      :heading="editing ? t('bakini.n.acc.editTitle', 'Edit address') : t('bakini.n.acc.addAddress', 'Add an address')"
-      :lede="t('bakini.n.acc.sameFields', 'Same fields as checkout')"
+      :heading="editing ? t('domino.acc.editAddress', 'Edit the address') : t('domino.acc.addAddress', 'Add an address')"
+      :lede="noMap ? t('domino.acc.sameFieldsTyped', 'The same fields as checkout.') : t('domino.acc.sameFields', 'Find it on the map or type it in, as at checkout.')"
       :no-map="noMap"
       :phone-required="false"
       :receiver-info="editing"
@@ -90,14 +92,15 @@ import { MapHelper } from "@selldone/core-js/helper";
 import { ShopOptionsHelper } from "@selldone/core-js/helper/shop/ShopOptionsHelper";
 import KalioAddressSheet from "@app-storefront/components/kalio/checkout/KalioAddressSheet.vue";
 import { t } from "../../../components/kalio/i18n/kalio-i18n";
-import NxIcon from "../../../components/bakini/noir/NxIcon.vue";
+import DmIcon from "../../../components/domino/DmIcon.vue";
+import DmEmpty from "../../../components/domino/ui/DmEmpty.vue";
 
 /* The fields an address keeps (Selldone's address book). */
 const FIELDS = ["country", "state", "state_code", "city", "address", "location", "no", "unit", "name", "phone", "message", "postal"];
 
 export default {
   name: "StorefrontUserAddresses",
-  components: { KalioAddressSheet, NxIcon },
+  components: { KalioAddressSheet, DmIcon, DmEmpty },
   inject: ["$shop"],
 
   data() {
@@ -133,7 +136,7 @@ export default {
 
   methods: {
     t,
-    /* Bakini Noir: the card's icon from the address's own name. */
+    /* The row's icon from the address's own name. */
     iconOf(address) {
       const title = (address.title || "").toLowerCase();
       if (/work|office|shop|store|studio/.test(title)) return "store";

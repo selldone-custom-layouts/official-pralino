@@ -115,7 +115,7 @@ export default ({mode}: any) => {
           darkTokens({
             darkSelector: "html.dm-dark",
             include: [/\/style\//, /\/StorefrontApp\.vue/, /\/components\//, /\/pages\//, /\/layouts\//],
-            exclude: [/\/node_modules\//, /\/modules\/pagebuilder\//, /\/theme-switcher\//, /\/style\/noir\//, /\/style\/bakini-noir[\w-]*\.scss/, /\/components\/bakini\/noir\//, /\/style\/domino\//, /\/style\/domino-[\w-]*\.scss/, /\/components\/domino\//],
+            exclude: [/\/node_modules\//, /\/modules\/pagebuilder\//, /\/theme-switcher\//, /\/style\/domino\//, /\/style\/domino-[\w-]*\.scss/, /\/components\/domino\//],
             lightVars: [],
             card: "#2d221b",
             raise: "#352920",

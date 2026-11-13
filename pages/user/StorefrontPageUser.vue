@@ -11,7 +11,7 @@
   -->
 
 <template>
-  <kalio-account-shell class="mb-16" />
+  <kalio-account-shell />
 </template>
 
 <script lang="ts">

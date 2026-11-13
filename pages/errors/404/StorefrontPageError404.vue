@@ -1,50 +1,43 @@
 <!--
-  Bakini Noir — page not found (bakio-design/404-b.html, b/pages-shop.js
-  N.pages["404"]): inside the Layout, with the header and footer
-  (router: BakiniNotFound). "This page is not on the menu." with a search,
-  every collection as a chip, the big 404 on a lit plate; then "Something
-  good instead": four best sellers from different collections as cards.
+  Domino — page not found (domino-design/404-b.html, pages-shop.js "404"):
+  inside the Layout, with the header and footer (router: BakiniNotFound).
+  Two faint drawings, the outlined 404, "This page is not on the counter"
+  and why, a search (Selldone's own catalogue search), "Back to the home
+  page" and "See the deals"; then "A few pastries to try instead": six
+  best sellers, one collection after another, as cards.
 -->
 <template>
-  <div class="nx nx-404">
-    <section class="nf">
+  <div class="dm dm-404">
+    <section aria-labelledby="nf-h" class="nf">
+      <dm-art name="cake" wrap="nf-a1" /><dm-art name="whisk" wrap="nf-a2" />
       <div class="wrap nf-in">
-        <div class="nf-copy">
-          <p class="eyebrow">{{ t("bakini.n.rd.err", "Error 404") }}</p>
-          <h1 class="serif">{{ t("bakini.n.rd.nfH", "This page is") }} <em>{{ t("bakini.n.rd.nfHem", "not on the menu.") }}</em></h1>
-          <p class="muted">{{ t("bakini.n.rd.nfP", "The link may be old, or the page has moved. Search the bakery or start from a collection.") }}</p>
-          <form class="sr-form nf-form" role="search" @submit.prevent="go">
-            <nx-icon name="search" />
-            <input
-              :aria-label="t('bakini.n.rd.searchBakery', 'Search the bakery')"
-              :placeholder="t('bakini.n.rd.searchBakery', 'Search the bakery')"
-              :value="q"
-              enterkeyhint="search"
-              name="q"
-              type="search"
-              @input="q = $event.target.value"
-            />
-            <button class="btn" type="submit">{{ t("bakini.n.rd.search", "Search") }}</button>
-          </form>
-          <div v-if="noir.cats.length" :aria-label="t('bakini.n.rd.collections', 'Collections')" class="es-chips nf-chips">
-            <router-link v-for="c in noir.cats" :key="c.id" :to="catTo(c)" class="chip"
-              ><img v-if="catImage(c, 128)" :src="catImage(c, 128)" alt="" /><bdi>{{ catTitle(c) }}</bdi></router-link
-            >
-          </div>
+        <svg aria-hidden="true" class="nf-num" focusable="false" viewBox="0 0 360 150"><text text-anchor="middle" x="180" y="128">404</text></svg>
+        <h1 id="nf-h" class="nf-h">{{ t("domino.nf.h", "This page is not on the counter") }}</h1>
+        <p class="nf-p">{{ t("domino.nf.p", "The link may be old, or the page has moved. Search for a pastry, or start again from the home page.") }}</p>
+        <form class="nf-srch" role="search" @submit.prevent="go">
+          <label class="sr" for="nfq">{{ t("domino.nf.search", "Search the bakery") }}</label><dm-icon name="search" /><input
+            id="nfq"
+            v-model="q"
+            :placeholder="placeholder"
+            autocomplete="off"
+            enterkeyhint="search"
+            type="search"
+          /><button class="btn sm" type="submit">{{ t("domino.nf.go", "Search") }}</button>
+        </form>
+        <div class="nf-acts">
+          <router-link :to="{ path: '/' }" class="btn alt">{{ t("domino.nf.home", "Back to the home page") }}</router-link>
+          <router-link :to="dealsTo" class="qlink">{{ t("domino.nf.deals", "See the deals") }}</router-link>
         </div>
-        <div aria-hidden="true" class="nf-plate"><span class="nf-num serif">404</span></div>
       </div>
     </section>
-    <section v-if="picks.length" class="sec tight">
+    <section v-if="picks.length" aria-labelledby="nft-h" class="sec-s nf-try">
       <div class="wrap">
-        <div class="sec-hd">
-          <div>
-            <p class="eyebrow">{{ t("bakini.n.rd.whileHere", "While you are here") }}</p>
-            <h2>{{ t("bakini.n.rd.goodH", "Something") }} <em>{{ t("bakini.n.rd.goodHem", "good instead.") }}</em></h2>
-          </div>
-        </div>
-        <div class="nf-grid">
-          <nx-card v-for="p in picks" :key="p.id" :product="p" />
+        <header class="sec-hd sm">
+          <p class="eyebrow">{{ t("domino.nf.whileHere", "While you are here") }}</p>
+          <h2 id="nft-h" class="h2">{{ t("domino.nf.tryH", "A few pastries to try instead") }}</h2>
+        </header>
+        <div class="grid six">
+          <dm-card v-for="p in picks" :key="p.id" :product="p" />
         </div>
       </div>
     </section>
@@ -53,39 +46,37 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import NxIcon from "../../../components/bakini/noir/NxIcon.vue";
-import NxCard from "../../../components/bakini/noir/NxCard.vue";
-import { bySells, catImage, catTitle, catTo, loadNoir, noir } from "../../../components/bakini/noir/noir";
-import { catalogueRoute } from "../../../components/kalio/kalio-catalog";
+import DmIcon from "../../../components/domino/DmIcon.vue";
+import DmArt from "../../../components/domino/DmArt.vue";
+import DmCard from "../../../components/domino/ui/DmCard.vue";
+import { bySells, catTitle, dm, loadDm, mixed } from "../../../components/domino/dm";
+import { catalogueRoute, dealsRoute } from "../../../components/kalio/kalio-catalog";
 import { t } from "../../../components/kalio/i18n/kalio-i18n";
 
 export default defineComponent({
   name: "StorefrontPageError404",
-  components: { NxIcon, NxCard },
-  data: () => ({ q: "", noir }),
+  components: { DmIcon, DmArt, DmCard },
+  data: () => ({ q: "", dm }),
   computed: {
-    /* Four best sellers in stock, one per collection. */
+    /* Six best sellers in stock, one collection after another. */
     picks(): any[] {
-      const out: any[] = [];
-      const used = new Set();
-      for (const p of bySells(this.noir.products.filter((x: any) => x.quantity > 0))) {
-        if (out.length < 4 && !used.has(p.category_id)) {
-          out.push(p);
-          used.add(p.category_id);
-        }
-      }
-      return out;
+      return mixed(bySells(this.dm.products.filter((x: any) => x.quantity > 0))).slice(0, 6);
+    },
+    /* "Search croissants, tarts…" from the shop's own collections. */
+    placeholder(): string {
+      const names = this.dm.cats.slice(0, 2).map((c: any) => catTitle(c).toLowerCase());
+      return names.length ? t("domino.nf.ph", "Search {names}…", { names: names.join(", ") }) : t("domino.nf.search", "Search the bakery");
+    },
+    dealsTo(): any {
+      return dealsRoute();
     },
   },
   created() {
-    loadNoir();
-    (this as any).setPageTitle?.(t("bakini.n.rd.nfTitle", "Page not found"));
+    loadDm();
+    (this as any).setPageTitle?.(t("domino.nf.title", "Page not found"));
   },
   methods: {
     t,
-    catTo,
-    catTitle,
-    catImage,
     go() {
       const text = this.q.trim();
       const r = (window as any).$storefront.routes;

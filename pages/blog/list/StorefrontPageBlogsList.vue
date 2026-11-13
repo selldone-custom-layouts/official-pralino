@@ -1,71 +1,83 @@
 <!--
-  Bakini Noir — the journal (bakio-design/blog-b.html, b/pages-read.js
-  N.pages.blog): the breadcrumb, "The journal." and a line; the newest post
-  as a wide featured card ("Latest · <date>", its title, its description,
-  "Read the story"); then the others in a grid of journal cards with their
-  dates (never "1 min read": the list has no text to count). Whatever posts
-  the shop has, newest first; "More stories" reads the next page. A topic,
-  tag, author or search narrows the list and says so in the heading.
+  Domino — the journal (domino-design/blog-b.html, pages-read.js blog,
+  nicdark's classic list): the title band ("The <shop> journal" and a
+  line), the newest post as a wide featured card ("Newest post", its date,
+  title and description, "Read the post"), then "Every post" with a search
+  field (Selldone's own search, by the address's ?search=) and the others
+  in a grid of journal cards. Whatever posts the shop has, newest first;
+  "More posts" reads the next page. A topic, tag, author or search narrows
+  the list and says so in the band. No posts: the mockup's empty card.
 -->
 <template>
-  <div class="nx nx-journal">
-    <section class="wrap jr">
-      <div class="jr-hd">
-        <nx-crumbs :items="[{ label: t('bakini.n.rd.journal', 'Journal') }]" />
-        <h1 v-if="!filtered" class="serif">{{ t("bakini.n.rd.jrH", "The") }} <em>{{ t("bakini.n.rd.jrHem", "journal.") }}</em></h1>
-        <h1 v-else class="serif">
-          <em>{{ heading }}</em>
-        </h1>
-        <p class="muted">{{ lede }}</p>
-      </div>
-
-      <template v-if="articles.length">
-        <article v-if="feature" class="jr-feat">
-          <router-link :to="postRoute(feature)" aria-hidden="true" class="jr-feat-ph" tabindex="-1">
+  <div class="dm dm-journal">
+    <dm-pt :crumbs="crumbs" :lead="lede" :title="heading" art="whisk" art2="cookie" cls="compact" />
+    <section :aria-label="t('domino.rd.posts', 'Posts')" class="sec-s">
+      <div class="wrap">
+        <article v-if="feature" class="bf">
+          <router-link :to="postRoute(feature)" aria-hidden="true" class="bf-ph" tabindex="-1">
             <img v-if="feature.image" :src="image(feature)" :srcset="srcset(feature)" alt="" height="1000" sizes="(max-width: 760px) 92vw, 760px" width="1600" @error="dropSrcset" />
+            <dm-art v-else name="whisk" wrap="dm-bc-art" />
           </router-link>
-          <div class="jr-feat-t">
-            <p class="eyebrow">
-              {{ t("bakini.n.rd.latest", "Latest") }}<template v-if="feature.created_at">{{ " · " }}<time :datetime="feature.created_at">{{ fmtDate(feature.created_at) }}</time></template>
+          <div class="bf-tx">
+            <p class="eyebrow">{{ t("domino.rd.newest", "Newest post") }}</p>
+            <p v-if="feature.created_at" class="p-m">
+              <dm-icon name="cal" /><time :datetime="feature.created_at">{{ fmtDate(feature.created_at) }}</time>
             </p>
-            <h2 class="serif">
+            <h2 class="bf-t">
               <router-link :to="postRoute(feature)">{{ feature.title }}</router-link>
             </h2>
-            <p v-if="feature.description">{{ feature.description }}</p>
-            <router-link :to="postRoute(feature)" class="btn">{{ t("bakini.n.rd.readStory", "Read the story") }}<nx-icon name="arrow" /></router-link>
+            <p v-if="feature.description" class="bf-d">{{ feature.description }}</p>
+            <router-link :to="postRoute(feature)" class="btn sm">{{ t("domino.rd.readPost", "Read the post") }}</router-link>
           </div>
         </article>
-        <div v-if="rest.length" class="jr-grid">
-          <nx-post v-for="b in rest" :key="b.id" :post="b" />
-        </div>
-        <div v-if="articles.length < total" class="nx-more">
-          <button :disabled="busy" class="btn ghost" type="button" @click="loadMore">{{ t("bakini.n.rd.moreStories", "More stories") }}</button>
-        </div>
-      </template>
 
-      <div v-else-if="busy" aria-hidden="true" class="jr-grid nx-skel">
-        <div v-for="n in 3" :key="n" class="post"><span class="post-ph"></span></div>
+        <div v-if="articles.length > 1 || filtered" class="bl-bar">
+          <h2 class="h3x">{{ filtered ? t("domino.rd.matching", "Matching posts") : t("domino.rd.every", "Every post") }}</h2>
+          <form class="bl-s" role="search" @submit.prevent="search">
+            <label class="sr" for="bl-q">{{ t("domino.rd.searchJournal", "Search the journal") }}</label><dm-icon name="search" /><input
+              id="bl-q"
+              v-model="q"
+              :placeholder="t('domino.rd.searchJournal', 'Search the journal')"
+              autocomplete="off"
+              type="search"
+              @input="searchSoon"
+            />
+          </form>
+        </div>
+
+        <div v-if="rest.length" class="bgrid">
+          <dm-post v-for="b in rest" :key="b.id" :post="b" />
+        </div>
+        <div v-else-if="busy && !articles.length" :aria-label="t('domino.rd.loading', 'Loading the journal')" class="bgrid" role="status">
+          <div v-for="n in 3" :key="n" class="bc dm-bc-skel"><span class="bc-ph"></span><span class="dm-sk-l"></span><span class="dm-sk-l -s"></span></div>
+        </div>
+        <dm-empty
+          v-else-if="!articles.length || filtered"
+          :text="filtered ? t('domino.rd.noMatchP', 'Try a collection name, delivery or pickup.') : t('domino.rd.noPostsP', 'The bakery has not published any posts yet.')"
+          :title="filtered ? t('domino.rd.noMatchT', 'No post matches this') : t('domino.rd.noPostsT', 'No posts yet')"
+          cls="boxed"
+          :icon="filtered ? 'search' : 'chat'"
+        >
+          <template #acts>
+            <router-link v-if="filtered" :to="journalRoute()" class="btn">{{ t("domino.rd.allPosts", "All posts") }}</router-link>
+            <router-link v-else :to="{ path: '/' }" class="btn">{{ t("domino.rd.backShop", "Back to the shop") }}</router-link>
+          </template>
+        </dm-empty>
+        <div v-if="articles.length && articles.length < total" class="dm-or-more dm-bl-more">
+          <button :aria-disabled="busy ? 'true' : undefined" class="btn quiet" type="button" @click="loadMore">{{ t("domino.rd.morePosts", "More posts") }}</button>
+        </div>
       </div>
-
-      <nx-empty
-        v-else
-        :text="filtered ? t('bakini.n.rd.noMatchP', 'Nothing in the journal matches this yet. Every story is one tap away.') : t('bakini.n.rd.noPostsP', 'The bakery has not published any stories yet.')"
-        :title="filtered ? t('bakini.n.rd.noMatchT', 'No stories here yet') : t('bakini.n.rd.noPostsT', 'No stories yet')"
-        icon="book"
-      >
-        <router-link v-if="filtered" :to="journalRoute()" class="btn">{{ t("bakini.n.rd.allStories", "All stories") }}</router-link>
-        <router-link v-else :to="{ path: '/' }" class="btn">{{ t("bakini.n.rd.backShop", "Back to the shop") }}</router-link>
-      </nx-empty>
     </section>
   </div>
 </template>
 
 <script lang="ts">
-import NxIcon from "@app-storefront/components/bakini/noir/NxIcon.vue";
-import NxPost from "@app-storefront/components/bakini/noir/NxPost.vue";
-import NxCrumbs from "@app-storefront/components/bakini/noir/read/NxCrumbs.vue";
-import NxEmpty from "@app-storefront/components/bakini/noir/read/NxEmpty.vue";
-import { fmtDate } from "@app-storefront/components/bakini/noir/noir";
+import DmIcon from "@app-storefront/components/domino/DmIcon.vue";
+import DmArt from "@app-storefront/components/domino/DmArt.vue";
+import DmPost from "@app-storefront/components/domino/read/DmPost.vue";
+import DmPt from "@app-storefront/components/domino/ui/DmPt.vue";
+import DmEmpty from "@app-storefront/components/domino/ui/DmEmpty.vue";
+import { fmtDate } from "@app-storefront/components/domino/dm";
 import { dropSrcset, photoSrcset } from "@app-storefront/components/kalio/kalio-catalog";
 import { journalExtra, journalPage, journalRoute, postRoute } from "@app-storefront/components/kalio/pages/kalio-journal";
 import { t } from "@app-storefront/components/kalio/i18n/kalio-i18n";
@@ -75,10 +87,10 @@ const FIRST = 13;
 
 export default {
   name: "StorefrontPageBlogsList",
-  components: { NxIcon, NxPost, NxCrumbs, NxEmpty },
+  components: { DmIcon, DmArt, DmPost, DmPt, DmEmpty },
   inject: ["$shop"],
 
-  data: () => ({ articles: [] as any[], total: 0, busy: false, page: 1, categories: [] as any[] }),
+  data: () => ({ articles: [] as any[], total: 0, busy: false, page: 1, categories: [] as any[], q: "" }),
 
   computed: {
     current_category() {
@@ -102,16 +114,25 @@ export default {
     category() {
       return this.categories.find((it: any) => String(it.id) === String(this.current_category)) || null;
     },
+    shopName() {
+      const n = String(this.$shop?.title || "");
+      return n.charAt(0).toUpperCase() + n.slice(1);
+    },
     heading() {
-      if (this.current_category) return this.category?.title || this.category?.name || t("bakini.n.rd.topic", "Topic");
-      if (this.current_author_id) return this.articles[0]?.user?.name || this.current_author || t("bakini.n.rd.author", "Author");
+      if (!this.filtered) return t("domino.rd.jrTitle", "The {shop} journal", { shop: this.shopName });
+      if (this.current_category) return this.category?.title || this.category?.name || t("domino.rd.topic", "Topic");
+      if (this.current_author_id) return this.articles[0]?.user?.name || this.current_author || t("domino.rd.author", "Author");
       if (this.current_tag) return `#${this.current_tag}`;
-      return t("bakini.n.rd.searchFor", "“{q}”", { q: String(this.current_search) });
+      return t("domino.rd.searchFor", "“{q}”", { q: String(this.current_search) });
+    },
+    crumbs() {
+      const j = { label: t("domino.rd.journal", "Journal") };
+      return this.filtered ? [{ ...j, to: journalRoute() }, { label: this.heading }] : [j];
     },
     lede() {
-      if (this.current_category) return this.category?.description || t("bakini.n.rd.ledeTopic", "Every story on this topic, newest first.");
-      if (this.filtered) return t("bakini.n.rd.ledeMatch", "The stories that match, newest first.");
-      return t("bakini.n.rd.jrLede", "Guides to the collections, how orders reach you, and small ideas for ordering pastries one by one.");
+      if (this.current_category) return this.category?.description || t("domino.rd.ledeTopic", "Every post on this topic, newest first.");
+      if (this.filtered) return t("domino.rd.ledeMatch", "The posts that match, newest first.");
+      return t("domino.rd.jrLede", "Guides to the collections, and plain answers about delivery, pickup and ordering for a group.");
     },
     feature() {
       return this.filtered ? null : this.articles[0] || null;
@@ -125,6 +146,12 @@ export default {
     "$route.fullPath"() {
       this.load();
     },
+    current_search: {
+      handler(v: any) {
+        if (document.activeElement?.id !== "bl-q") this.q = String(v || "");
+      },
+      immediate: true,
+    },
   },
 
   created() {
@@ -135,9 +162,24 @@ export default {
       .catch(() => {});
   },
 
+  beforeUnmount() {
+    clearTimeout(this.timer);
+  },
+
   methods: {
     t,
     fmtDate,
+    /* The search field writes Selldone's ?search= (a pause after typing). */
+    searchSoon() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(this.search, 450);
+    },
+    search() {
+      clearTimeout(this.timer);
+      const v = this.q.trim();
+      if (v === String(this.current_search || "")) return;
+      this.$router.replace({ query: { ...this.$route.query, search: v || undefined } });
+    },
     postRoute,
     journalRoute,
     dropSrcset,

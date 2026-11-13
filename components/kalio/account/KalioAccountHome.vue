@@ -1,122 +1,80 @@
 <!--
-  Bakini Noir — the account's Overview (bakio-design/account-b.html): the
-  last order (its photos, number and date, the way · window and how it is
-  paid, and the mockup's four steps with a label under each; "View order"),
-  then the saved address and the profile side by side, then "Order again"
-  with the last order's products (compact rows with their + box). No order
-  yet: the mockup's "No orders yet" card. Nothing shows as an empty box: a
-  card without data is left out (no address: a line that asks for one).
+  Domino — the account's Overview (domino-design/account-b.html): "Hello,
+  <first name>" and one line, the last order as the mockup's card (its
+  label, the way · window, how it is paid and the total; its pastries with
+  how many; the four steps; "View the order", and "Buy again" once it is
+  delivered or cancelled), then three tiles: the address book (the saved
+  address), the profile (the email) and help (the FAQ). No order yet: the
+  mockup's empty card. Nothing shows as an empty box.
 -->
 <template>
-  <div class="nx-ahome">
-    <!-- The last order -->
-    <div v-if="latest" class="gcard last">
-      <div class="gc-hd">
-        <h2>{{ t("bakini.n.acc.lastOrder", "Last order") }}</h2>
-        <router-link :to="orderRoute(latest)" class="link">{{ t("bakini.n.acc.viewOrder", "View order") }}<nx-icon name="arrow" cls="flip-rtl" /></router-link>
-      </div>
-      <div class="last-in">
-        <div v-if="thumbs.length" class="last-thumbs">
-          <span v-for="th in thumbs" :key="th.key" :style="{ '--bk-hue': hueOf(th.category) }" class="th"><img v-if="th.src" :src="th.src" alt="" class="cut" loading="lazy" /></span>
+  <div class="acc-p dm-ahome">
+    <h2 class="h3x">{{ t("domino.acc.hello", "Hello, {name}", { name: firstName }) }}</h2>
+    <p class="co-p">{{ t("domino.acc.helloP", "Your orders, addresses and details in one place.") }}</p>
+
+    <article v-if="latest" class="oc">
+      <div class="oc-hd">
+        <div>
+          <p class="eyebrow">{{ t("domino.acc.lastOrder", "Last order · {code}", { code: code(latest) }) }}</p>
+          <h3 class="oc-t">{{ wayLine || longDate(latest.reserved_at || latest.created_at) }}</h3>
         </div>
-        <div class="last-t">
-          <b>{{ t("bakini.n.acc.orderOn", "Order {code} · {date}", { code: code(latest), date: longDate(latest.reserved_at || latest.created_at) }) }}</b>
-          <span class="muted">{{ lastLine }}</span>
-        </div>
+        <p class="oc-tot">
+          <span>{{ payWord }}</span><b class="money">{{ money(latest.price, latest.currency) }}</b>
+        </p>
       </div>
-      <ol v-if="tone.tone !== 'off'" :aria-label="t('bakini.n.ord.progress', 'Order progress')" class="tl">
-        <li v-for="(s, i) in steps" :key="s.key" :aria-current="i === stepAt ? 'step' : undefined" :class="stepClass(i)">
-          <span class="tl-dot"><nx-icon :name="stepClass(i) === 'done' ? 'check' : s.icon" /></span>
-          <span class="tl-l">{{ s.label }}</span>
+      <ul v-if="lines.length" class="oc-th">
+        <li v-for="l in lines" :key="l.key">
+          <span class="rc-th"><img v-if="l.src" :src="l.src" alt="" loading="lazy" /></span
+          ><span
+            ><b>{{ l.title || t("domino.acc.anItem", "An item") }}</b><small>× {{ l.count }}</small></span
+          >
+        </li>
+        <li v-if="moreLines" class="dm-oc-more">
+          <small>{{ t("domino.acc.moreItems", { one: "and {n} more", other: "and {n} more" }, { n: moreLines }) }}</small>
+        </li>
+      </ul>
+      <ol v-if="tone.tone !== 'off'" :aria-label="t('domino.od.progress', 'Order progress')" class="tl4 sm">
+        <li v-for="(s, i) in steps" :key="s.key" :aria-current="stateOf(i) === 'cur' ? 'step' : undefined" :class="['t', stateOf(i)]">
+          <span class="t-ic"><dm-icon :name="stateOf(i) === 'done' ? 'check' : s.icon" /></span><span class="t-l">{{ s.label }}</span>
         </li>
       </ol>
-      <p v-else class="nx-ahome__off"><nx-icon name="close" />{{ tone.word }}</p>
-      <div v-if="tone.tone === 'pay'" class="nx-ahome__pay">
-        <span>{{ t("bakini.n.acc.waitingPay", "This order is waiting for payment.") }}</span>
-        <router-link :to="orderRoute(latest)" class="btn sm"><nx-icon name="lock" />{{ t("bakini.n.acc.payNow", "Pay now") }}</router-link>
+      <p v-else class="dm-oc-off"><dm-icon name="close" />{{ tone.word }}</p>
+      <div class="dm-od-acts">
+        <router-link :to="orderRoute(latest)" class="btn sm"
+          ><template v-if="tone.tone === 'pay'"><dm-icon name="lock" />{{ t("domino.acc.payNow", "Pay now") }}</template
+          ><template v-else>{{ t("domino.acc.viewOrder", "View the order") }}<dm-icon cls="flip-rtl" name="arrow" /></template
+        ></router-link>
+        <button v-if="['ok', 'off'].includes(tone.tone)" :aria-disabled="busy_again ? 'true' : undefined" class="qlink" type="button" @click="busy_again || buyAgain()">
+          <dm-icon :name="again_done ? 'check' : 'bag'" />{{ again_done ? t("domino.acc.inBag", "In your bag") : t("domino.acc.buyAgain", "Buy again") }}
+        </button>
       </div>
-    </div>
+    </article>
 
-    <div v-else-if="account.loaded" class="empty">
-      <span class="ec"><nx-icon name="box" /></span>
-      <h3>{{ t("bakini.n.acc.noOrders", "No orders yet") }}</h3>
-      <p>{{ t("bakini.n.acc.noOrdersP", "When you place an order, it appears here with its delivery window and progress.") }}</p>
-      <div class="acts">
-        <router-link :to="{ path: '/' }" class="btn">{{ t("bakini.n.acc.startShopping", "Start shopping") }}</router-link>
-      </div>
-    </div>
-    <div v-else aria-busy="true" class="gcard last nx-ahome__wait"><span></span><span></span></div>
+    <dm-empty
+      v-else-if="account.loaded"
+      :text="t('domino.acc.noOrdersP', 'When you place an order, it appears here with its delivery window and progress.')"
+      :title="t('domino.acc.noOrders', 'No orders yet')"
+      cls="boxed"
+      icon="box"
+    >
+      <template #acts
+        ><router-link :to="{ path: '/' }" class="btn">{{ t("domino.acc.startShopping", "Start shopping") }}</router-link></template
+      >
+    </dm-empty>
+    <div v-else :aria-label="t('domino.acc.loading', 'Loading your orders')" class="dm-od-load" role="status"><span class="dm-od-sk"></span></div>
 
-    <div class="desk-two">
-      <!-- The saved address -->
-      <div class="gcard">
-        <div class="gc-hd">
-          <h2>{{ t("bakini.n.acc.address", "Saved address") }}</h2>
-          <router-link :to="sectionRoute('USER_ADDRESSES_PAGE')" class="link">{{ address ? t("bakini.n.acc.manage", "Manage") : t("bakini.n.acc.add", "Add") }}</router-link>
-        </div>
-        <div class="ilines">
-          <template v-if="address">
-            <div class="iline">
-              <nx-icon name="home" />
-              <div>
-                <b>{{ address.name || address.title || t("bakini.n.acc.addressUntitled", "Address") }}</b><span>{{ addressLine(address) }}</span>
-              </div>
-            </div>
-            <div v-if="address.phone" class="iline">
-              <nx-icon name="phone" />
-              <div>
-                <b>{{ address.phone }}</b><span>{{ t("bakini.n.acc.receiverPhone", "Receiver phone") }}</span>
-              </div>
-            </div>
-          </template>
-          <div v-else class="iline">
-            <nx-icon name="pin" />
-            <div>
-              <b>{{ account.addresses ? t("bakini.n.acc.noAddress", "No saved address yet") : t("bakini.n.acc.moment", "One moment…") }}</b
-              ><span>{{ t("bakini.n.acc.noAddressP", "Save one and pick it at checkout in a tap.") }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- The profile -->
-      <div class="gcard">
-        <div class="gc-hd">
-          <h2>{{ t("bakini.n.acc.profile", "Profile") }}</h2>
-          <router-link :to="sectionRoute('USER_PROFILE_PAGE')" class="link">{{ t("bakini.n.acc.edit", "Edit") }}</router-link>
-        </div>
-        <div class="ilines">
-          <div class="iline">
-            <nx-icon name="user" />
-            <div>
-              <b>{{ user?.name }}</b><span>{{ t("bakini.n.acc.name", "Name") }}</span>
-            </div>
-          </div>
-          <div v-if="user?.email" class="iline">
-            <nx-icon name="mail" />
-            <div>
-              <b>{{ user.email }}</b><span>{{ t("bakini.n.acc.emailFor", "Email for order updates") }}</span>
-            </div>
-          </div>
-          <div v-if="user?.phone" class="iline">
-            <nx-icon name="phone" />
-            <div>
-              <b>{{ user.phone }}</b><span>{{ t("bakini.n.acc.phone", "Phone") }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Order again -->
-    <div v-if="again.length" class="gcard">
-      <div class="gc-hd">
-        <h2>{{ t("bakini.n.acc.again", "Order again") }}</h2>
-        <span class="muted">{{ t("bakini.n.acc.fromLast", "From your last order") }}</span>
-      </div>
-      <div class="again">
-        <nx-mini v-for="p in again" :key="p.id" :product="p" />
-      </div>
+    <div class="tiles">
+      <router-link :to="sectionRoute('USER_ADDRESSES_PAGE')" class="tile"
+        ><span class="il-ic"><dm-icon name="pin" /></span><b>{{ t("domino.acc.book", "Address book") }}</b
+        ><span>{{ address ? addressLine(address) : account.addresses ? t("domino.acc.noAddress", "No saved address yet") : t("domino.acc.moment", "One moment…") }}</span></router-link
+      >
+      <router-link :to="sectionRoute('USER_PROFILE_PAGE')" class="tile"
+        ><span class="il-ic"><dm-icon name="user" /></span><b>{{ t("domino.acc.profile", "Profile") }}</b><span>{{ user?.email || user?.phone || user?.name }}</span></router-link
+      >
+      <router-link :to="helpRoute" class="tile"
+        ><span class="il-ic"><dm-icon name="chat" /></span><b>{{ t("domino.acc.help", "Help") }}</b
+        ><span>{{ t("domino.acc.helpP", "Delivery, pickup and payment answers") }}</span></router-link
+      >
     </div>
   </div>
 </template>
@@ -127,10 +85,11 @@ import CurrencyMixin from "@selldone/components-vue/mixin/currency/CurrencyMixin
 import { reorder } from "../kalio-basket";
 import { t } from "../i18n/kalio-i18n";
 import { productImage, productsById, vendors } from "../kalio-catalog";
-import NxIcon from "../../bakini/noir/NxIcon.vue";
-import NxMini from "../../bakini/noir/NxMini.vue";
-import { hueOf } from "../../bakini/noir/noir";
-import { longDate, noirStepAt, noirStepClass, noirSteps, orderLine } from "../../bakini/noir/account/noir-account";
+import DmIcon from "../../domino/DmIcon.vue";
+import DmEmpty from "../../domino/ui/DmEmpty.vue";
+import { isPickupWay, wayWindowLine } from "../../domino/buy/dm-cart";
+import { longDate, orderStep, orderSteps } from "../../domino/order/od";
+import { money } from "../../region-switcher/region";
 import {
   STATES,
   account,
@@ -151,7 +110,7 @@ const LINES = 4;
 
 export default {
   name: "KalioAccountHome",
-  components: { NxIcon, NxMini },
+  components: { DmIcon, DmEmpty },
   mixins: [CurrencyMixin],
   inject: ["$shop"],
 
@@ -167,30 +126,35 @@ export default {
   },
 
   computed: {
-    // ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅ Bakini Noir ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅
+    // ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅ Domino ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅
     user() {
       return this.USER();
     },
+    firstName() {
+      return (this.user?.name || "").trim().split(/\s+/)[0] || t("domino.acc.there", "there");
+    },
+    pickup() {
+      return isPickupWay((this.detail || this.latest)?.delivery_info);
+    },
     steps() {
-      return noirSteps();
+      return orderSteps(this.pickup);
     },
     stepAt() {
-      return noirStepAt((this.detail || this.latest)?.delivery_state);
+      return orderStep(this.detail || this.latest);
     },
-    /* Up to three of the last order's photos. */
-    thumbs() {
-      const items = (this.detail?.items || this.latest?.items || []).slice(0, 3);
-      return items.map((item, i) => {
-        const product = item.product || this.catalogue.get(item.product_id);
-        return {
-          key: i,
-          src: this.detail ? this.image(item) : (product && productImage(product, true)) || this.getProductImage(item.product_id),
-          category: product?.category_id,
-        };
-      });
+    wayLine() {
+      const info = (this.detail || this.latest)?.delivery_info;
+      return info?.type ? wayWindowLine(this.$shop, info) : "";
     },
-    lastLine() {
-      return orderLine(this.$shop, this.latest, this.detail);
+    payWord() {
+      const status = this.latest?.status;
+      if (status === "COD") return this.pickup ? t("domino.od.payAtPickup", "Pay at pickup") : t("domino.od.payOnDelivery", "Pay on delivery");
+      if (status === "Payed") return t("domino.od.paid", "Paid");
+      if (status === "Canceled") return t("domino.acc.cancelled", "Cancelled");
+      return t("domino.od.toPay", "To pay");
+    },
+    helpRoute() {
+      return this.$router.hasRoute("ShopFAQ") ? { name: "ShopFAQ" } : { name: window.$storefront.routes.SHOP_CONTACT_US };
     },
     address() {
       return (account.addresses || [])[0] || null;
@@ -315,8 +279,13 @@ export default {
 
   methods: {
     t,
-    hueOf,
     longDate,
+    /* done · cur · next; the last step reached is done. */
+    stateOf(i) {
+      const at = this.stepAt;
+      if (i < at || (i === at && at === this.steps.length - 1)) return "done";
+      return i === at ? "cur" : "next";
+    },
     when,
     code(order) {
       return orderCode(this, order);
@@ -326,16 +295,6 @@ export default {
     },
     sectionRoute(name) {
       return { name: window.$storefront.routes[name] };
-    },
-    stepClass(i) {
-      return noirStepClass(i, this.stepAt, this.steps.length - 1);
-    },
-    /** The times Selldone records: placed, sent, delivered. */
-    stepTime(i) {
-      const trip = this.detail?.transportation_order;
-      const at = i === 0 ? this.latest.reserved_at : i === 3 ? trip?.send_at : i === 4 ? this.detail?.delivery_at || trip?.deliver_at : null;
-      if (!at || this.stepClass(i) !== "-done") return null;
-      return new Date(at).toLocaleTimeString(document.documentElement.lang || "en", { hour: "numeric", minute: "2-digit" });
     },
     image(item) {
       if (item.variant?.image) return window.CDN.GET_SHOP_IMAGE_PATH(item.variant.image, 128);
@@ -348,11 +307,7 @@ export default {
       return (item.price || 0) * (item.count || 0) - (item.offer_amount || 0);
     },
     money(amount, currency) {
-      try {
-        return new Intl.NumberFormat(document.documentElement.lang || "en", { style: "currency", currency: currency || "USD" }).format(amount || 0);
-      } catch (e) {
-        return `${amount}`;
-      }
+      return money(Number(amount) || 0, currency);
     },
     addressLine(a) {
       const street = [a.address, a.no, a.unit].filter(Boolean).join(", ");

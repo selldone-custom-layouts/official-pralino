@@ -67,7 +67,7 @@ import { themeState } from "../../theme-switcher/theme-switcher";
 import SStorefrontSocialButtons from "@selldone/components-vue/storefront/social/SStorefrontSocialButtons.vue";
 import SFooterSectionGdpr from "@selldone/components-vue/storefront/footer/section/gdpr/SFooterSectionGdpr.vue";
 import SFooterSectionSelldone from "@selldone/components-vue/storefront/footer/section/selldone/SFooterSectionSelldone.vue";
-import { loadDm, shopFacts } from "../dm";
+import { loadDm, openLine as openLineOf, shopFacts } from "../dm";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 /* A US state's two letters for the address line ("CA"). */
@@ -116,12 +116,7 @@ export default {
       return [street, cityLine, f.country].filter(Boolean);
     },
     openLine() {
-      const f = this.facts;
-      if (!f.days.length && !f.hours) return "";
-      if (f.everyDay) return f.hours ? t("domino.hdr.openEvery", "Open every day {hours}", { hours: f.hours }) : t("domino.hdr.openEveryNoHours", "Open every day");
-      return f.hours
-        ? t("domino.hdr.openDays", { one: "Open {n} day a week, {hours}", other: "Open {n} days a week, {hours}" }, { n: f.days.length, hours: f.hours })
-        : t("domino.hdr.openDaysNoHours", { one: "Open {n} day a week", other: "Open {n} days a week" }, { n: f.days.length });
+      return openLineOf(this.facts);
     },
   },
   created() {

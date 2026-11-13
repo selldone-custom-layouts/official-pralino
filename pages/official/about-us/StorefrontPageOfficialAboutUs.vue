@@ -1,8 +1,11 @@
 <!--
-  Bakini Noir — About (bakio-design/about-b.html, b/pages-read.js
-  N.pages.about): the story beside a collage of nine pastries; "The counter"
-  (address, hours, the courier's windows, the way to pay); the collections;
-  how an order works in three steps; the counter on the map.
+  Domino — About (domino-design/about-b.html, pages-read.js about): the
+  title band ("About <shop>", the counter's address); "Who we are" beside
+  the About photo (assets/domino/domino-about.webp; without it, the shop's
+  own pastries spread on the counter), with the counter's lines (address,
+  hours, the way to pay); three panels — the counter, a collection photo,
+  "Sold one by one"; the collections with their photos; and a collage of
+  pastries with "A small table of favourites".
 
   The story is the shop's own About page (Selldone dashboard › Shop ›
   Profile) when it has written one; until then sample copy built only from
@@ -11,111 +14,89 @@
   yet". Never invented history, awards, names or counts.
 -->
 <template>
-  <div class="nx nx-about">
-    <section class="ab-hero">
-      <div class="wrap ab-hero-in">
-        <div class="ab-copy">
-          <nx-sample-tag v-if="!own" />
-          <h1 v-if="own" class="serif">{{ t("bakini.n.rd.aboutOwnH", "About") }} <em>{{ name }}.</em></h1>
-          <h1 v-else class="serif">{{ t("bakini.n.rd.aboutH", "A pâtisserie counter") }} <em>{{ headEm }}</em></h1>
-          <div v-if="own" class="prose nx-own" v-html="ownHtml"></div>
+  <div class="dm dm-about">
+    <dm-pt :crumbs="[{ label: t('domino.rd.about', 'About') }]" :lead="bandLead" :title="t('domino.rd.aboutT', 'About {shop}', { shop: name })" art="croissant" art2="macaron" />
+
+    <section aria-labelledby="ab-h" class="sec ab-in">
+      <dm-art name="cupcake" wrap="ab-a1" />
+      <div class="wrap ab-g">
+        <div class="ab-tx">
+          <p class="eyebrow">{{ t("domino.rd.whoWeAre", "Who we are") }}</p>
+          <h2 id="ab-h" class="h2">{{ own ? t("domino.rd.aboutT", "About {shop}", { shop: name }) : t("domino.rd.aboutH", "Made to be chosen one at a time") }}</h2>
+          <dm-sample-tag v-if="!own" />
+          <div v-if="own" class="art-body dm-own" v-html="ownHtml"></div>
           <template v-else>
             <p>{{ storyP1 }}</p>
             <p v-if="storyP2">{{ storyP2 }}</p>
           </template>
+          <ul v-if="lines.length" class="ils">
+            <dm-ic-line v-for="l in lines" :key="l.key" :icon="l.icon" :text="l.text" :title="l.title" />
+          </ul>
+        </div>
+        <dm-photo art="croissant" class="ab-ph" name="domino-about">
+          <template v-if="spread.length" #fallback><dm-cuts :products="spread" kind="spread" /></template>
+        </dm-photo>
+      </div>
+    </section>
+
+    <section :aria-label="t('domino.rd.theCounter', 'The counter')" class="trio-s ab-trio">
+      <div class="wrap trio">
+        <div class="tri dark">
+          <dm-art cls="tri-ic" name="cake" />
+          <h3>{{ t("domino.rd.theCounter", "The counter") }}</h3>
+          <p>{{ counterText }}</p>
+          <router-link :to="contactTo" class="btn sm on-dark">{{ t("domino.rd.findUs", "Find us") }}</router-link>
+        </div>
+        <router-link v-if="photoCat" :to="catTo(photoCat)" aria-hidden="true" class="tri photo" tabindex="-1">
+          <img v-if="colPhoto(photoCat)" :src="colPhoto(photoCat)" alt="" loading="lazy" />
+          <dm-cuts v-else :products="bySells(inCat(photoCat.id))" kind="trio" />
+        </router-link>
+        <div class="tri light">
+          <dm-art cls="tri-ic" name="whisk" />
+          <h3>{{ t("domino.rd.oneByOne", "Sold one by one") }}</h3>
+          <p>{{ oneByOne }}</p>
+          <router-link :to="shopTo" class="btn sm">{{ t("domino.rd.everyPiece", "See every piece") }}</router-link>
+        </div>
+      </div>
+    </section>
+
+    <section v-if="dm.cats.length" aria-labelledby="abc-h" class="sec ab-cols">
+      <div class="wrap">
+        <header class="sec-hd">
+          <p class="eyebrow">{{ t("domino.rd.theCollections", "The collections") }}</p>
+          <h2 id="abc-h" class="h2">{{ t("domino.rd.colsH", { one: "One collection at the counter", other: "{w} collections at the counter" }, { n: dm.cats.length, w: numberWord(dm.cats.length) }) }}</h2>
+          <p class="lead c">{{ t("domino.rd.colsP", "Each one is a short list of individual pieces, each with its own price.") }}</p>
+        </header>
+        <div class="acg">
+          <article v-for="c in dm.cats" :key="c.id" class="acc-c">
+            <router-link :to="catTo(c)" aria-hidden="true" class="acc-ph" tabindex="-1">
+              <img v-if="colPhoto(c)" :src="colPhoto(c)" alt="" loading="lazy" />
+              <dm-cuts v-else :products="bySells(inCat(c.id))" kind="trio" />
+            </router-link>
+            <div class="acc-tx">
+              <h3>
+                <router-link :to="catTo(c)"><bdi>{{ catTitle(c) }}</bdi></router-link>
+              </h3>
+              <p v-if="c.description"><bdi>{{ c.description }}</bdi></p>
+              <router-link :to="catTo(c)" class="qlink">{{ t("domino.rd.shopCol", "Shop {name}", { name: catTitle(c).toLowerCase() }) }}<dm-icon cls="flip-rtl" name="arrow" /></router-link>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section v-if="collage.length >= 6" aria-labelledby="abl-h" class="sec band ab-col">
+      <div class="wrap ab-cg">
+        <div aria-hidden="true" class="clg">
+          <span v-for="(p, i) in collage" :key="p.id" :class="['clg-i', 'c' + i]"><img :src="productImage(p)" alt="" loading="lazy" /></span>
+        </div>
+        <div class="ab-tx">
+          <p class="eyebrow">{{ t("domino.rd.pieceByPiece", "Piece by piece") }}</p>
+          <h2 id="abl-h" class="h2">{{ t("domino.rd.tableH", "A small table of favourites") }}</h2>
+          <p>{{ tableText }}</p>
           <div class="ab-acts">
-            <router-link :to="shopTo" class="btn">{{ t("bakini.n.rd.shopCollections", "Shop the collections") }}</router-link>
-            <router-link :to="contactTo" class="btn ghost">{{ t("bakini.n.rd.visitCounter", "Visit the counter") }}</router-link>
-          </div>
-        </div>
-        <div aria-hidden="true" class="ab-col">
-          <span v-for="(p, i) in collage" :key="p.id" :class="['abc', 'abc' + i]" :style="{ '--bk-hue': hueOf(p.category_id) }"><img :src="productImage(p)" alt="" class="cut" /></span>
-        </div>
-      </div>
-    </section>
-
-    <section v-if="factCards.length" class="sec tight">
-      <div class="wrap">
-        <div class="sec-hd">
-          <div>
-            <p class="eyebrow">{{ t("bakini.n.rd.theCounter", "The counter") }}</p>
-            <h2 v-if="f.everyDay">{{ t("bakini.n.rd.openH", "Open") }} <em>{{ t("bakini.n.rd.openHem", "every day.") }}</em></h2>
-            <h2 v-else>{{ t("bakini.n.rd.findH", "Find") }} <em>{{ t("bakini.n.rd.findHem", "the counter.") }}</em></h2>
-          </div>
-        </div>
-        <div class="ab-facts">
-          <div v-for="c in factCards" :key="c.key" class="gcard">
-            <span class="dm-ic"><nx-icon :name="c.icon" /></span><b>{{ c.title }}</b><span>{{ c.line }}</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section v-if="noir.cats.length" class="sec tight">
-      <div class="wrap">
-        <div class="sec-hd">
-          <div>
-            <p class="eyebrow">{{ t("bakini.n.rd.theCollections", "The collections") }}</p>
-            <h2>{{ t("bakini.n.rd.caseH", "What is") }} <em>{{ t("bakini.n.rd.caseHem", "in the case.") }}</em></h2>
-          </div>
-        </div>
-        <div class="ab-cats">
-          <router-link v-for="c in noir.cats" :key="c.id" :style="{ '--bk-hue': hueOf(c.id) }" :to="catTo(c)" class="ab-cat">
-            <span class="ab-cat-ph"><img v-if="catImage(c, 256)" :src="catImage(c, 256)" alt="" class="cut" /></span>
-            <span
-              ><b><bdi>{{ catTitle(c) }}</bdi></b><small v-if="c.description"><bdi>{{ c.description }}</bdi></small></span
-            >
-            <nx-icon cls="k-flip" name="arrow" />
-          </router-link>
-        </div>
-      </div>
-    </section>
-
-    <section class="sec tight">
-      <div class="wrap">
-        <div class="ab-how">
-          <nx-sample-tag />
-          <div class="ab-steps">
-            <div v-for="(s, i) in steps" :key="i">
-              <span class="pro-n serif">{{ "0" + (i + 1) }}</span>
-              <h3>{{ s.title }}</h3>
-              <p>{{ s.text }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section v-if="f.address" class="sec tight">
-      <div class="wrap">
-        <div class="visit">
-          <div class="visit-map"><nx-map :line="[street, f.hours].filter(Boolean).join(' · ')" :location="f.location" :title="name" /></div>
-          <div class="visit-txt">
-            <p class="eyebrow">{{ t("bakini.n.rd.findUs", "Find us") }}</p>
-            <h2 class="serif">{{ t("bakini.n.rd.comeH", "Come to") }} <em>{{ t("bakini.n.rd.comeHem", "the counter.") }}</em></h2>
-            <div class="ilines">
-              <div class="iline">
-                <nx-icon name="pin" />
-                <div>
-                  <b><bdi>{{ street }}</bdi></b><span><bdi>{{ city }}</bdi></span>
-                </div>
-              </div>
-              <div v-if="open" class="iline">
-                <nx-icon name="clock" />
-                <div>
-                  <b>{{ f.everyDay ? t("bakini.n.rd.openEvery", "Open every day") : t("bakini.n.rd.openDays", "Open") }}</b><span>{{ f.hours || f.days.join(", ") }}</span>
-                </div>
-              </div>
-              <div v-if="f.phone || f.email" class="iline">
-                <nx-icon name="phone" />
-                <div>
-                  <b v-if="f.phone"><a :href="'tel:' + f.phone.replace(/[^\d+]/g, '')" dir="ltr">{{ f.phone }}</a></b><span v-if="f.email">{{ f.email }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="visit-acts">
-              <router-link :to="contactTo" class="btn">{{ t("bakini.n.rd.contact", "Contact") }}</router-link>
-            </div>
+            <router-link :to="shopTo" class="btn">{{ t("domino.rd.startOrder", "Start an order") }}</router-link>
+            <router-link :to="faqTo" class="qlink">{{ t("domino.rd.questions", "Questions") }}</router-link>
           </div>
         </div>
       </div>
@@ -124,20 +105,26 @@
 </template>
 
 <script lang="ts">
-import NxIcon from "@app-storefront/components/bakini/noir/NxIcon.vue";
-import NxMap from "@app-storefront/components/bakini/noir/NxMap.vue";
-import NxSampleTag from "@app-storefront/components/bakini/noir/read/NxSampleTag.vue";
-import { bySells, catImage, catTitle, catTo, hueOf, loadNoir, mixed, noir, productImage, shopFacts, unitOf } from "@app-storefront/components/bakini/noir/noir";
-import { cityLine, listWords, openLine, ownText, paySentence, shopName, shopProfile, shortAddress, streetOf } from "@app-storefront/components/bakini/noir/read/rd";
+import DmIcon from "@app-storefront/components/domino/DmIcon.vue";
+import DmArt from "@app-storefront/components/domino/DmArt.vue";
+import DmCuts from "@app-storefront/components/domino/DmCuts.vue";
+import DmPhoto from "@app-storefront/components/domino/DmPhoto.vue";
+import DmPt from "@app-storefront/components/domino/ui/DmPt.vue";
+import DmIcLine from "@app-storefront/components/domino/ui/DmIcLine.vue";
+import DmSampleTag from "@app-storefront/components/domino/ui/DmSampleTag.vue";
+import { bySells, catTitle, catTo, dm, inCat, loadDm, mixed, openLine as openWords, productImage, shopFacts, unitOf } from "@app-storefront/components/domino/dm";
+import { collectionPhoto } from "@app-storefront/components/domino/dm-photos";
+import { numberWord } from "@app-storefront/components/domino/product/pd";
+import { listWords, ownText, paySentence, shopName, shopProfile, shortAddress } from "@app-storefront/components/domino/read/rd";
 import { catalogueRoute } from "@app-storefront/components/kalio/kalio-catalog";
 import { t } from "@app-storefront/components/kalio/i18n/kalio-i18n";
 
 export default {
   name: "StorefrontPageOfficialAboutUs",
-  components: { NxIcon, NxMap, NxSampleTag },
+  components: { DmIcon, DmArt, DmCuts, DmPhoto, DmPt, DmIcLine, DmSampleTag },
   inject: ["$shop"],
 
-  data: () => ({ noir, profile: null as any }),
+  data: () => ({ dm, profile: null as any }),
 
   computed: {
     shop() {
@@ -155,79 +142,69 @@ export default {
     ownHtml() {
       return String(this.profile?.body || "").replace(/\scontenteditable="[^"]*"/g, "");
     },
-    street() {
-      return streetOf(this.f);
+    bandLead() {
+      const at = shortAddress(this.f);
+      return at ? t("domino.rd.aboutLead", "A pâtisserie counter at {place}.", { place: at }) : "";
     },
-    city() {
-      return cityLine(this.f);
-    },
-    open() {
-      return openLine(this.f);
-    },
-    headEm() {
-      return this.f.city ? t("bakini.n.rd.aboutHemCity", "in {city}.", { city: this.f.city }) : t("bakini.n.rd.aboutHem", "near you.");
+    units() {
+      return [...new Set(this.dm.cats.map((c: any) => unitOf(this.dm.products.find((p: any) => p.category_id === c.id) || {}).toLowerCase()).filter(Boolean))] as string[];
     },
     collectionsWords() {
-      return listWords(this.noir.cats.map((c: any) => catTitle(c).toLowerCase()));
+      return listWords(this.dm.cats.map((c: any) => catTitle(c).toLowerCase()));
     },
     storyP1() {
-      const where = shortAddress(this.f);
-      const lead = where
-        ? t("bakini.n.rd.storyAt", "{shop} is a pâtisserie at {address}.", { shop: this.name, address: where })
-        : t("bakini.n.rd.storyIs", "{shop} is a pâtisserie.", { shop: this.name });
-      const units = this.units;
-      const small = units[0] ? t("bakini.n.rd.storySmall", ", so an order can be as small as one {unit}", { unit: units[0] }) : "";
-      const hold = this.collectionsWords ? t("bakini.n.rd.storyCase", "The counter holds its collections — {names} — and every piece is sold on its own{small}.", { names: this.collectionsWords, small }) : "";
+      const where = this.f.address;
+      const lead = where ? t("domino.rd.storyAt", "{shop} is a bakery counter at {address}.", { shop: this.name, address: where }) : t("domino.rd.storyIs", "{shop} is a bakery counter.", { shop: this.name });
+      const small = this.units[0] ? t("domino.rd.storySmall", ", so an order can be a single {unit} or a small table of favourites", { unit: this.units[0] }) : "";
+      const hold = this.collectionsWords ? t("domino.rd.storyCase", "Its collections — {names} — are sold as individual pieces{small}.", { names: this.collectionsWords, small }) : "";
       return [lead, hold].filter(Boolean).join(" ");
     },
     storyP2() {
+      const f = this.f;
+      const open = f.hours ? (f.everyDay ? t("domino.rd.openEveryFrom", "The counter is open every day from {hours}.", { hours: f.hours }) : t("domino.rd.openFrom", "The counter is open {hours}.", { hours: f.hours })) : "";
       const kinds: string[] = [];
-      if (this.f.courier) kinds.push(t("bakini.n.rd.byCourier", "travel by the {name} across the city", { name: this.f.courier.title }));
-      if (this.f.shipping) kinds.push(t("bakini.n.rd.byShipping", "ship further away"));
-      if (this.f.pickup) kinds.push(t("bakini.n.rd.byPickup", "wait at the counter for pickup"));
-      const how = kinds.length ? t("bakini.n.rd.ordersHow", "Orders {kinds}.", { kinds: listWords(kinds, "disjunction") }) : "";
-      const pay = this.f.gateway?.cod ? t("bakini.n.rd.payEasy", "Payment is simple: cash when the order arrives.") : "";
-      return [how, pay].filter(Boolean).join(" ");
+      if (f.courier) kinds.push(f.courier.distance ? t("domino.rd.byCourierKm", "travel with the {name} within {km} km", { name: f.courier.title, km: f.courier.distance }) : t("domino.rd.byCourier", "travel with the {name}", { name: f.courier.title }));
+      if (f.shipping) kinds.push(t("domino.rd.byShipping", "ship further away"));
+      if (f.pickup) kinds.push(t("domino.rd.byPickup", "wait at the counter for pickup"));
+      const how = kinds.length ? t("domino.rd.ordersHow", "Orders {kinds}", { kinds: listWords(kinds) }) : "";
+      const pay = f.gateway?.cod ? t("domino.rd.paidCod", ", and they are paid in cash on delivery.") : how ? "." : "";
+      return [open, how ? how + pay : ""].filter(Boolean).join(" ");
     },
-    units() {
-      return [...new Set(this.noir.cats.map((c: any) => unitOf(this.noir.products.find((p: any) => p.category_id === c.id) || {}).toLowerCase()))];
-    },
-    collage() {
-      return mixed(bySells(this.noir.products)).slice(0, 9);
-    },
-    factCards() {
+    /* The counter's lines: where, when, how it is paid. */
+    lines() {
       const f = this.f;
       const out: any[] = [];
-      if (f.address) out.push({ key: "pin", icon: "pin", title: this.street, line: [this.city, f.pickupNote ? f.pickupNote.split(".")[0] : ""].filter(Boolean).join(" · ") });
-      if (f.hours || f.days.length) out.push({ key: "clock", icon: "clock", title: f.hours || t("bakini.n.rd.openDays", "Open"), line: f.everyDay ? t("bakini.n.rd.monSun", "Monday to Sunday, every day of the week") : f.days.join(", ") });
-      if (f.courier && f.courier.windows.length) {
-        const n = f.courier.windows.length;
-        out.push({
-          key: "bike",
-          icon: "bike",
-          title: t("bakini.n.rd.windowsT", { one: "{n} delivery window", other: "{n} delivery windows" }, { n }),
-          line: f.courier.distance ? t("bakini.n.rd.windowsL", "{windows}, within {km} km", { windows: listWords(f.courier.windows), km: f.courier.distance }) : listWords(f.courier.windows),
-        });
-      }
-      if (f.gateway) out.push({ key: "cash", icon: "cash", title: f.gateway.name, line: f.gateway.description || paySentence(f) });
-      return out.slice(0, 4);
+      if (f.address) out.push({ key: "pin", icon: "pin", title: f.address, text: f.pickupNote });
+      const open = openWords(f);
+      if (open) out.push({ key: "clock", icon: "clock", title: open, text: f.everyDay ? t("domino.rd.monSun", "Monday to Sunday") : "" });
+      if (f.gateway) out.push({ key: "cash", icon: "cash", title: f.gateway.name, text: f.gateway.cod ? t("domino.rd.nothingOnline", "Nothing is charged online") : f.gateway.description || paySentence(f) });
+      return out;
     },
-    steps() {
-      const f = this.f;
+    spread() {
+      return mixed(bySells(this.dm.products)).slice(0, 5);
+    },
+    counterText() {
+      return this.f.pickupNote || [shortAddress(this.f), openWords(this.f)].filter(Boolean).join(". ") || t("domino.rd.counterP", "Every piece is baked and packed at the counter.");
+    },
+    /* The collection with the most sold pieces, in its photo. */
+    photoCat() {
+      const cats = this.dm.cats.slice();
+      const sold = (c: any) => inCat(c.id).reduce((n: number, p: any) => n + (Number(p.sells) || 0), 0);
+      return cats.sort((a: any, b: any) => sold(b) - sold(a))[0] || null;
+    },
+    oneByOne() {
       const u = this.units;
-      const ex = u.length >= 3 ? t("bakini.n.rd.s1ex", " — one {a}, one {b}, a single {c}", { a: u[0], b: u[1], c: u[2] }) : "";
-      const ways: string[] = [];
-      if (f.courier) ways.push(f.courier.windows.length ? t("bakini.n.rd.wCourier", "courier in a window that suits you") : t("bakini.n.rd.wCourierPlain", "courier delivery"));
-      if (f.shipping) ways.push(t("bakini.n.rd.wShipping", "{name}", { name: f.shipping.title.toLowerCase() }));
-      if (f.pickup) ways.push(t("bakini.n.rd.wPickup", "pickup at the counter"));
-      const w = listWords(ways, "disjunction");
-      return [
-        { title: t("bakini.n.rd.s1T", "Choose piece by piece"), text: t("bakini.n.rd.s1", "Add exactly the pastries you want{ex}.", { ex }) },
-        { title: t("bakini.n.rd.s2T", "Pick how it reaches you"), text: w ? w.charAt(0).toUpperCase() + w.slice(1) + "." : t("bakini.n.rd.s2", "Choose how it reaches you at checkout.") },
-        f.gateway?.cod
-          ? { title: t("bakini.n.rd.s3T", "Pay when it arrives"), text: t("bakini.n.rd.s3", "Cash on delivery — nothing is charged online.") }
-          : { title: t("bakini.n.rd.s3Tb", "Pay at checkout"), text: paySentence(f) },
-      ];
+      if (u.length >= 3) return t("domino.rd.oneByOneP3", "One {a}, one {b}, one {c} — every pastry is its own piece, with its own price.", { a: u[0], b: u[1], c: u[2] });
+      return t("domino.rd.oneByOneP", "Every pastry is its own piece, with its own price.");
+    },
+    tableText() {
+      const u = this.units;
+      const tail = t("domino.rd.tableTail", "Each piece is chosen on its own, and the bag shows the full price, the saving and the total before checkout.");
+      if (u.length >= 3) return `${t("domino.rd.tableMix", "Mix a {a} with a {b}, and add a {c} for later.", { a: u[0], b: u[1], c: u[2] })} ${tail}`;
+      return tail;
+    },
+    collage() {
+      return mixed(bySells(this.dm.products)).slice(0, 6);
     },
     shopTo() {
       return catalogueRoute({});
@@ -235,14 +212,17 @@ export default {
     contactTo() {
       return { name: window.$storefront.routes.SHOP_CONTACT_US };
     },
+    faqTo() {
+      return this.$router.hasRoute("ShopFAQ") ? { name: "ShopFAQ" } : this.contactTo;
+    },
   },
 
   created() {
-    loadNoir();
-    this.setPageTitle?.(t("bakini.n.rd.aboutTitle", "About {shop}", { shop: shopName(this.$store.getters.getShop) }));
+    loadDm();
+    this.setPageTitle?.(t("domino.rd.aboutT", "About {shop}", { shop: shopName(this.$store.getters.getShop) }));
     shopProfile(this.$shop.name, "about-us").then((p) => (this.profile = p));
   },
 
-  methods: { t, hueOf, catTo, catTitle, catImage, productImage },
+  methods: { t, catTo, catTitle, productImage, bySells, inCat, numberWord, colPhoto: collectionPhoto },
 };
 </script>

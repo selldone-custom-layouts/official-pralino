@@ -1,50 +1,53 @@
 <!--
-  Bakini Noir — the account's desk (bakio-design/account-b.html,
-  addresses-b.html; b/pages-buy.js deskMenu): the page's own words as a
-  serif heading ("Good to see you.", "Your addresses."), then the side menu
-  (the shopper, Overview · Orders · Addresses · Profile · Sign out, as the
-  mockup; Selldone's other sections — saved, wallet, gift cards, returns,
-  reviews — stay reachable in a quieter list under them) beside the open
-  section. A guest (orders kept on this device) sees the orders and a way
-  to sign in. The data is Kalio's (kalio-account.ts).
+  Domino — the account (domino-design/account-b.html, addresses-b.html;
+  pages-buy.js accNav): the title band (Home · Account · the open section;
+  its own title; one line on where the orders stand), then the side menu
+  (the shopper with their mark, Overview · Orders · Addresses · Profile ·
+  Sign out, as the mockup; Selldone's other sections — saved, wallet, gift
+  cards, returns, reviews — stay reachable in a quieter list under them)
+  beside the open section. On a phone the menu is a row of pills above it.
+  A guest (orders kept on this device) sees the orders and a way to sign
+  in. The data is Kalio's (kalio-account.ts).
 -->
 <template>
-  <div class="nx nx-acct">
-    <section class="wrap desk">
-      <div class="desk-hd">
-        <h1 class="serif">{{ heading[0] }}{{ " " }}<em>{{ heading[1] }}</em></h1>
-      </div>
-      <div class="desk-grid">
-        <aside class="desk-side">
-          <div class="desk-me">
-            <span aria-hidden="true" class="av lg">
-              <img v-if="avatar" :src="avatar" alt="" class="nx-acct__img" @error="avatar_failed = true" />
-              <template v-else-if="initials">{{ initials }}</template>
-              <nx-icon v-else name="user" />
-            </span>
+  <div class="dm dm-acct">
+    <dm-pt :crumbs="crumbs" :lead="summary" :title="heading" art="cookie" art2="croissant" cls="compact" />
+    <section :aria-label="heading" class="sec-s">
+      <div class="wrap acc">
+        <nav :aria-label="t('domino.acc.nav', 'Account')" class="acc-nav">
+          <div class="acc-me">
+            <dm-mark :word="user?.name || ''" />
             <div>
-              <b>{{ user ? user.name : pending ? t("bakini.n.acc.moment", "One moment…") : t("bakini.n.acc.guest", "Shopping as a guest") }}</b>
-              <span>{{ user ? user.email || user.phone : t("bakini.n.acc.guestNote", "Orders placed on this device") }}</span>
+              <b>{{ user ? user.name : pending ? t("domino.acc.moment", "One moment…") : t("domino.acc.guest", "Shopping as a guest") }}</b>
+              <small>{{ user ? user.email || user.phone : t("domino.acc.guestNote", "Orders placed on this device") }}</small>
             </div>
           </div>
-          <nav :aria-label="t('bakini.n.acc.nav', 'Your account')" class="desk-nav">
-            <router-link v-for="item in mainItems" :key="item.key" :aria-current="isOn(item) ? 'page' : undefined" :to="item.route">
-              <nx-icon :name="item.icon" /><span>{{ item.word }}</span>
-            </router-link>
-            <button v-if="user" :disabled="busy_out" type="button" @click="signOut">
-              <nx-icon name="logout" /><span>{{ t("bakini.n.acc.signOut", "Sign out") }}</span>
-            </button>
-            <button v-else-if="!pending" type="button" @click="signIn">
-              <nx-icon name="user" /><span>{{ t("bakini.n.acc.signIn", "Sign in") }}</span>
-            </button>
-          </nav>
-          <nav v-if="moreItems.length" :aria-label="t('bakini.n.acc.more', 'More in your account')" class="nx-acct__more">
-            <router-link v-for="item in moreItems" :key="item.key" :aria-current="isOn(item) ? 'page' : undefined" :to="item.route">
-              <nx-icon :name="item.icon" /><span>{{ item.word }}</span>
-            </router-link>
-          </nav>
-        </aside>
-        <div class="desk-main">
+          <ul>
+            <li v-for="item in mainItems" :key="item.key">
+              <router-link :aria-current="isOn(item) ? 'page' : undefined" :class="['an', { on: isOn(item) }]" :to="item.route"
+                ><span class="il-ic"><dm-icon :name="item.icon" /></span><span>{{ item.word }}</span></router-link
+              >
+            </li>
+            <li v-if="user">
+              <button :aria-disabled="busy_out ? 'true' : undefined" class="an" type="button" @click="busy_out || signOut()">
+                <span class="il-ic"><dm-icon name="out" /></span><span>{{ t("domino.acc.signOut", "Sign out") }}</span>
+              </button>
+            </li>
+            <li v-else-if="!pending">
+              <button class="an" type="button" @click="signIn">
+                <span class="il-ic"><dm-icon name="user" /></span><span>{{ t("domino.acc.signIn", "Sign in") }}</span>
+              </button>
+            </li>
+          </ul>
+          <ul v-if="moreItems.length" :aria-label="t('domino.acc.more', 'More in your account')" class="dm-acc-more">
+            <li v-for="item in moreItems" :key="item.key">
+              <router-link :aria-current="isOn(item) ? 'page' : undefined" :class="['an', { on: isOn(item) }]" :to="item.route"
+                ><span class="il-ic"><dm-icon :name="item.icon" /></span><span>{{ item.word }}</span></router-link
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="acc-main">
           <router-view />
         </div>
       </div>
@@ -55,12 +58,14 @@
 <script>
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import { t } from "../i18n/kalio-i18n";
-import NxIcon from "../../bakini/noir/NxIcon.vue";
+import DmIcon from "../../domino/DmIcon.vue";
+import DmMark from "../../domino/ui/DmMark.vue";
+import DmPt from "../../domino/ui/DmPt.vue";
 import { ACCOUNT_HOME, ACCOUNT_STYLE, account, greeting, loadAddresses, loadOrders, sections, standing } from "./kalio-account";
 
 export default {
   name: "KalioAccountShell",
-  components: { NxIcon },
+  components: { DmIcon, DmMark, DmPt },
   inject: ["$shop"],
 
   data() {
@@ -94,16 +99,16 @@ export default {
     hello() {
       return greeting();
     },
-    /* ── Bakini Noir ── */
+    /* ── Domino ── */
     /* The mockup's menu: Overview, Orders, Addresses, Profile. */
     mainItems() {
       const r = window.$storefront.routes;
       const items = [];
-      if (this.user) items.push({ key: "home", word: t("bakini.n.acc.overview", "Overview"), icon: "grid", route: { name: ACCOUNT_HOME } });
-      items.push({ key: "orders", word: t("bakini.n.acc.orders", "Orders"), icon: "box", route: { name: r.HISTORY_ORDERS_PHYSICAL } });
+      if (this.user) items.push({ key: "home", word: t("domino.acc.overview", "Overview"), icon: "home", route: { name: ACCOUNT_HOME } });
+      items.push({ key: "orders", word: t("domino.acc.orders", "Orders"), icon: "box", route: { name: r.HISTORY_ORDERS_PHYSICAL } });
       if (this.user) {
-        items.push({ key: "addresses", word: t("bakini.n.acc.addresses", "Addresses"), icon: "pin", route: { name: r.USER_ADDRESSES_PAGE } });
-        items.push({ key: "profile", word: t("bakini.n.acc.profile", "Profile"), icon: "user", route: { name: r.USER_PROFILE_PAGE } });
+        items.push({ key: "addresses", word: t("domino.acc.addresses", "Addresses"), icon: "pin", route: { name: r.USER_ADDRESSES_PAGE } });
+        items.push({ key: "profile", word: t("domino.acc.profile", "Profile"), icon: "user", route: { name: r.USER_PROFILE_PAGE } });
       }
       return items;
     },
@@ -112,29 +117,32 @@ export default {
       if (!this.user) return [];
       const r = window.$storefront.routes;
       return [
-        { key: "saved", word: t("bakini.n.acc.saved", "Saved"), icon: "heart", route: { name: r.USER_FAVORITES_PAGE } },
-        { key: "wallet", word: t("bakini.n.acc.wallet", "Wallet"), icon: "cash", route: { name: r.USER_WALLETS_PAGE } },
-        { key: "gift", word: t("bakini.n.acc.gift", "Gift cards"), icon: "tag", route: { name: r.USER_GIFTCARDS_PAGE } },
-        { key: "returns", word: t("bakini.n.acc.returns", "Returns"), icon: "arrowL", route: { name: r.USER_RETURN_REQUESTS } },
-        { key: "reviews", word: t("bakini.n.acc.reviews", "Reviews"), icon: "star", route: { name: r.USER_COMMENTS_PAGE } },
+        { key: "saved", word: t("domino.acc.saved", "Saved"), icon: "heart", route: { name: r.USER_FAVORITES_PAGE } },
+        { key: "wallet", word: t("domino.acc.wallet", "Wallet"), icon: "cash", route: { name: r.USER_WALLETS_PAGE } },
+        { key: "gift", word: t("domino.acc.gift", "Gift cards"), icon: "gift", route: { name: r.USER_GIFTCARDS_PAGE } },
+        { key: "returns", word: t("domino.acc.returns", "Returns"), icon: "back", route: { name: r.USER_RETURN_REQUESTS } },
+        { key: "reviews", word: t("domino.acc.reviews", "Reviews"), icon: "star", route: { name: r.USER_COMMENTS_PAGE } },
       ];
     },
-    /* The open section's own words, as the mockup's heading. */
-    heading() {
+    /* The open section: the band's title and the last crumb. */
+    section() {
       const r = window.$storefront.routes;
       const name = this.$route.name;
-      if (name === ACCOUNT_HOME) return [t("bakini.n.acc.hHome", "Good to see"), t("bakini.n.acc.hHomeEm", "you.")];
-      if (this.$route.matched.some((m) => m.name === r.ORDERS_PAGE)) return [t("bakini.n.acc.hYour", "Your"), t("bakini.n.acc.hOrders", "orders.")];
-      const words = {
-        [r.USER_ADDRESSES_PAGE]: [t("bakini.n.acc.hYour", "Your"), t("bakini.n.acc.hAddresses", "addresses.")],
-        [r.USER_PROFILE_PAGE]: [t("bakini.n.acc.hYour", "Your"), t("bakini.n.acc.hProfile", "profile.")],
-        [r.USER_FAVORITES_PAGE]: [t("bakini.n.acc.hSaved", "Saved"), t("bakini.n.acc.hSavedEm", "for later.")],
-        [r.USER_WALLETS_PAGE]: [t("bakini.n.acc.hYour", "Your"), t("bakini.n.acc.hWallet", "wallet.")],
-        [r.USER_GIFTCARDS_PAGE]: [t("bakini.n.acc.hGift", "Gift"), t("bakini.n.acc.hGiftEm", "cards.")],
-        [r.USER_RETURN_REQUESTS]: [t("bakini.n.acc.hYour", "Your"), t("bakini.n.acc.hReturns", "returns.")],
-        [r.USER_COMMENTS_PAGE]: [t("bakini.n.acc.hYour", "Your"), t("bakini.n.acc.hReviews", "reviews.")],
-      };
-      return words[name] || [t("bakini.n.acc.hYour", "Your"), t("bakini.n.acc.hAccount", "account.")];
+      if (name === ACCOUNT_HOME) return null;
+      if (this.$route.matched.some((m) => m.name === r.ORDERS_PAGE)) return t("domino.acc.orders", "Orders");
+      const item = [...this.mainItems, ...this.moreItems].find((x) => x.route.name === name);
+      return item ? item.word : null;
+    },
+    heading() {
+      const r = window.$storefront.routes;
+      if (!this.section) return t("domino.acc.title", "Your account");
+      if (this.$route.matched.some((m) => m.name === r.ORDERS_PAGE)) return t("domino.acc.titleOrders", "Your orders");
+      return this.section;
+    },
+    crumbs() {
+      const home = this.user ? { name: ACCOUNT_HOME } : { name: window.$storefront.routes.HISTORY_ORDERS_PHYSICAL };
+      if (!this.section) return [{ label: t("domino.acc.account", "Account") }];
+      return [{ label: t("domino.acc.account", "Account"), to: home }, { label: this.section }];
     },
     shown() {
       return sections().filter((item) => this.user || !item.user);
@@ -193,7 +201,7 @@ export default {
      *  open one into view (Wallet, Profile… were off the right edge). */
     showActive() {
       this.$nextTick(() => {
-        for (const nav of this.$el?.querySelectorAll?.(".desk-nav, .nx-acct__more") || []) {
+        for (const nav of this.$el?.querySelectorAll?.(".acc-nav ul") || []) {
           const on = nav.querySelector('[aria-current="page"]');
           if (!on || nav.scrollWidth <= nav.clientWidth + 1) continue;
           const delta = on.getBoundingClientRect().left - nav.getBoundingClientRect().left;

@@ -1,113 +1,141 @@
 <!--
-  Bakini Noir — Contact (bakio-design/contact-b.html, b/pages-read.js
-  N.pages.contact): "Talk to the bakery." with the shop's real lines (the
-  address, the phone, the email, the open days and counter hours, the pickup
-  counter) beside the counter on the map; then the message form (name,
-  email, message, Send), sent with Selldone's own contact call. Missing
-  fields are named under each field before sending. When the shop has
-  written its own "Contact us" page, its text shows above the form. A
-  missing page is not an error: nothing red is shown ("Store profile not
-  found" never appears).
+  Domino — Contact (domino-design/contact-b.html, pages-read.js contact):
+  the title band ("Contact <shop>"); three cards on the band colour — Visit
+  (the address and the pickup counter's words), Call or write (the phone
+  large, the email), Hours (the open line and the open days as pills);
+  then "Send <shop> a message": the counter on a real map (the shop's own
+  location; DmMap) with its address under it, beside the form (name,
+  email, message, Send, "Or call …"), sent with Selldone's own contact
+  call; missing fields are named under each field before sending. Last,
+  "Before you write" with links to the answers. Only what the shop has:
+  no phone, no card line; no location, the map's calm colour and the pin.
+  When the shop has written its own "Contact us" page, its text shows above
+  the form.
 -->
 <template>
-  <div class="nx nx-contact">
-    <section class="wrap ct">
-      <div class="ct-hd">
-        <nx-crumbs :items="[{ label: t('bakini.n.rd.contactCrumb', 'Contact') }]" />
-        <h1 class="serif">{{ t("bakini.n.rd.ctH", "Talk to") }} <em>{{ t("bakini.n.rd.ctHem", "the bakery.") }}</em></h1>
-        <p class="muted">{{ lede }}</p>
+  <div class="dm dm-contact">
+    <dm-pt :crumbs="[{ label: t('domino.rd.contact', 'Contact') }]" :lead="lede" :title="t('domino.rd.contactT', 'Contact {shop}', { shop: name })" art="cupcake" art2="cookie" />
+
+    <section :aria-label="t('domino.rd.waysAria', 'Ways to reach {shop}', { shop: name })" class="ct-info">
+      <div class="wrap ci">
+        <article v-if="f.address" class="ci-c">
+          <dm-art cls="ci-ic" name="cake" />
+          <h2 class="ci-t">{{ t("domino.rd.visit", "Visit") }}</h2>
+          <p>
+            <bdi>{{ street }}</bdi><br /><bdi>{{ cityLine }}</bdi>
+          </p>
+          <p v-if="f.pickupNote" class="ci-s">{{ f.pickupNote }}</p>
+        </article>
+        <article v-if="f.phone || f.email" class="ci-c">
+          <dm-art cls="ci-ic" name="cupcake" />
+          <h2 class="ci-t">{{ f.phone && f.email ? t("domino.rd.callWrite", "Call or write") : f.phone ? t("domino.rd.call", "Call") : t("domino.rd.write", "Write") }}</h2>
+          <p v-if="f.phone">
+            <a :href="tel" class="ci-big" dir="ltr">{{ f.phone }}</a>
+          </p>
+          <p v-if="f.email">
+            <a :href="'mailto:' + f.email">{{ f.email }}</a>
+          </p>
+        </article>
+        <article v-if="open || f.days.length" class="ci-c">
+          <dm-art cls="ci-ic" name="croissant" />
+          <h2 class="ci-t">{{ t("domino.rd.hours", "Hours") }}</h2>
+          <p v-if="open">{{ open }}</p>
+          <ul v-if="f.days.length" :aria-label="t('domino.rd.openDays', 'Open days')" class="days">
+            <li v-for="d in f.days" :key="d">{{ dayShort(d) }}</li>
+          </ul>
+        </article>
       </div>
+    </section>
 
-      <div class="ct-grid">
-        <div class="gcard ct-info">
-          <div class="ilines">
-            <div v-if="f.address" class="iline">
-              <nx-icon name="pin" />
-              <div>
-                <b><bdi>{{ street }}</bdi></b><span><bdi>{{ fullCity }}</bdi></span>
-              </div>
-            </div>
-            <div v-if="f.phone" class="iline">
-              <nx-icon name="phone" />
-              <div>
-                <b><a :href="'tel:' + f.phone.replace(/[^\d+]/g, '')" dir="ltr">{{ f.phone }}</a></b
-                ><span>{{ f.hours ? t("bakini.n.rd.phoneHours", "Every day during counter hours") : t("bakini.n.rd.phoneAny", "Call the bakery") }}</span>
-              </div>
-            </div>
-            <div v-if="f.email" class="iline">
-              <nx-icon name="mail" />
-              <div>
-                <b><a :href="'mailto:' + f.email">{{ f.email }}</a></b><span>{{ t("bakini.n.rd.mailFor", "For orders, ingredients and allergens") }}</span>
-              </div>
-            </div>
-            <div v-if="open" class="iline">
-              <nx-icon name="clock" />
-              <div>
-                <b>{{ open }}</b><span v-if="f.everyDay">{{ t("bakini.n.rd.monSunShort", "Monday to Sunday") }}</span>
-              </div>
-            </div>
-            <div v-if="f.pickup" class="iline">
-              <nx-icon name="store" />
-              <div>
-                <b>{{ t("bakini.n.rd.pickupCounter", "Pickup counter") }}</b><span>{{ pickupLine }}</span>
-              </div>
-            </div>
+    <section aria-labelledby="ct-h" class="sec-s ct-main">
+      <div class="wrap">
+        <header class="sec-hd">
+          <p class="eyebrow">{{ t("domino.rd.writeTo", "Write to the bakery") }}</p>
+          <h2 id="ct-h" class="h2">{{ t("domino.rd.sendH", "Send {shop} a message", { shop: name }) }}</h2>
+        </header>
+        <div class="ct-g">
+          <div class="ct-map">
+            <div class="ct-mbox"><dm-map :line="street" :location="f.location" :title="name" /></div>
+            <p v-if="street" class="ct-cap">
+              <dm-icon name="pin" /><span
+                ><b><bdi>{{ street }}</bdi></b
+                ><template v-if="capNote">{{ " · " + capNote }}</template></span
+              >
+            </p>
           </div>
-          <div v-if="f.location" class="ct-map"><nx-map :line="[street, f.hours].filter(Boolean).join(' · ')" :location="f.location" :title="name" /></div>
+          <form class="ct-f" novalidate @submit.prevent="send">
+            <div v-if="own" class="art-body dm-own" v-html="ownHtml"></div>
+            <template v-if="!sent">
+              <div class="g2">
+                <div :class="['fld', { bad: !!errs.name }]">
+                  <label class="fl" for="ct-n">{{ t("domino.rd.fName", "Name") }}</label>
+                  <input id="ct-n" v-model.trim="form.name" autocomplete="name" class="inp" name="name" />
+                  <span class="err">{{ errs.name }}</span>
+                </div>
+                <div :class="['fld', { bad: !!errs.email }]">
+                  <label class="fl" for="ct-e">{{ t("domino.rd.fEmail", "Email") }}</label>
+                  <input id="ct-e" v-model.trim="form.email" autocomplete="email" class="inp" name="email" type="email" />
+                  <span class="err">{{ errs.email }}</span>
+                </div>
+              </div>
+              <div :class="['fld', { bad: !!errs.message }]">
+                <label class="fl" for="ct-m">{{ t("domino.rd.fMessage", "Message") }}</label>
+                <textarea id="ct-m" v-model="form.message" :placeholder="t('domino.rd.fMessagePh', 'A question about an order, an allergen, a larger order for a group…')" class="inp" name="message" rows="6"></textarea>
+                <span class="err">{{ errs.message }}</span>
+              </div>
+              <p v-if="failed" class="dm-fail" role="alert"><dm-icon name="info" />{{ failed }}</p>
+              <div class="ct-a">
+                <button :aria-disabled="busy ? 'true' : undefined" class="btn" type="submit">{{ t("domino.rd.send", "Send") }}<dm-icon cls="flip-rtl" name="send" /></button>
+                <p v-if="f.phone" class="ct-n">
+                  {{ t("domino.rd.orCall", "Or call") }} <a :href="tel" dir="ltr">{{ f.phone }}</a>
+                </p>
+              </div>
+            </template>
+            <div v-else class="ct-ok" role="status">
+              <span class="em-ic sm"><dm-icon name="check" /></span>
+              <div>
+                <b>{{ t("domino.rd.sentT", "Message sent") }}</b>
+                <p>{{ t("domino.rd.sentP", "The bakery replies at the email you gave.") }}</p>
+                <button class="qlink" type="button" @click="sent = false">{{ t("domino.rd.another", "Send another message") }}</button>
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
+    </section>
 
-        <form class="gcard ct-form" novalidate @submit.prevent="send">
-          <div class="gc-hd">
-            <h2>{{ t("bakini.n.rd.sendH", "Send a message") }}</h2>
+    <section aria-labelledby="cf-h" class="sec-s ct-faq">
+      <div class="wrap">
+        <div class="cf">
+          <div>
+            <p class="eyebrow">{{ t("domino.rd.before", "Before you write") }}</p>
+            <h2 id="cf-h" class="h3x">{{ t("domino.rd.answered", "Most questions are answered here") }}</h2>
           </div>
-          <div v-if="own" class="prose nx-own" v-html="ownHtml"></div>
-          <template v-if="!sent">
-            <div class="fgrid">
-              <label :class="['fld', { err: errs.name }]">
-                <span>{{ t("bakini.n.rd.fName", "Name") }}</span>
-                <input v-model.trim="form.name" :placeholder="t('bakini.n.rd.fNamePh', 'Your name')" autocomplete="name" name="name" />
-                <small class="hint">{{ errs.name }}</small>
-              </label>
-              <label :class="['fld', { err: errs.email }]">
-                <span>{{ t("bakini.n.rd.fEmail", "Email") }}</span>
-                <input v-model.trim="form.email" autocomplete="email" name="email" placeholder="you@example.com" type="email" />
-                <small class="hint">{{ errs.email }}</small>
-              </label>
-              <label :class="['fld', 'full', { err: errs.message }]">
-                <span>{{ t("bakini.n.rd.fMessage", "Message") }}</span>
-                <textarea v-model="form.message" :placeholder="t('bakini.n.rd.fMessagePh', 'How can the bakery help?')" name="message" rows="6"></textarea>
-                <small class="hint">{{ errs.message }}</small>
-              </label>
-            </div>
-            <p v-if="failed" class="nx-fail" role="alert">{{ failed }}</p>
-            <div class="ct-send">
-              <p class="muted">{{ t("bakini.n.rd.replies", "The bakery replies by email.") }}</p>
-              <button :disabled="busy" class="btn lg" type="submit"><nx-icon name="send" />{{ t("bakini.n.rd.send", "Send") }}</button>
-            </div>
-          </template>
-          <div v-else class="ct-ok" role="status">
-            <span class="ec big"><nx-icon name="check" /></span>
-            <b class="serif">{{ t("bakini.n.rd.thanks", "Thank you.") }}</b>
-            <p class="muted">{{ t("bakini.n.rd.sentP", "Your message is on its way. The bakery replies at the email you gave.") }}</p>
-            <button class="btn ghost sm" type="button" @click="sent = false">{{ t("bakini.n.rd.another", "Send another message") }}</button>
-          </div>
-        </form>
+          <ul class="cf-l">
+            <li v-for="q in topics" :key="q">
+              <router-link :to="faqTo" class="cf-a"
+                ><span>{{ q }}</span><dm-icon cls="flip-rtl" name="arrow"
+              /></router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <script lang="ts">
-import NxIcon from "@app-storefront/components/bakini/noir/NxIcon.vue";
-import NxMap from "@app-storefront/components/bakini/noir/NxMap.vue";
-import NxCrumbs from "@app-storefront/components/bakini/noir/read/NxCrumbs.vue";
-import { shopFacts } from "@app-storefront/components/bakini/noir/noir";
-import { cityLine, openLine, ownText, shopName, shopProfile, streetOf } from "@app-storefront/components/bakini/noir/read/rd";
+import DmIcon from "@app-storefront/components/domino/DmIcon.vue";
+import DmArt from "@app-storefront/components/domino/DmArt.vue";
+import DmPt from "@app-storefront/components/domino/ui/DmPt.vue";
+import DmMap from "@app-storefront/components/domino/read/DmMap.vue";
+import { openLine as openWords, shopFacts } from "@app-storefront/components/domino/dm";
+import { cityLine, ownText, shopName, shopProfile, streetOf } from "@app-storefront/components/domino/read/rd";
 import { t } from "@app-storefront/components/kalio/i18n/kalio-i18n";
 
 export default {
   name: "StorefrontPageOfficialContactUs",
-  components: { NxIcon, NxMap, NxCrumbs },
+  components: { DmIcon, DmArt, DmPt, DmMap },
   inject: ["$shop"],
 
   data: () => ({
@@ -132,21 +160,33 @@ export default {
     street() {
       return streetOf(this.f);
     },
-    fullCity() {
+    cityLine() {
       return [cityLine(this.f), this.f.country].filter(Boolean).join(", ");
     },
     open() {
-      return openLine(this.f);
+      return openWords(this.f);
     },
-    pickupLine() {
-      const note = this.f.pickupNote ? this.f.pickupNote.split(".")[0] + "." : "";
-      const free = this.f.pickup && !this.f.pickup.fee ? t("bakini.n.rd.pickupChoose", "Choose Pickup at checkout — it is free.") : t("bakini.n.rd.pickupChoosePaid", "Choose Pickup at checkout.");
-      return [note, free].filter(Boolean).join(" ");
+    tel() {
+      return "tel:" + String(this.f.phone || "").replace(/[^\d+]/g, "");
+    },
+    capNote() {
+      return this.f.pickupNote ? this.f.pickupNote.split(".")[0] : "";
     },
     lede() {
-      return this.f.everyDay
-        ? t("bakini.n.rd.ctLede", "Questions about an order, ingredients or allergens — the counter is open every day.")
-        : t("bakini.n.rd.ctLede2", "Questions about an order, ingredients or allergens — write or call the bakery.");
+      return t("domino.rd.ctLede", "Come to the counter, call, or write — the bakery answers every message.");
+    },
+    topics() {
+      const f = this.f;
+      const out: string[] = [];
+      if (f.courier) out.push(f.courier.windows.length ? t("domino.rd.qWindows", "Delivery windows") : t("domino.rd.qDelivery", "Delivery"));
+      else if (f.shipping) out.push(t("domino.rd.qShipping", "Shipping"));
+      if (f.pickup) out.push(t("domino.rd.qPickup", "Pickup at the counter"));
+      out.push(f.gateway?.cod ? t("domino.rd.qCod", "Cash on delivery") : t("domino.rd.qPay", "Payment"));
+      out.push(t("domino.rd.qAllergens", "Allergens"));
+      return out;
+    },
+    faqTo() {
+      return this.$router.hasRoute("ShopFAQ") ? { name: "ShopFAQ" } : { name: window.$storefront.routes.SHOP_CONTACT_US };
     },
     own() {
       return ownText(this.profile?.body);
@@ -157,7 +197,7 @@ export default {
   },
 
   created() {
-    this.setPageTitle?.(t("bakini.n.rd.contactCrumb", "Contact"));
+    this.setPageTitle?.(t("domino.rd.contact", "Contact"));
     shopProfile(this.$shop.name, "contact-us").then((p) => (this.profile = p));
     const u = this.USER?.();
     if (u) {
@@ -168,18 +208,29 @@ export default {
 
   methods: {
     t,
+    /* "Mon", in the page's language (Selldone keeps the days in English). */
+    dayShort(day: string) {
+      const i = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"].indexOf(day);
+      if (i < 0) return day.slice(0, 3);
+      try {
+        return new Date(Date.UTC(2023, 0, 1 + i)).toLocaleDateString(document.documentElement.lang || "en", { weekday: "short", timeZone: "UTC" });
+      } catch {
+        return day.slice(0, 3);
+      }
+    },
     check() {
       const f = this.form;
       this.errs = {
-        name: f.name.length > 1 ? "" : t("bakini.n.rd.errName", "Add your name"),
-        email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email) ? "" : f.email ? t("bakini.n.rd.errEmailBad", "Check the email address") : t("bakini.n.rd.errEmail", "Add your email"),
-        message: f.message.trim().length > 3 ? "" : t("bakini.n.rd.errMessage", "Write a message"),
+        name: f.name.length > 1 ? "" : t("domino.rd.errName", "Add your name"),
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email) ? "" : t("domino.rd.errEmail", "Add a valid email address"),
+        message: f.message.trim().length > 3 ? "" : t("domino.rd.errMessage", "Write a message"),
       };
       const first = ["name", "email", "message"].find((k) => this.errs[k]);
       if (first) (this.$el.querySelector(`[name="${first}"]`) as HTMLElement | null)?.focus();
       return !first;
     },
     send() {
+      if (this.busy) return;
       this.failed = "";
       if (!this.check()) return;
       this.busy = true;
@@ -194,13 +245,13 @@ export default {
         })
         .then(({ data }: any) => {
           if (data?.error) {
-            this.failed = t("bakini.n.rd.failed", "That did not go through. Please try again.");
+            this.failed = t("domino.rd.failed", "That did not go through. Please try again.");
             return;
           }
           this.form.message = "";
           this.sent = true;
         })
-        .catch(() => (this.failed = t("bakini.n.rd.failedLater", "That did not go through. Please try again in a moment.")))
+        .catch(() => (this.failed = t("domino.rd.failedLater", "That did not go through. Please try again in a moment.")))
         .finally(() => (this.busy = false));
     },
   },

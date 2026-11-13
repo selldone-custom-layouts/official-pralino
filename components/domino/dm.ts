@@ -1,9 +1,7 @@
 /*
  * Domino — the shared shell state and the shop's data as the mockups
- * (domino-design/src/domino.js) use them, read live from the shop. Started
- * as Bakini Noir's shared module; components/bakini/noir/noir.ts re-exports
- * this file until the last Noir page is ported, so there is one layer state
- * and one catalogue for both.
+ * (domino-design/src/domino.js) use them, read live from the shop: one
+ * layer state and one catalogue for every page.
  *
  * - `dm`: the collections (root categories, the shop's order) and the
  *   whole catalogue, read once and shared by every page;
@@ -292,6 +290,16 @@ export function shopFacts(shop: any): ShopFacts {
   };
 }
 
+/** "Open every day 8:00–18:00" (or "Open 5 days a week, …") from the
+    shop's own days and hours; "" when it gives neither. */
+export function openLine(f: ShopFacts): string {
+  if (!f.days.length && !f.hours) return "";
+  if (f.everyDay) return f.hours ? t("domino.hdr.openEvery", "Open every day {hours}", { hours: f.hours }) : t("domino.hdr.openEveryNoHours", "Open every day");
+  return f.hours
+    ? t("domino.hdr.openDays", { one: "Open {n} day a week, {hours}", other: "Open {n} days a week, {hours}" }, { n: f.days.length, hours: f.hours })
+    : t("domino.hdr.openDaysNoHours", { one: "Open {n} day a week", other: "Open {n} days a week" }, { n: f.days.length });
+}
+
 /* ━━━━━━━━━━━━ Layers ━━━━━━━━━━━━ */
 
 export const layer = reactive({ open: "" as string, quick: null as any, product: null as any });
@@ -391,4 +399,10 @@ export function fmtDate(iso: string | null | undefined): string {
   } catch {
     return d.toDateString();
   }
+}
+
+/** True when the shop's checkout does not need an account (guests may buy). */
+export function guestCheckout(shop: any): boolean {
+  const opt = (shop?.options || []).find((o: any) => o?.code === "checkout");
+  return opt?.value?.mode === "login-free";
 }

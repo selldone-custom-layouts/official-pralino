@@ -1,80 +1,94 @@
 <!--
-  Bakini Noir — FAQ (bakio-design/faq-b.html, b/pages-read.js N.pages.faq):
-  "Questions, answered." with topic chips; the questions as an accordion
-  (the first open); beside them "Still have a question?" with the bakery's
-  phone and email and "Contact the bakery".
+  Domino — FAQ (domino-design/faq-b.html, pages-read.js faq): the title
+  band ("Questions & answers", a line, and the sample label while the shop
+  has no FAQ of its own); beside the questions, "Before you order" with the
+  topics as chips that jump to them and "Still wondering?" (the shop's
+  phone and email, "Contact <shop>"); the questions grouped by topic, each
+  group under its icon, each question a details row with a + (the first
+  open).
 
-  The questions are the shop's own (Selldone's FAQ, its tags as the topics)
-  when it has some; until then sample questions about ordering pieces,
-  delivery windows, pickup, the way to pay and allergens, built from the
-  shop's facts and labelled "Sample text — the shop has not written this
-  page yet".
+  The questions are the shop's own (Selldone's FAQ, its first tag as the
+  topic) when it has some; until then sample questions about ordering
+  pieces, delivery windows, pickup, the way to pay and allergens, built from
+  the shop's facts and labelled as a sample.
 -->
 <template>
-  <div class="nx nx-faq">
-    <section class="wrap faq">
-      <div class="faq-hd">
-        <nx-sample-tag v-if="!own && !busy" />
-        <h1 class="serif">{{ t("bakini.n.rd.faqH", "Questions,") }} <em>{{ t("bakini.n.rd.faqHem", "answered.") }}</em></h1>
-        <div v-if="groups.length > 1" :aria-label="t('bakini.n.rd.topics', 'Topics')" class="faq-tabs" role="group">
-          <button :aria-pressed="group === '' ? 'true' : 'false'" class="chip" type="button" @click="group = ''">{{ t("bakini.n.rd.all", "All") }}</button>
-          <button v-for="g in groups" :key="g" :aria-pressed="group === g ? 'true' : 'false'" class="chip" type="button" @click="group = g">{{ g }}</button>
-        </div>
-      </div>
-      <div class="faq-grid">
-        <div class="faq-list">
-          <template v-if="!busy">
-            <details v-for="(q, i) in shown" :key="q.key" :open="i === 0" class="fq">
-              <summary>
-                <span>{{ q.q }}</span><span class="fq-i"><nx-icon name="plus" /></span>
-              </summary>
-              <div v-if="q.html" class="prose nx-faq-a" v-html="q.a"></div>
-              <p v-else>{{ q.a }}</p>
-            </details>
-          </template>
-          <div v-else aria-hidden="true" class="nx-skel">
-            <div v-for="n in 4" :key="n" class="nx-skel__line -fq"></div>
+  <div class="dm dm-faq">
+    <dm-pt :crumbs="[{ label: t('domino.rd.faq', 'FAQ') }]" :lead="t('domino.rd.faqLead', 'Delivery windows, pickup, the way to pay and ordering single pieces.')" :title="t('domino.rd.faqT', 'Questions & answers')" art="macaron" art2="whisk">
+      <dm-sample-tag v-if="!own && !busy" :text="t('domino.rd.faqSample', 'Sample questions — the shop has not written its FAQ yet')" />
+    </dm-pt>
+    <section :aria-label="t('domino.rd.questionsAria', 'Questions')" class="sec-s">
+      <div class="wrap faq">
+        <aside class="faq-side">
+          <p class="eyebrow">{{ t("domino.rd.beforeOrder", "Before you order") }}</p>
+          <h2 class="h3x">{{ t("domino.rd.plainAnswers", "Plain answers from the counter") }}</h2>
+          <nav v-if="groups.length > 1" :aria-label="t('domino.rd.topics', 'Topics')" class="faq-nav">
+            <ul>
+              <li v-for="(g, i) in groups" :key="g.name">
+                <a :href="'#fq' + i" class="chip" @click.prevent="jump(i)">{{ g.name }}</a>
+              </li>
+            </ul>
+          </nav>
+          <div v-if="f.phone || f.email" class="faq-ct">
+            <p>
+              <b>{{ t("domino.rd.stillWondering", "Still wondering?") }}</b>
+            </p>
+            <ul class="ils sm">
+              <li v-if="f.phone" class="il">
+                <span class="il-ic"><dm-icon name="phone" /></span>
+                <div class="il-tx">
+                  <b><a :href="'tel:' + f.phone.replace(/[^\d+]/g, '')" dir="ltr">{{ f.phone }}</a></b><span v-if="open">{{ open }}</span>
+                </div>
+              </li>
+              <li v-if="f.email" class="il">
+                <span class="il-ic"><dm-icon name="mail" /></span>
+                <div class="il-tx">
+                  <b><a :href="'mailto:' + f.email">{{ f.email }}</a></b><span>{{ t("domino.rd.answersEmail", "{shop} answers by email", { shop: name }) }}</span>
+                </div>
+              </li>
+            </ul>
+            <router-link :to="{ name: contactRoute }" class="btn sm">{{ t("domino.rd.contactT", "Contact {shop}", { shop: name }) }}</router-link>
           </div>
-        </div>
-        <aside class="gcard faq-ask">
-          <span class="dm-ic"><nx-icon name="help" /></span>
-          <h2 class="serif">{{ t("bakini.n.rd.stillH", "Still have a question?") }}</h2>
-          <p class="muted">{{ t("bakini.n.rd.stillP", "The bakery answers about orders, ingredients and allergens.") }}</p>
-          <div v-if="f.phone || f.email" class="ilines">
-            <div v-if="f.phone" class="iline">
-              <nx-icon name="phone" />
-              <div>
-                <b><a :href="'tel:' + f.phone.replace(/[^\d+]/g, '')" dir="ltr">{{ f.phone }}</a></b><span v-if="f.hours">{{ f.everyDay ? t("bakini.n.rd.everyDayHours", "Every day {hours}", { hours: f.hours }) : f.hours }}</span>
-              </div>
-            </div>
-            <div v-if="f.email" class="iline">
-              <nx-icon name="mail" />
-              <div>
-                <b><a :href="'mailto:' + f.email">{{ f.email }}</a></b><span>{{ t("bakini.n.rd.byEmail", "Replies by email") }}</span>
-              </div>
-            </div>
-          </div>
-          <router-link :to="{ name: contactRoute }" class="btn">{{ t("bakini.n.rd.contactBakery", "Contact the bakery") }}</router-link>
         </aside>
+        <div class="faq-l">
+          <template v-if="!busy">
+            <section v-for="(g, i) in groups" :id="'fq' + i" :key="g.name" :aria-labelledby="'fqh' + i" class="fq">
+              <h2 :id="'fqh' + i" class="fq-h">
+                <span class="il-ic"><dm-icon :name="g.icon" /></span>{{ g.name }}
+              </h2>
+              <details v-for="(q, j) in g.items" :key="q.key" :open="i === 0 && j === 0" class="qa">
+                <summary>
+                  <span>{{ q.q }}</span><span aria-hidden="true" class="qa-ic"><dm-icon name="plus" /></span>
+                </summary>
+                <div v-if="q.html" class="art-body dm-qa-a" v-html="q.a"></div>
+                <p v-else>{{ q.a }}</p>
+              </details>
+            </section>
+          </template>
+          <div v-else :aria-label="t('domino.rd.loadingFaq', 'Loading the questions')" class="dm-od-load" role="status">
+            <span v-for="n in 3" :key="n" class="dm-od-sk -row"></span>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <script lang="ts">
-import NxIcon from "@app-storefront/components/bakini/noir/NxIcon.vue";
-import NxSampleTag from "@app-storefront/components/bakini/noir/read/NxSampleTag.vue";
-import { money, shopFacts } from "@app-storefront/components/bakini/noir/noir";
-import { guestCheckout, sampleFaq } from "@app-storefront/components/bakini/noir/read/rd";
+import DmIcon from "@app-storefront/components/domino/DmIcon.vue";
+import DmPt from "@app-storefront/components/domino/ui/DmPt.vue";
+import DmSampleTag from "@app-storefront/components/domino/ui/DmSampleTag.vue";
+import { guestCheckout, money, openLine as openWords, shopFacts } from "@app-storefront/components/domino/dm";
+import { sampleFaq, shopName } from "@app-storefront/components/domino/read/rd";
 import { withRetry } from "@app-storefront/components/bakini/bakini";
 import { t } from "@app-storefront/components/kalio/i18n/kalio-i18n";
 
 export default {
   name: "StorefrontPageFaq",
-  components: { NxIcon, NxSampleTag },
+  components: { DmIcon, DmPt, DmSampleTag },
   props: { shop: { type: Object } },
 
-  data: () => ({ faqs: [] as any[], busy: true, group: "" }),
+  data: () => ({ faqs: [] as any[], busy: true }),
 
   computed: {
     theShop() {
@@ -82,6 +96,12 @@ export default {
     },
     f() {
       return shopFacts(this.theShop);
+    },
+    name() {
+      return shopName(this.theShop);
+    },
+    open() {
+      return openWords(this.f);
     },
     own() {
       return this.faqs.length > 0;
@@ -91,18 +111,25 @@ export default {
       if (this.own)
         return this.faqs.map((x: any) => ({
           key: "f" + x.id,
-          group: (x.tags && x.tags[0]) || "",
+          group: (x.tags && x.tags[0]) || t("domino.rd.general", "General"),
           q: x.question,
           a: x.answer || "",
           html: /<[a-z][\s\S]*>/i.test(String(x.answer || "")),
+          icon: "chat",
         }));
-      return sampleFaq(this.theShop, this.f, (n: number) => money(n, true), guestCheckout(this.theShop)).map((x, i) => ({ key: "s" + i, group: x.group, q: x.q, a: x.a, html: false }));
+      const icons = ["bag", "bike", "cash", "info"];
+      const sample = sampleFaq(this.theShop, this.f, (n: number) => money(n, true), guestCheckout(this.theShop));
+      const names = [...new Set(sample.map((x) => x.group))];
+      return sample.map((x, i) => ({ key: "s" + i, group: x.group, q: x.q, a: x.a, html: false, icon: icons[names.indexOf(x.group)] || "info" }));
     },
     groups() {
-      return [...new Set(this.items.map((x: any) => x.group).filter(Boolean))];
-    },
-    shown() {
-      return this.group ? this.items.filter((x: any) => x.group === this.group) : this.items;
+      const out: { name: string; icon: string; items: any[] }[] = [];
+      for (const x of this.items) {
+        let g = out.find((y) => y.name === x.group);
+        if (!g) out.push((g = { name: x.group, icon: x.icon, items: [] }));
+        g.items.push(x);
+      }
+      return out;
     },
     contactRoute() {
       return window.$storefront.routes.SHOP_CONTACT_US;
@@ -110,13 +137,20 @@ export default {
   },
 
   created() {
-    this.setPageTitle?.(t("bakini.n.rd.faqTitle", "FAQ"));
+    this.setPageTitle?.(t("domino.rd.faq", "FAQ"));
     withRetry(() => window.axios.get(window.XAPI.GET_FAQ(this.theShop.name), { params: { offset: 0, limit: 50 } }))
       .then(({ data }: any) => (this.faqs = data?.faqs || []))
       .catch(() => (this.faqs = []))
       .finally(() => (this.busy = false));
   },
 
-  methods: { t },
+  methods: {
+    t,
+    jump(i: number) {
+      const el = document.getElementById("fq" + i);
+      el?.scrollIntoView({ behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ? "auto" : "smooth", block: "start" });
+      (el?.querySelector("summary") as HTMLElement | null)?.focus({ preventScroll: true });
+    },
+  },
 };
 </script>

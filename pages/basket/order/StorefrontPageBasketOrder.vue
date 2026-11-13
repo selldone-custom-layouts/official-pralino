@@ -13,58 +13,49 @@
   -->
 
 <!--
-  Kalio — an order's page: a light page with the way back to the orders,
-  then the order itself (the router's child; a physical order draws its
-  own steps, KalioOrder in physical/dashbaord). Other kinds of order keep
-  Selldone's steps above theirs. Fetching the order is Selldone's, below.
+  Domino — an order's page (domino-design/order-b.html): the title band
+  (Home · Your orders · the order's own code; "Order SM-41"; where it
+  stands and when it was placed), then the order itself (the router's
+  child; a physical order draws its own cards, physical/dashbaord). Other
+  kinds of order keep Selldone's steps above theirs. An order that cannot
+  be opened says why and where to go. Fetching the order is Selldone's.
 -->
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <div class="k-order nx nx-orderpage">
-    <div class="wrap">
-      <nav :aria-label="t('bakini.n.ord.crumbs', 'Breadcrumb')" class="crumbs nx-ord-crumbs">
-        <router-link
-          :to="
-            buildReturnRoute(
-              $route.query.return_id
-                ? window.$storefront.routes.USER_RETURN_REQUESTS
-                : history_list_page_name,
-            )
-          "
-          >{{ $route.query.return_id ? t("bakini.n.ord.returns", "Your returns") : t("bakini.n.ord.yourOrders", "Your orders") }}</router-link
-        ><nx-icon name="right" /><span aria-current="page">{{ t("bakini.n.ord.orderWord", "Order") }}</span>
-      </nav>
-
-      <s-order-delivery-status-stepper
-        v-if="orders_states && basket && !isPhysical"
-        :has-subscription="isSubscription"
-        :is-subscribed="isSubscription && basket.status === 'Payed'"
-        :state="basket.delivery_state"
-        :states="orders_states"
-        class="k-order__stepper"
-      />
-
-      <!-- Kalio (5 November 2026): an order that cannot be opened says why
-           and where to go, where Selldone kept the loading dots and a
-           "Basket not found" toast. -->
-      <div v-if="!basket && failed" class="empty nx-ord-missing">
-        <span class="ec"><nx-icon :name="USER() ? 'doc' : 'lock'" /></span>
-        <h3>{{ t("order.missing.title", "We can’t open this order") }}</h3>
-        <p v-if="USER()">{{ t("order.missing.user", "It isn’t in your account. The link may be wrong, or the order belongs to someone else.") }}</p>
-        <p v-else>{{ t("order.missing.guest", "If you placed it, sign in to see it, or open the link in your order email on the device you ordered from.") }}</p>
-        <div class="acts">
-          <button v-if="!USER()" class="btn" type="button" @click="signIn">{{ t("common.signIn", "Sign in") }}</button>
-          <router-link :to="buildReturnRoute(history_list_page_name)" :class="USER() ? 'btn' : 'btn ghost'">{{ t("account.yourOrders", "Your orders") }}</router-link>
+<template>
+  <div class="dm dm-order">
+    <dm-pt :crumbs="crumbs" :lead="lead" :title="title" art="whisk" art2="cupcake" cls="compact" />
+    <section v-if="!basket" :aria-label="title" class="sec-s">
+      <div class="wrap">
+        <dm-empty
+          v-if="failed"
+          :icon="USER() ? 'doc' : 'lock'"
+          :text="USER() ? t('domino.od.missingUser', 'It isn’t in your account. The link may be wrong, or the order belongs to someone else.') : t('domino.od.missingGuest', 'If you placed it, sign in to see it, or open the link in your order email on the device you ordered from.')"
+          :title="t('domino.od.missingT', 'We can’t open this order')"
+          cls="boxed"
+          tag="h2"
+        >
+          <template #acts>
+            <button v-if="!USER()" class="btn" type="button" @click="signIn">{{ t("domino.od.signIn", "Sign in") }}</button>
+            <router-link :class="USER() ? 'btn' : 'btn quiet'" :to="buildReturnRoute(history_list_page_name || window.$storefront.routes.HISTORY_ORDERS_PHYSICAL)">{{ t("domino.od.yourOrders", "Your orders") }}</router-link>
+          </template>
+        </dm-empty>
+        <div v-else :aria-label="t('domino.od.loading', 'Loading the order')" class="dm-od-load" role="status">
+          <span class="dm-od-sk"></span><span class="dm-od-sk"></span><span class="dm-od-sk"></span>
         </div>
       </div>
-      <div v-else-if="!basket" class="k-order__loading">
-        <u-loading-ellipsis css-mode></u-loading-ellipsis>
+    </section>
+    <router-view v-else-if="isPhysical" :basket="basket" @request:refresh="fetchOrderInfo()" />
+    <section v-else :aria-label="title" class="sec-s">
+      <div class="wrap dm-od-other">
+        <s-order-delivery-status-stepper
+          v-if="orders_states"
+          :has-subscription="isSubscription"
+          :is-subscribed="isSubscription && basket.status === 'Payed'"
+          :state="basket.delivery_state"
+          :states="orders_states"
+        />
+        <router-view :basket="basket" @request:refresh="fetchOrderInfo()" />
       </div>
-      <router-view
-        v-else
-        :basket="basket"
-        @request:refresh="fetchOrderInfo()"
-      />
-    </div>
+    </section>
   </div>
 </template>
 
@@ -77,17 +68,18 @@ import SOrderDeliveryStatusStepper from "@selldone/components-vue/storefront/ord
 import { StorefrontLocalStorages } from "@selldone/core-js/helper/local-storage/StorefrontLocalStorages";
 import { RouteMixin } from "@selldone/components-vue/mixin/route/RouteMixin.ts";
 import { Basket } from "@selldone/core-js";
-import ULoadingEllipsis from "@selldone/components-vue/ui/loading/ellipsis/ULoadingEllipsis.vue";
 import TemplateMixin from "@selldone/components-vue/mixin/template/TemplateMixin.ts";
 import {EventBus} from "@selldone/components-vue/utils/events/EventBus.ts";
 import { t } from "../../../components/kalio/i18n/kalio-i18n";
-import NxIcon from "../../../components/bakini/noir/NxIcon.vue";
+import DmPt from "../../../components/domino/ui/DmPt.vue";
+import DmEmpty from "../../../components/domino/ui/DmEmpty.vue";
+import { orderLead } from "../../../components/domino/order/od";
 
 export default {
   name: "StorefrontPageBasketOrder",
   mixins: [RouteMixin, TemplateMixin],
 
-  components: { ULoadingEllipsis, SOrderDeliveryStatusStepper, NxIcon },
+  components: { SOrderDeliveryStatusStepper, DmPt, DmEmpty },
   inject: ["$shop"],
   props: {},
 
@@ -101,6 +93,22 @@ export default {
   },
 
   computed: {
+    code() {
+      if (!this.basket || !this.type) return "";
+      return this.getBasketOrderCode({ ...this.basket, type: this.basket.type || this.type.code });
+    },
+    title() {
+      return this.code ? t("domino.od.title", "Order {code}", { code: this.code }) : t("domino.od.titleNone", "Your order");
+    },
+    lead() {
+      return this.basket ? orderLead(this.basket) : "";
+    },
+    crumbs() {
+      const back = this.$route.query.return_id
+        ? { label: t("domino.od.returns", "Your returns"), to: this.buildReturnRoute(window.$storefront.routes.USER_RETURN_REQUESTS) }
+        : { label: t("domino.od.yourOrders", "Your orders"), to: this.buildReturnRoute(this.history_list_page_name || window.$storefront.routes.HISTORY_ORDERS_PHYSICAL) };
+      return [back, { label: this.code || t("domino.od.orderWord", "Order") }];
+    },
     isSubscription() {
       return this.basket && this.basket.type === ProductType.SUBSCRIPTION.code;
     },

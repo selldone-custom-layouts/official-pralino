@@ -1,14 +1,15 @@
 <!--
-  Bakini Noir — the sign-in sheet (bakio-design/login-b.html, b/pages-buy.js
-  N.pages.login): the wordmark (the shop's live title), "Sign in to <shop>."
-  and why; the shop's own social ways in (Google, Apple, GitHub, LinkedIn,
-  as the shop has switched them on) as quiet buttons; "or with email": the
-  email field and "Email me a one-time code", then the six-digit code; and
-  "Continue as guest" when the shop's checkout does not need an account. A
-  dialog on a computer, a bottom sheet on a phone (the mockup's .dialog);
-  ✕, Esc and a click outside close it. No "Login by Selldone" and no
-  Selldone mark: Selldone's own account login is reached the same way as
-  the socials only when it is the shop's single way in.
+  Domino — the sign-in sheet (domino-design/login-b.html, pages-buy.js
+  loginSheet): a small modal ("Sign in", ✕), the wordmark (the shop's live
+  title) and why; the shop's own social ways in (Google, Apple, GitHub,
+  LinkedIn, as the shop has switched them on) as quiet pill buttons; "or
+  with your email": the email field and "Send a one-time code", then the
+  6-digit code in one field and "Verify and sign in" ("Use a different
+  email" goes back); "Continue as guest" when the shop's checkout does not
+  need an account. A centred card on a computer, a sheet from the bottom on
+  a phone; ✕, Esc and a click outside close it. No "Login by Selldone" and
+  no Selldone mark: Selldone's own account login appears as a way in only
+  when it is the shop's single one.
 
   The sign-in itself is Selldone's: socials go through the storefront's
   LoginShop (its OAuth page), the email code through
@@ -19,89 +20,95 @@
 -->
 <template>
   <teleport to="body">
-    <div :dir="rtl ? 'rtl' : 'ltr'" class="nx nx-signin">
+    <div :dir="rtl ? 'rtl' : 'ltr'" class="dm dm-layers dm-signin">
       <div :class="['scrim', { open: show }]" @click="close"></div>
-      <div
-        :aria-hidden="show ? undefined : 'true'"
-        ref="dlg"
-        :class="['dialog', 'nx-lg', { open: show }]"
-        aria-labelledby="lg-t"
-        aria-modal="true"
-        role="dialog"
-        tabindex="-1"
-        @keydown.esc.stop="close"
-      >
-        <div :data-step="step" class="lg-card">
-          <button :aria-label="t('bakini.n.rd.lgClose', 'Close')" class="iconbtn x nx-lg__x" type="button" @click="close"><nx-icon name="close" /></button>
-          <domino-logo :to="null" class="lg-wm" />
-
-          <!-- 1. The ways in -->
-          <div class="lg-s lg-start">
-            <h1 id="lg-t" class="serif">{{ t("bakini.n.rd.lgH", "Sign in to") }} <em>{{ shopWord }}.</em></h1>
-            <p class="muted">{{ t("bakini.n.rd.lgP", "Follow orders, keep addresses and reorder in a tap.") }}</p>
-            <div v-if="socials.length" class="soc">
-              <button v-for="s in socials" :key="s.mode" :disabled="!!redirecting" class="btn ghost" type="button" @click="social(s.mode)">
-                <nx-icon :name="s.icon" />{{ redirecting === s.mode ? t("bakini.n.rd.lgOpening", "Opening…") : s.label }}
-              </button>
-            </div>
-            <template v-if="emailOn">
-              <p v-if="socials.length" class="or"><span>{{ t("bakini.n.rd.lgOr", "or with email") }}</span></p>
-              <form class="lg-email" novalidate @submit.prevent="requestCode">
-                <label :class="['fld', { err: emailErr }]">
-                  <span>{{ t("bakini.n.rd.fEmail", "Email") }}</span>
-                  <input ref="email" v-model.trim="email" autocomplete="email" placeholder="you@example.com" type="email" />
-                  <small class="hint">{{ emailErr }}</small>
-                </label>
-                <button :disabled="busy" class="btn lg block" type="submit">{{ busy ? t("bakini.n.rd.lgSending", "Sending…") : t("bakini.n.rd.lgCode", "Email me a one-time code") }}</button>
-              </form>
-            </template>
-            <s-shop-login v-if="smsOn" v-model:show="show" class="nx-lg__sms" />
-            <template v-if="guest">
-              <button class="btn quiet block" type="button" @click="close">{{ t("bakini.n.rd.lgGuest", "Continue as guest") }}</button>
-              <p class="lg-note">{{ t("bakini.n.rd.lgGuestNote", "Checkout does not need an account.") }}</p>
-            </template>
-            <p class="lg-note">
-              {{ t("bakini.n.rd.lgLegal", "By continuing you agree to the") }}
-              <router-link :to="{ name: routes.SHOP_PROFILE_PAGE_TERMS }" class="t-act" @click="close">{{ t("bakini.n.rd.lgTerms", "Terms") }}</router-link>
-              {{ t("bakini.n.rd.lgAnd", "and") }}
-              <router-link :to="{ name: routes.SHOP_PROFILE_PAGE_PRIVACY }" class="t-act" @click="close">{{ t("bakini.n.rd.lgPrivacy", "Privacy") }}</router-link>.
-            </p>
+      <div id="loginm" :class="['modal', 'small', 'loginm', { open: show }]" aria-labelledby="loginm-t" aria-modal="true" role="dialog" @keydown.esc.stop="close">
+        <div ref="dlg" class="md-card" tabindex="-1">
+          <div class="md-hd">
+            <h2 id="loginm-t" class="md-t">{{ step === "done" ? t("domino.lg.doneT", "Signed in") : t("domino.lg.title", "Sign in") }}</h2>
+            <button :aria-label="t('domino.modal.close', 'Close')" class="ibtn x" type="button" @click="close"><dm-icon name="close" /></button>
           </div>
+          <div class="md-body">
+            <div :data-step="step === 'code' ? 2 : 1" class="lg">
+              <div aria-hidden="true" class="lg-wm"><span class="wm-name">{{ shopWord }}</span><i class="wm-dot"></i></div>
 
-          <!-- 2. The code -->
-          <div class="lg-s lg-code">
-            <button class="btn quiet sm" type="button" @click="back"><nx-icon cls="k-flip" name="arrowL" />{{ t("bakini.n.rd.lgBack", "Back") }}</button>
-            <h1 class="serif">{{ t("bakini.n.rd.lgCheckH", "Check your") }} <em>{{ t("bakini.n.rd.lgCheckHem", "email.") }}</em></h1>
-            <p class="muted">
-              {{ t("bakini.n.rd.lgSent", "We sent a 6-digit code to") }} <b>{{ email }}</b>{{ t("bakini.n.rd.lgExpires", ". It expires in 10 minutes.") }}
-            </p>
-            <div class="otp" dir="ltr">
-              <input
-                v-for="(d, i) in digits"
-                :key="i"
-                :ref="(el) => (boxes[i] = el)"
-                :aria-label="t('bakini.n.rd.lgDigit', 'Digit {n}', { n: i + 1 })"
-                :value="d"
-                autocomplete="one-time-code"
-                inputmode="numeric"
-                maxlength="1"
-                @input="onDigit(i, $event)"
-                @keydown="onKey(i, $event)"
-                @paste="onPaste($event)"
-              />
+              <template v-if="step !== 'done'">
+                <p class="lg-p">{{ t("domino.lg.why", "Sign in to see your orders and saved addresses.") }}</p>
+
+                <!-- 1. The ways in -->
+                <div class="lg-1">
+                  <ul v-if="socials.length" class="provs">
+                    <li v-for="s in socials" :key="s.mode">
+                      <button :aria-disabled="redirecting ? 'true' : undefined" class="prov" type="button" @click="redirecting || social(s.mode)">
+                        <span class="prov-ic"><dm-icon :name="s.icon" /></span
+                        ><span>{{ redirecting === s.mode ? t("domino.lg.opening", "Opening…") : t("domino.lg.continueWith", "Continue with {name}", { name: s.label }) }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                  <template v-if="emailOn">
+                    <p v-if="socials.length" class="or"><span>{{ t("domino.lg.or", "or with your email") }}</span></p>
+                    <form class="lg-f" novalidate @submit.prevent="requestCode">
+                      <div :class="['fld', { bad: !!emailErr }]">
+                        <label class="fl" for="lg-m">{{ t("domino.lg.email", "Email") }}</label>
+                        <input id="lg-m" ref="email" v-model.trim="email" autocomplete="email" class="inp" placeholder="you@example.com" type="email" />
+                        <span class="err">{{ emailErr }}</span>
+                      </div>
+                      <button :aria-disabled="busy ? 'true' : undefined" class="btn block" type="submit">{{ busy ? t("domino.lg.sending", "Sending…") : t("domino.lg.send", "Send a one-time code") }}</button>
+                    </form>
+                  </template>
+                  <s-shop-login v-if="smsOn" v-model:show="show" class="dm-lg-sms" />
+                </div>
+
+                <!-- 2. The code -->
+                <div class="lg-2">
+                  <p class="lg-sent">
+                    {{ t("domino.lg.sent", "We sent a 6-digit code to") }} <b>{{ email }}</b>.
+                  </p>
+                  <form class="lg-f" novalidate @submit.prevent="verify">
+                    <div :class="['fld', { bad: !!codeErr }]">
+                      <label class="fl" for="lg-c">{{ t("domino.lg.code", "Code") }}</label>
+                      <input
+                        id="lg-c"
+                        :ref="(el) => (boxes[0] = el)"
+                        :value="digits.join('')"
+                        autocomplete="one-time-code"
+                        class="inp code"
+                        dir="ltr"
+                        inputmode="numeric"
+                        maxlength="6"
+                        placeholder="••••••"
+                        @input="onCode"
+                      />
+                      <span class="err" role="alert">{{ codeErr }}</span>
+                    </div>
+                    <button :aria-disabled="busy ? 'true' : undefined" class="btn block" type="submit">{{ busy ? t("domino.lg.checking", "Checking…") : t("domino.lg.verify", "Verify and sign in") }}</button>
+                  </form>
+                  <div class="dm-il-acts">
+                    <button class="qlink" type="button" @click="back"><dm-icon cls="flip-rtl" name="back" />{{ t("domino.lg.other", "Use a different email") }}</button>
+                    <button :aria-disabled="busy ? 'true' : undefined" class="qlink" type="button" @click="busy || requestCode()">{{ t("domino.lg.resend", "Send a new code") }}</button>
+                  </div>
+                </div>
+
+                <div v-if="guest" class="lg-guest">
+                  <button class="btn quiet block" type="button" @click="close">{{ t("domino.lg.guest", "Continue as guest") }}</button>
+                  <p>{{ t("domino.lg.guestNote", "Checkout does not need an account.") }}</p>
+                </div>
+                <p class="dm-lg-legal">
+                  {{ t("domino.lg.legal", "By continuing you agree to the") }}
+                  <router-link :to="{ name: routes.SHOP_PROFILE_PAGE_TERMS }" @click="close">{{ t("domino.lg.terms", "Terms") }}</router-link>
+                  {{ t("domino.lg.and", "and") }}
+                  <router-link :to="{ name: routes.SHOP_PROFILE_PAGE_PRIVACY }" @click="close">{{ t("domino.lg.privacy", "Privacy") }}</router-link>.
+                </p>
+              </template>
+
+              <!-- 3. Signed in -->
+              <div v-else class="dm-lg-done">
+                <span class="em-ic"><dm-icon name="check" /></span>
+                <p class="lg-p">{{ email ? t("domino.lg.as", "Signed in as {email}.", { email }) : t("domino.lg.in", "You’re signed in.") }}</p>
+                <router-link :to="{ name: 'KalioAccountHome' }" class="btn block" @click="close">{{ t("domino.lg.account", "Go to your account") }}</router-link>
+                <button class="btn quiet block" type="button" @click="close">{{ t("domino.lg.backShop", "Back to the shop") }}</button>
+              </div>
             </div>
-            <p class="hint-err" role="alert">{{ codeErr }}</p>
-            <button :disabled="busy" class="btn lg block" type="button" @click="verify">{{ busy ? t("bakini.n.rd.lgChecking", "Checking…") : t("bakini.n.rd.lgSignIn", "Sign in") }}</button>
-            <button :disabled="busy" class="link" type="button" @click="requestCode">{{ t("bakini.n.rd.lgResend", "Send a new code") }}</button>
-          </div>
-
-          <!-- 3. Signed in -->
-          <div class="lg-s lg-done">
-            <span class="ec big"><nx-icon name="check" /></span>
-            <h1 class="serif">{{ t("bakini.n.rd.lgDoneH", "You’re") }} <em>{{ t("bakini.n.rd.lgDoneHem", "signed in.") }}</em></h1>
-            <p class="muted">{{ email ? t("bakini.n.rd.lgAs", "Signed in as {email}.", { email }) : "" }}</p>
-            <router-link :to="{ name: 'KalioAccountHome' }" class="btn lg block" @click="close">{{ t("bakini.n.rd.lgAccount", "Go to your account") }}</router-link>
-            <button class="btn quiet block" type="button" @click="close">{{ t("bakini.n.rd.lgBackShop", "Back to the shop") }}</button>
           </div>
         </div>
       </div>
@@ -113,9 +120,8 @@
 import { throttle } from "lodash-es";
 import SShopLogin from "@selldone/components-vue/storefront/login/SShopLogin.vue";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
-import DominoLogo from "../../domino/DominoLogo.vue";
-import NxIcon from "../../bakini/noir/NxIcon.vue";
-import { guestCheckout } from "../../bakini/noir/read/rd";
+import DmIcon from "../../domino/DmIcon.vue";
+import { guestCheckout } from "../../domino/dm";
 import { isRtl } from "../../region-switcher/region";
 import { t } from "../i18n/kalio-i18n";
 
@@ -130,7 +136,7 @@ const SOCIAL = [
 
 export default {
   name: "KalioSignIn",
-  components: { SShopLogin, DominoLogo, NxIcon },
+  components: { SShopLogin, DmIcon },
   inject: ["$shop"],
 
   data: () => ({
@@ -164,7 +170,7 @@ export default {
     socials() {
       const list = SOCIAL.filter((s) => this.modes.includes(s.mode));
       /* Selldone's own account login only when it is the shop's single way in. */
-      if (!list.length && !this.emailOn && !this.smsOn && this.modes.includes("selldone")) return [{ mode: "selldone", icon: "user", label: t("bakini.n.rd.lgContinue", "Continue") }];
+      if (!list.length && !this.emailOn && !this.smsOn && this.modes.includes("selldone")) return [{ mode: "selldone", icon: "user", label: t("domino.lg.account2", "your account") }];
       return list;
     },
     emailOn() {
@@ -248,7 +254,7 @@ export default {
     },
     requestCode() {
       const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(this.email || "");
-      this.emailErr = ok ? "" : this.email ? t("bakini.n.rd.errEmailBad", "Check the email address") : t("bakini.n.rd.errEmail", "Add your email");
+      this.emailErr = ok ? "" : this.email ? t("domino.lg.errEmailBad", "Add a valid email address") : t("domino.lg.errEmail", "Add your email");
       if (!ok) return this.$refs.email?.focus();
       this.busy = true;
       this.codeErr = "";
@@ -269,7 +275,7 @@ export default {
     verify() {
       const code = this.digits.join("");
       if (code.length < 6) {
-        this.codeErr = t("bakini.n.rd.lgAll6", "Enter all 6 digits.");
+        this.codeErr = t("domino.lg.all6", "Enter the 6 digits");
         return;
       }
       this.busy = true;
@@ -284,6 +290,14 @@ export default {
         })
         .catch((e) => (this.codeErr = e?.error_msg || t("bakini.n.rd.lgWrong", "That code did not work. Check it, or send a new one.")))
         .finally(() => (this.busy = false));
+    },
+    /* The code in one field (the mockup's), digits only; six of them sign in. */
+    onCode(e) {
+      const v = String(e.target.value || "").replace(/\D/g, "").slice(0, 6);
+      e.target.value = v;
+      this.digits = Array.from({ length: 6 }, (_, k) => v[k] || "");
+      this.codeErr = "";
+      if (v.length === 6) this.verify();
     },
     onDigit(i, e) {
       const v = String(e.target.value || "").replace(/\D/g, "").slice(-1);

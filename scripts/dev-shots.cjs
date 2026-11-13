@@ -17,6 +17,11 @@ const out = path.resolve(process.argv[3] || "docs/dev-shots");
 const widths = (process.argv[4] || "1440,390").split(",").map(Number);
 const modes = (process.argv[5] || "light,dark").split(",");
 const name = process.env.NAME || "home";
+/* LS_FILE: a JSON file of extra localStorage entries (a guest order's key, copied from the live
+   origin, opens that order on the dev server). EVAL_FILE: a script run once the page is ready
+   (to preview a state the live data does not have; local only). */
+const extraLs = process.env.LS_FILE ? JSON.parse(fs.readFileSync(process.env.LS_FILE, "utf8")) : {};
+const evalJs = process.env.EVAL_FILE ? fs.readFileSync(process.env.EVAL_FILE, "utf8") : "";
 
 (async () => {
   fs.mkdirSync(out, { recursive: true });
@@ -24,11 +29,12 @@ const name = process.env.NAME || "home";
   for (const mode of modes) {
     for (const w of widths) {
       const ctx = await browser.newContext({ viewport: { width: w, height: w < 600 ? 844 : 900 }, deviceScaleFactor: 1, isMobile: w < 600, hasTouch: w < 600 });
-      await ctx.addInitScript((m) => {
+      await ctx.addInitScript(([m, ls]) => {
         try {
           localStorage.setItem("domino-theme", JSON.stringify({ palette: "pistachio", mode: m }));
+          for (const k of Object.keys(ls)) localStorage.setItem(k, ls[k]);
         } catch (e) {}
-      }, mode);
+      }, [mode, extraLs]);
       await ctx.route(/\/buy\//, (r) => (r.request().resourceType() === "fetch" || r.request().resourceType() === "xhr" ? r.abort() : r.continue()));
       const page = await ctx.newPage();
       const errors = [];
@@ -36,6 +42,10 @@ const name = process.env.NAME || "home";
       await page.goto(url, { waitUntil: "domcontentloaded", timeout: 180000 });
       await page.waitForSelector(process.env.WAIT || ".dm .ftr", { timeout: 180000 });
       await page.waitForTimeout(2500);
+      if (evalJs) {
+        await page.evaluate(evalJs);
+        await page.waitForTimeout(800);
+      }
       await page.evaluate(async () => {
         document.querySelectorAll('img[loading="lazy"]').forEach((i) => (i.loading = "eager"));
         for (let y = 0; y < document.body.scrollHeight; y += 600) {
