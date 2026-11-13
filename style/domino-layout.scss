@@ -1,0 +1,768 @@
+/* ▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Domino Cocoa Patisserie — the Layout's own touches ▆▆▆▆▆▆▆▆▆▆▆▆▆▆
+
+   style/domino/*.css are the B mockup's stylesheets, generated unchanged
+   (scripts/domino-css.cjs) and scoped to Domino's markup (.dm). What the
+   storefront needs on top of them lives here: the page ground, the sticky
+   header inside Vuetify's app (the top bar scrolls away), the language &
+   currency pill and its panel and sheet (the region-switcher kit's chips),
+   the bag drawer's receipt and "Often added", the photo slots' designed
+   fallbacks (live cut-outs), the theme-switcher kit's row in the mockup's
+   footer band, and Selldone's own small parts in the legal row. Holds both
+   modes; not rewritten by the dark build step (vite.config.ts). House
+   rules: no underline anywhere, flat buttons, hover = colour only, every
+   ring drawn inside its own box. */
+
+/* ── The page ── */
+/* Vuetify's app clips with overflow: hidden, which stops anything sticking
+   (the header); clip does the same without making a scroll box. */
+.v-application,
+.v-application .v-application__wrap,
+.s--shop {
+  overflow: clip !important;
+}
+html,
+html body,
+.v-application,
+.s--shop {
+  background: var(--dm-bg) !important;
+}
+.v-application,
+.s--shop {
+  color: var(--dm-ink);
+  font-family: var(--dm-sans);
+}
+/* Domino's wrappers take the page's type, not a ground of their own where
+   they hold only layers. */
+.dm.dm-layers {
+  position: relative;
+  z-index: 60;
+  background: transparent;
+  height: 0;
+}
+/* Links and buttons inside Domino keep the mockup's colours against the
+   shared skins (no underline, hover = colour only). */
+.dm a,
+.dm a:hover,
+.dm a:focus,
+.dm button {
+  text-decoration: none !important;
+}
+
+/* ── The header: the top bar scrolls away, the cocoa bar sticks ── */
+.dm.dm-hdrwrap {
+  position: sticky;
+  top: calc(-1 * var(--dm-tb-h));
+  z-index: 50;
+  background: var(--dm-hdr-bg);
+}
+.dm-hdrwrap .hdr {
+  position: relative;
+  top: 0;
+}
+.dm-hdrwrap .skip {
+  position: absolute;
+}
+/* One line, always the same height (the sticky offset is this height). */
+.dm .topbar .tb-in {
+  height: var(--dm-tb-h);
+  min-height: 0;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+.dm .topbar .tb-l,
+.dm .topbar .tb-r {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  min-width: 0;
+}
+.dm .topbar .tb-l {
+  overflow: hidden;
+}
+.dm .topbar .tb-r li {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 1240px) {
+  .dm .topbar .tb-l li:nth-child(3) {
+    display: none;
+  }
+}
+@media (max-width: 1080px) {
+  .dm .topbar .tb-l li:nth-child(2) {
+    display: none;
+  }
+}
+@media (max-width: 979px) {
+  .dm .topbar .tb-rg {
+    display: none !important;
+  }
+  .dm .topbar .tb-r li:nth-child(2)::before {
+    display: none;
+  }
+}
+/* The wordmark: a long shop name steps down and never leaves the bar. */
+.dm .wm {
+  min-width: 0;
+  max-width: 100%;
+}
+.dm .wm-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dm .wm.-long .wm-name {
+  font-size: 36px;
+}
+.dm .wm.-xl .wm-name {
+  font-size: 28px;
+}
+@media (max-width: 760px) {
+  .dm .wm.-long .wm-name {
+    font-size: 28px;
+  }
+  .dm .wm.-xl .wm-name {
+    font-size: 22px;
+  }
+}
+/* The wordmark outside Domino's own markup (the sign-in sheet). */
+.dm-wm {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  .wm-name {
+    font-family: var(--dm-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+  }
+  .wm-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dm-act);
+  }
+}
+.dm .hdr .wm .wm-dot {
+  background: var(--dm-act-dk);
+}
+/* The count on the bag sits on the light accent: cocoa words. */
+.dm .count {
+  background: var(--dm-count-bg);
+  color: var(--dm-count-ink);
+}
+.dm .order,
+.dm .order:hover {
+  color: var(--dm-on-cocoa-dk) !important;
+}
+.dm .nav-a[aria-current="page"] {
+  color: var(--dm-hdr-hover);
+}
+/* The search panel: the highlighted suggestion and "See every result". */
+.dm .srch-list a.hl {
+  background: var(--dm-band);
+}
+.dm .srch-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 6px 0;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dm-act-text);
+  .i {
+    width: 16px;
+    height: 16px;
+  }
+}
+.dm .srch-list .pr {
+  white-space: nowrap;
+}
+.dm .srch-hint {
+  min-height: 30px;
+}
+
+/* ── The language & currency pill (top bar), its panel and its sheet ── */
+.dm .rg-pill.rs-pick__btn {
+  --rs-pill-bg: transparent;
+  --rs-pill-bg-hover: transparent;
+  --rs-pill-ink: var(--dm-top-ink);
+  height: 28px;
+  gap: 6px;
+  padding: 0 10px 0 8px;
+  box-shadow: inset 0 0 0 1px var(--dm-dark-line-2);
+  font: 600 10.5px/1 var(--dm-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  .i {
+    width: 15px;
+    height: 15px;
+  }
+  .chev {
+    width: 13px;
+    height: 13px;
+    stroke-width: 1.8;
+    transition: transform 0.2s;
+  }
+  &[aria-expanded="true"] .chev {
+    transform: rotate(180deg);
+  }
+  &:hover {
+    color: var(--dm-top-hover) !important;
+  }
+  &:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--dm-top-hover) !important;
+  }
+}
+.dm .rgp {
+  position: fixed;
+  z-index: 70;
+  width: 300px;
+  max-width: calc(100vw - 24px);
+  padding: 18px;
+  background: var(--dm-surface);
+  color: var(--dm-ink);
+  border-radius: var(--dm-r-card);
+  box-shadow: inset 0 0 0 1px var(--dm-line);
+  font-family: var(--dm-sans);
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.18s, transform 0.18s, visibility 0s 0.18s;
+  &.open {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.18s, transform 0.18s;
+  }
+}
+.dm .rgp-note {
+  margin-top: 12px;
+  color: var(--dm-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.dm .rs-chips {
+  --rs-ink: var(--dm-ink);
+  --rs-muted: var(--dm-muted);
+  --rs-line: var(--dm-line);
+  --rs-surface: var(--dm-surface);
+  --rs-accent: var(--dm-act-text);
+  --rs-accent-soft: var(--dm-act-soft);
+  --rs-on-accent: var(--dm-act-on);
+  --rs-font: var(--dm-sans);
+}
+.dm .rs-chips__t {
+  font: 700 10.5px/1.4 var(--dm-sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dm-muted);
+  margin: 0 0 8px;
+}
+.dm .rgp .rs-chips__t:first-child {
+  display: none; /* the panel's own heading says it */
+}
+.dm .rs-chip {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--dm-band);
+  color: var(--dm-ink);
+  font: 600 14px/1 var(--dm-sans);
+}
+.dm .rs-chip.-on {
+  background: var(--dm-act-soft);
+  box-shadow: inset 0 0 0 2px var(--dm-act-text);
+}
+.dm .rs-chips__note {
+  color: var(--dm-muted);
+  font-size: 12.5px;
+  margin: 10px 0 0;
+}
+/* The sheet (phone): from the bottom, over the scrim. */
+.dm .dm-sheet.rs-sheet {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 95;
+  width: 100%;
+  max-width: 560px;
+  max-height: 86vh;
+  margin: 0 auto;
+  padding: 0 0 env(safe-area-inset-bottom, 0px);
+  overflow: auto;
+  border-radius: 22px 22px 0 0;
+  background: var(--dm-surface);
+  color: var(--dm-ink);
+  animation: none;
+  visibility: hidden;
+  transform: translateY(100%);
+  transition: transform 0.26s ease, visibility 0s 0.26s;
+  &.open {
+    visibility: visible;
+    transform: none;
+    transition: transform 0.26s ease;
+  }
+  .sh-body {
+    padding: 20px 24px 26px;
+  }
+  .btn.block {
+    margin-top: 18px;
+  }
+}
+
+/* ── The phone menu: "Show N more" and the language row ── */
+.dm .pn-list .pn-more,
+.dm .pn-list .pn-rg {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--dm-r-chip);
+  text-align: start;
+  font-family: var(--dm-serif);
+  font-size: 20px;
+  font-weight: var(--dm-h-weight);
+  color: var(--dm-ink);
+}
+.dm .pn-list .pn-more {
+  color: var(--dm-act-text);
+  font-family: var(--dm-sans);
+  font-size: 15px;
+  font-weight: 600;
+  .th {
+    background: var(--dm-act-soft);
+    color: var(--dm-act-text);
+    border-radius: 50%;
+  }
+  .i {
+    width: 18px;
+    height: 18px;
+  }
+}
+.dm .pn-list .pn-rg > span:first-child {
+  flex: 1;
+}
+.dm .pn-list .pn-more:hover,
+.dm .pn-list .pn-rg:hover {
+  background: var(--dm-band);
+}
+.dm .pn-rg-v {
+  font: 600 12px/1 var(--dm-sans);
+  letter-spacing: 0.1em;
+  color: var(--dm-muted);
+}
+.dm .pn-list .pn-rg .chev {
+  width: 16px;
+  height: 16px;
+  color: var(--dm-muted);
+}
+.dm .pn-info p,
+.dm .pn-info a {
+  align-items: flex-start;
+}
+.dm .pn-info .i {
+  flex: none;
+}
+/* The panels sit above the sticky header and the region panel. */
+.dm .scrim {
+  background: var(--dm-scrim);
+}
+
+/* ── The bag drawer: rows with a line total, the receipt, Often added ── */
+.dm .dw-list li {
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: start;
+}
+.dm .dw-list .th {
+  grid-row: span 2;
+}
+.dm .dw-tx {
+  min-width: 0;
+}
+.dm .dw-n {
+  display: block;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--dm-ink);
+  overflow-wrap: anywhere;
+}
+.dm .dw-n:hover {
+  color: var(--dm-act-text);
+}
+.dm .dw-tx small {
+  display: block;
+  margin-top: 2px;
+  line-height: 1.45;
+}
+.dm .dw-tx small s {
+  color: var(--dm-muted);
+}
+.dm .dw-lt {
+  grid-column: 3;
+  grid-row: 1;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.dm .dw-q {
+  grid-column: 2 / span 2;
+}
+.dm .dw-sum {
+  margin-top: 4px;
+}
+.dm .dw-acts {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+}
+.dm .qlink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 4px;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dm-act-text);
+}
+.dm .qlink:hover {
+  color: var(--dm-ink);
+}
+.dm .dw-often {
+  margin-top: 6px;
+  padding-top: 18px;
+  border-top: 1px solid var(--dm-line);
+}
+.dm .dw-h {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.dm .minis {
+  display: grid;
+  gap: 10px;
+}
+.dm .mini {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  border-radius: var(--dm-r);
+  background: var(--dm-band);
+}
+.dm .mini-th {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--dm-r-thumb);
+  background: var(--dm-plate);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  img {
+    width: 84%;
+    height: 84%;
+    object-fit: contain;
+  }
+}
+.dm .mini-tx {
+  min-width: 0;
+}
+.dm .mini-t {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--dm-ink);
+  overflow-wrap: anywhere;
+}
+.dm .mini-t:hover {
+  color: var(--dm-act-text);
+}
+.dm .mini-p {
+  font-size: 13px;
+}
+.dm .mini-a .btn.sm {
+  padding-inline: 16px;
+}
+.dm .mini-a .qb {
+  min-height: 36px;
+}
+.dm .mini-a .qb button {
+  width: 34px;
+  height: 34px;
+}
+.dm .dw-empty .btn {
+  margin-top: 4px;
+}
+
+/* ── The add box ── */
+.dm .btn.add[disabled] {
+  background: var(--dm-band);
+  color: var(--dm-muted);
+  cursor: not-allowed;
+}
+.dm .btn.add.alt:not([disabled]) {
+  background: var(--dm-alt);
+  color: var(--dm-alt-on);
+}
+.dm .btn.add.alt:not([disabled]):hover {
+  background: var(--dm-alt-deep);
+}
+.dm .qb .qn {
+  font-variant-numeric: tabular-nums;
+}
+.dm .money {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ── Photo slots: the designed fallbacks (live cut-outs; never a caption) ── */
+.dm .dm-cuts {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+}
+.dm .dm-cut {
+  position: absolute;
+  display: block;
+  aspect-ratio: 1;
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+.dm .dm-cuts.-one .c0 {
+  left: 50%;
+  top: 50%;
+  width: min(66%, 420px);
+  transform: translate(-50%, -50%);
+}
+.dm .dm-cuts.-trio .c0 {
+  left: 50%;
+  bottom: 4%;
+  width: min(48%, 340px);
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.dm .dm-cuts.-trio .c1,
+.dm .dm-cuts.-trio .c2 {
+  bottom: 12%;
+  width: min(36%, 260px);
+  z-index: 1;
+}
+.dm .dm-cuts.-trio .c1 {
+  inset-inline-start: 4%;
+}
+.dm .dm-cuts.-trio .c2 {
+  inset-inline-end: 4%;
+}
+.dm .dm-cuts.-spread .dm-cut {
+  width: min(30%, 220px);
+}
+.dm .dm-cuts.-spread .c0 {
+  inset-inline-start: 4%;
+  top: 8%;
+}
+.dm .dm-cuts.-spread .c1 {
+  inset-inline-start: 35%;
+  top: 2%;
+}
+.dm .dm-cuts.-spread .c2 {
+  inset-inline-end: 4%;
+  top: 10%;
+}
+.dm .dm-cuts.-spread .c3 {
+  inset-inline-start: 18%;
+  bottom: 2%;
+}
+.dm .dm-cuts.-spread .c4 {
+  inset-inline-end: 18%;
+  bottom: 0;
+}
+.dm .dm-cuts.-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1%;
+  padding-inline: 5%;
+}
+.dm .dm-cuts.-row .dm-cut {
+  position: relative;
+  flex: 0 1 18%;
+  max-width: 300px;
+}
+@media (max-width: 760px) {
+  .dm .dm-cuts.-row .c4,
+  .dm .dm-cuts.-row .c3 {
+    display: none;
+  }
+  .dm .dm-cuts.-row .dm-cut {
+    flex-basis: 30%;
+  }
+}
+/* A plate under the cut-outs of a collection without its photo. */
+.dm .cc-ph:has(> .dm-cuts),
+.dm .gt:has(> .dm-cuts) {
+  background: radial-gradient(ellipse 70% 42% at 50% 88%, var(--dm-plate), transparent 70%), var(--dm-ph);
+}
+/* The hero's framed photo and the offer card: one piece in the upper middle. */
+.dm .hero-inset .dm-cuts.-one .c0 {
+  width: 76%;
+}
+.dm .offer .dm-cuts.-one .c0 {
+  top: 34%;
+  width: 62%;
+}
+.dm .offer .dm-cut img {
+  filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.35));
+}
+/* The words over a deep slot stay above the cut-outs. */
+.dm .ph .hero-words,
+.dm .ph .offer-tx,
+.dm .ph .j-word,
+.dm .ph .pb-down {
+  z-index: 3;
+}
+/* The photo band's row of pieces leaves room for the arrow. */
+.dm .pb-ph .dm-cuts.-row {
+  bottom: 70px;
+}
+@media (max-width: 760px) {
+  .dm .pb-ph .dm-cuts.-row {
+    bottom: 60px;
+  }
+}
+
+/* ── Sections that adapt to the shop's data (every grid row stays full) ── */
+.dm .nums.on-dark.n2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.dm .nums.on-dark.n1 {
+  grid-template-columns: 1fr;
+}
+.dm .ccs.n1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+.dm .focus-in.no-fnums {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+}
+@media (max-width: 760px) {
+  .dm .focus-in.no-fnums {
+    grid-template-columns: 1fr;
+  }
+}
+.dm .cc-t,
+.dm .s-t,
+.dm .p-t,
+.dm .checks a {
+  overflow-wrap: anywhere;
+}
+.dm .post .p-th img[src=""] {
+  display: none;
+}
+
+/* ── The footer: the theme-switcher kit's row in the mockup's band ── */
+.dm .dts-in .ts-row {
+  --ts-swatch-edge: rgba(255, 240, 225, 0.42);
+  width: 100%;
+  gap: 14px 16px;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+.dm .dts-in .ts-row__label {
+  font: 700 10.5px/1.4 var(--dm-sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dm-dark-muted);
+}
+.dm .dts-in .ts-row__palettes {
+  gap: 8px;
+}
+.dm .dts-in .ts-row__name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--dm-dark-muted);
+}
+.dm .dts-in .ts-mode {
+  margin-inline-start: auto;
+  box-shadow: inset 0 0 0 1px var(--dm-dark-line-2);
+}
+.dm .dts-in .ts-mode .ts-mode__btn {
+  height: 36px;
+  font: 600 12px/1 var(--dm-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dm-dark-muted) !important;
+}
+.dm .dts-in .ts-mode .ts-mode__btn:hover {
+  color: var(--dm-dark-ink) !important;
+}
+.dm .dts-in .ts-mode .ts-mode__btn.-on {
+  background: var(--dm-dark-ink) !important;
+  color: var(--dm-dark) !important;
+}
+.dm .dts-in .ts-mode .ts-mode__btn:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--dm-act-dk);
+}
+@media (max-width: 760px) {
+  .dm .dts-in .ts-mode {
+    margin-inline-start: 0;
+  }
+}
+
+/* ── The legal row's Selldone parts, small and quiet ── */
+.dm .fb-in {
+  align-items: center;
+}
+.dm .fb-end {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+.dm .ftr-bot .dm-gdpr,
+.dm .ftr-bot .dm-gdpr .v-btn,
+.dm .ftr-bot .dm-made,
+.dm .ftr-bot .dm-made a,
+.dm .ftr-bot .dm-made .v-btn,
+.dm .ftr-bot .dm-social .v-btn {
+  color: var(--dm-dark-muted) !important;
+  opacity: 1 !important;
+  font: 600 10.5px/1.4 var(--dm-sans) !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+.dm .ftr-bot .dm-gdpr:empty,
+.dm .ftr-bot .dm-social:empty {
+  display: none;
+}
+.dm .ftr-bot .dm-made {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.dm .ftr-bot .dm-made img,
+.dm .ftr-bot .dm-made svg {
+  max-height: 16px;
+  width: auto;
+}
+.dm .ftr-bot nav a:hover,
+.dm .ftr-bot .dm-made a:hover {
+  color: var(--dm-act-dk) !important;
+}

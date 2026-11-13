@@ -1,18 +1,19 @@
 /*
- * Bakini Noir — typefaces (bakio-design/BRIEF-ALL-PAGES.md §5½, set B).
+ * Domino Cocoa Patisserie — typefaces (domino-design/home-b.html, set B
+ * "Cocoa & Pistachio").
  *
- * Instrument Serif (display, large, with italic accents) over Manrope (text
- * and UI). Material Symbols Rounded still draws the icons of the shared
- * pieces until each page is ported to the mockup's inline line icons. They
- * are requested from the app at start-up rather than from index.html: in
- * production the Layout runs inside the HTML Selldone renders for the shop,
- * and index.html never reaches the visitor. Selldone's own components keep
- * their Material Icons (v-icon). An Arabic face is loaded by the i18n runtime
- * only when Arabic is picked.
+ * Cormorant (display: headings, the wordmark, numbers set large, italic
+ * accents) over Jost (text and UI). Material Symbols Rounded still draws the
+ * icons of the shared pieces until each page is ported to the mockup's inline
+ * line icons. They are requested from the app at start-up rather than from
+ * index.html: in production the Layout runs inside the HTML Selldone renders
+ * for the shop, and index.html never reaches the visitor. Selldone's own
+ * components keep their Material Icons (v-icon). An Arabic face is loaded by
+ * the i18n runtime only when Arabic is picked.
  */
 
 const FONTS = [
-  "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400..800&display=swap",
+  "https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@400;500;600;700&display=swap",
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..24,400..600,0..1,0&display=block",
 ];
 

@@ -1,10 +1,10 @@
 {
   "deploy_server": "https://layouts.selldone.com",
   "deploy_path": "",
-  "package": "bakini-noir-patisserie",
-  "name": "Bakini Noir Patisserie",
-  "version": "1.0.5",
+  "package": "domino-cocoa-patisserie",
+  "name": "Domino Cocoa Patisserie",
+  "version": "1.0.0",
   "storefront": true,
   "backoffice": false,
-  "description": "A dark pastry theatre for a single bakery: a slim glass header, a carousel of the collections in arched windows, the collections as a side-scrolling lineup of tall dark cards, a bento of the shop's real facts (counter hours, delivery windows, pickup, shipping, cash on delivery), selection rows, a compare strip, deals and the journal; real spec filters, a product page with a sticky buy column and Buy together, a bag drawer, glass checkout cards, a desk account, and an ivory light mode."
+  "description": "A light cocoa-and-pistachio pâtisserie for a single bakery: a top bar with the shop’s hours and contact, a cocoa header with the shop’s name drawn as a centred italic wordmark, a hero of collection names over photos, counters on a scalloped cocoa band, the four best-selling collections as cards, how ordering works, three ways to receive an order, a gallery of the collections, today’s selection as rows, a photo band, a marquee of the collections and the journal; a bag drawer and a footer with a Theme row; dark through the footer."
 }

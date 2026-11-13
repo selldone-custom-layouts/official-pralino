@@ -15,7 +15,7 @@
   transition: background .5s;
 }
 :root { --bk-beam: rgba(120, 72, 40, .05); --bk-beam-2: rgba(120, 72, 40, .08); --bk-halo-hero: 30%; }
-html.bk-dark { --bk-beam: rgba(255, 228, 196, .045); --bk-beam-2: rgba(255, 228, 196, .085); --bk-halo-hero: 26%; }
+html.dm-dark { --bk-beam: rgba(255, 228, 196, .045); --bk-beam-2: rgba(255, 228, 196, .085); --bk-halo-hero: 26%; }
 .st-in:is(.nx,.nx *) { display: grid; justify-items: center; }
 .st-copy:is(.nx,.nx *) { max-width: 1240px; display: grid; justify-items: center; gap: 16px; }
 .st-h:is(.nx,.nx *) { font: 400 clamp(54px, 7.6vw, 112px)/.94 var(--bk-fd); letter-spacing: -.02em; }
@@ -29,9 +29,9 @@ html.bk-dark { --bk-beam: rgba(255, 228, 196, .045); --bk-beam-2: rgba(255, 228,
 .st-ph:is(.nx,.nx *) img { position: absolute; max-width: none; width: 80cqw; height: 80cqw; left: 10cqw; top: -16.4cqw; object-fit: contain; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .35)); }
 .st-ph:is(.nx,.nx *) .st-refl { top: 26.8cqw; transform: scaleY(-1); opacity: .16; filter: blur(1.5px);
   -webkit-mask-image: linear-gradient(to bottom, transparent 52%, rgba(0, 0, 0, .9) 78%); mask-image: linear-gradient(to bottom, transparent 52%, rgba(0, 0, 0, .9) 78%); }
-html:not(.bk-dark) .st-ph:is(.nx,.nx *) .st-refl { opacity: .1; }
-html:not(.bk-dark) .st-ph:is(.nx,.nx *) img { filter: drop-shadow(0 24px 30px rgba(80, 40, 10, .22)); }
-html:not(.bk-dark) .st-ph:is(.nx,.nx *) .st-refl { filter: blur(1.5px); }
+html:not(.dm-dark) .st-ph:is(.nx,.nx *) .st-refl { opacity: .1; }
+html:not(.dm-dark) .st-ph:is(.nx,.nx *) img { filter: drop-shadow(0 24px 30px rgba(80, 40, 10, .22)); }
+html:not(.dm-dark) .st-ph:is(.nx,.nx *) .st-refl { filter: blur(1.5px); }
 .st-cap:is(.nx,.nx *) { display: grid; justify-items: center; gap: 6px; margin-top: -4px; }
 .st-name:is(.nx,.nx *) { font: 400 clamp(28px, 3vw, 40px)/1.05 var(--bk-fd); }
 .st-price:is(.nx,.nx *) { color: var(--bk-mut); font-size: 14.5px; }
@@ -196,7 +196,7 @@ html:not(.bk-dark) .st-ph:is(.nx,.nx *) .st-refl { filter: blur(1.5px); }
 
 /* map illustration tokens */
 :root { --bk-m-water: #d6e2e8; --bk-m-land: #efe8e1; --bk-m-road: #ffffff; --bk-m-major: #f6d9b6; --bk-m-pier: #e2d8cf; --bk-m-fb: #d2c4b6; --bk-m-label: #6b5c63; --bk-m-bay: #5f7885; }
-html.bk-dark { --bk-m-water: #0c1419; --bk-m-land: #1b1418; --bk-m-road: #2d2228; --bk-m-major: #4a3527; --bk-m-pier: #261d22; --bk-m-fb: #3a2c25; --bk-m-label: #a8989e; --bk-m-bay: #6d8794; }
+html.dm-dark { --bk-m-water: #0c1419; --bk-m-land: #1b1418; --bk-m-road: #2d2228; --bk-m-major: #4a3527; --bk-m-pier: #261d22; --bk-m-fb: #3a2c25; --bk-m-label: #a8989e; --bk-m-bay: #6d8794; }
 .map-svg:is(.nx,.nx *) { display: block; width: 100%; height: 100%; }
 .map-svg:is(.nx,.nx *) .mw { fill: var(--bk-m-water); }
 .map-svg:is(.nx,.nx *) .mland { fill: var(--bk-m-land); }

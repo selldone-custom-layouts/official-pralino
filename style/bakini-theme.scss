@@ -1,4 +1,11 @@
-/* ▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Bakini Noir — the theme tokens ▆▆▆▆▆▆▆▆▆▆▆▆▆▆
+/* ▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Bakini Noir's token names, on Domino's colours ▆▆▆▆▆▆▆▆▆▆▆▆▆▆
+
+   Domino (13 November 2026): until every page is ported to its Domino
+   mockup, the Noir pages still read these --bk-* names. Their values are
+   now Domino's (style/domino-theme.scss: the cream ground, cocoa ink,
+   pistachio; the cocoa night under html.dm-dark), and the faces are
+   Cormorant and Jost, so no Noir colour or face shows. The notes below are
+   Noir's own and are removed with this file in phase 2.
 
    Every colour Bakini paints comes from these tokens. They are the mockup's
    own (bakio-design/b/core.css, set B "Noir": a dark pastry theatre), with a
@@ -10,17 +17,17 @@
    - Light is the refined ivory version: #f8f5f2 page, white cards, ink
      #1d1418, a darker gold #8a5e2e for small type.
 
-   :root holds Light, html.bk-dark holds Dark. The shared theme switcher
+   :root holds Light, html.dm-dark holds Dark. The shared theme switcher
    (components/theme-switcher/, config components/bakini/bakini-theme.ts) puts
-   the class "bk-dark" on <html> before the app mounts (dark by default, on
+   the class "dm-dark" on <html> before the app mounts (dark by default, on
    every shop: bakini-theme.settings.ts says mode "dark"), and writes the
    chosen palette's action colours (--bk-act*) inline on <html>.
 
    This file holds both modes itself. The build step (postcss-dark-tokens,
-   vite.config.ts) skips rules under html.bk-dark, and the few :root values
-   it rewrites are all redefined under html.bk-dark, so the step changes
+   vite.config.ts) skips rules under html.dm-dark, and the few :root values
+   it rewrites are all redefined under html.dm-dark, so the step changes
    nothing here. Every other fixed colour in the Layout's and Selldone's
-   styles gets a dark value from that step under html.bk-dark.
+   styles gets a dark value from that step under html.dm-dark.
 
    The second block maps the names the inherited pieces read (--bk-buy,
    --bk-surface, --bk-photo … from Medio, and through kalio-tokens.scss the
@@ -29,41 +36,41 @@
 
 :root {
   /* ── Type ── */
-  --bk-fd: "Instrument Serif", "Iowan Old Style", "Times New Roman", serif; /* display */
-  --bk-ft: "Manrope", "Noto Sans Arabic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; /* text and UI */
+  --bk-fd: var(--dm-serif); /* display */
+  --bk-ft: var(--dm-sans); /* text and UI */
 
   /* ── Ivory (Light) ── */
-  --bk-bg: #f8f5f2; /* the page */
-  --bk-bg-2: #f1ece7; /* a band a step down */
-  --bk-s1: #ffffff; /* cards */
-  --bk-s2: #f3eee9; /* raised parts, chips, quiet buttons */
-  --bk-s3: #e9e1da; /* hover of those */
-  --bk-ink: #1d1418;
-  --bk-ink-2: #3a2c33;
-  --bk-mut: #6b5c63; /* 5.80:1 on the page */
-  --bk-gold: #8a5e2e; /* small type and hairlines only: 5.20:1 on the page */
-  --bk-line: rgba(29, 20, 24, 0.11);
-  --bk-line-2: rgba(29, 20, 24, 0.22);
-  --bk-glass: rgba(248, 245, 242, 0.74); /* the header's glass */
-  --bk-plate: #efe8e2; /* the plate a cut-out pastry floats on */
-  --bk-plate-2: #e6ddd5;
+  --bk-bg: #f7f1ea; /* the page */
+  --bk-bg-2: #efe5d9; /* a band a step down */
+  --bk-s1: #fffaf4; /* cards */
+  --bk-s2: #f1e8dc; /* raised parts, chips, quiet buttons */
+  --bk-s3: #e6d8c7; /* hover of those */
+  --bk-ink: #3a2a22;
+  --bk-ink-2: #4a382e;
+  --bk-mut: #6b574b; /* 5.80:1 on the page */
+  --bk-gold: #4d6436; /* small type and hairlines only: 5.20:1 on the page */
+  --bk-line: rgba(58, 42, 34, 0.12);
+  --bk-line-2: rgba(58, 42, 34, 0.24);
+  --bk-glass: rgba(247, 241, 234, 0.86); /* the header's glass */
+  --bk-plate: #f2e8db; /* the plate a cut-out pastry floats on */
+  --bk-plate-2: #e9dccb;
   --bk-floor: rgba(70, 40, 20, 0.22); /* the soft shadow under a pastry */
   --bk-halo-a: 0.34; /* how much of the collection's hue the halo carries */
   --bk-spot: rgba(255, 246, 232, 0.9); /* the hero's spotlight */
   --bk-scrim: rgba(20, 12, 16, 0.42); /* under a sheet (never under a header menu) */
-  --bk-arrow-bg: #1d1418; /* the round row arrows: dark disc, white arrow */
+  --bk-arrow-bg: #3a2a22; /* the round row arrows: dark disc, white arrow */
   --bk-arrow-fg: #ffffff;
-  --bk-foot-bg: #efe9e3;
+  --bk-foot-bg: #efe5d9;
   --bk-ok: #2f7a4a;
   --bk-warn: #9a3b1d;
 
   /* ── The action colour (Caramel, the brand palette; the switcher rewrites these inline) ── */
-  --bk-act: #a0522d; /* every button, chosen states (white words 5.62:1) */
-  --bk-act-deep: #893e17; /* its hover */
-  --bk-act-soft: #ffece3; /* a tint of it */
+  --bk-act: #5a7440; /* every button, chosen states (white words 5.62:1) */
+  --bk-act-deep: #465b31; /* its hover */
+  --bk-act-soft: #e5ecd8; /* a tint of it */
   --bk-act-on: #ffffff; /* words on it */
-  --bk-act-text: #a0522d; /* it as words and links */
-  --bk-act-rgb: 160, 82, 45;
+  --bk-act-text: #4d6436; /* it as words and links */
+  --bk-act-rgb: 90, 116, 64;
   --bk-act-on-rgb: 255, 255, 255;
   --bk-focus: var(--bk-act-text);
   --bk-sel: color-mix(in srgb, var(--bk-act-soft) 70%, var(--bk-s1)); /* a chosen row's tint */
@@ -81,37 +88,37 @@
   color-scheme: light;
 }
 
-html.bk-dark {
-  --bk-bg: #120c10;
-  --bk-bg-2: #0d080b;
-  --bk-s1: #1c1419;
-  --bk-s2: #261b22;
-  --bk-s3: #30232b;
-  --bk-ink: #f4ede6;
-  --bk-ink-2: #e2d7d0;
-  --bk-mut: #b8a9af; /* 8.02:1 on a card */
-  --bk-gold: #d4a373; /* 7.98:1 on a card */
-  --bk-line: rgba(244, 237, 230, 0.1);
-  --bk-line-2: rgba(244, 237, 230, 0.2);
-  --bk-glass: rgba(18, 12, 16, 0.68);
-  --bk-plate: #211820;
-  --bk-plate-2: #171015;
+html.dm-dark {
+  --bk-bg: #1a1310;
+  --bk-bg-2: #120d0b;
+  --bk-s1: #2d221b;
+  --bk-s2: #352920;
+  --bk-s3: #3e3129;
+  --bk-ink: #f3e9de;
+  --bk-ink-2: #e4d6c8;
+  --bk-mut: #c2b1a2; /* 8.02:1 on a card */
+  --bk-gold: #b7d192; /* 7.98:1 on a card */
+  --bk-line: rgba(243, 233, 222, 0.1);
+  --bk-line-2: rgba(243, 233, 222, 0.2);
+  --bk-glass: rgba(26, 19, 16, 0.86);
+  --bk-plate: #2d221b;
+  --bk-plate-2: #231a15;
   --bk-floor: rgba(0, 0, 0, 0.62);
   --bk-halo-a: 0.3;
   --bk-spot: rgba(255, 233, 206, 0.16);
   --bk-scrim: rgba(5, 2, 4, 0.62);
-  --bk-arrow-bg: #f4ede6; /* ivory disc, dark arrow */
-  --bk-arrow-fg: #120c10;
-  --bk-foot-bg: #0d080b;
+  --bk-arrow-bg: #f3e9de; /* ivory disc, dark arrow */
+  --bk-arrow-fg: #1a1310;
+  --bk-foot-bg: #0f0b09;
   --bk-ok: #8fd19e;
   --bk-warn: #f2a07f;
 
   /* Caramel in dark: the same fill (3.21:1 against the card), lighter as words. */
-  --bk-act: #a0522d;
-  --bk-act-deep: #90431d;
-  --bk-act-soft: #4a200c;
-  --bk-act-on: #ffffff;
-  --bk-act-text: #ea9570; /* 7.76:1 on a card */
+  --bk-act: #a9c584;
+  --bk-act-deep: #bdd69c;
+  --bk-act-soft: #2a3321;
+  --bk-act-on: #1a1310;
+  --bk-act-text: #b7d192; /* 7.76:1 on a card */
   --bk-sel: color-mix(in srgb, var(--bk-act-soft) 45%, var(--bk-s2));
 
   color-scheme: dark;
@@ -190,7 +197,7 @@ html.bk-dark {
   /* The inherited dark bands keep white words in both modes: the stage. */
   --bk-navy: #1c1419;
   --bk-navy-2: #261b22;
-  --bk-dark-card: #1c1419;
+  --dm-dark-card: #1c1419;
   --bk-promo: #261b22;
   --bk-strip: #0d080b;
   --bk-slate: #120c10;
@@ -207,7 +214,7 @@ html.bk-dark {
   --bk-p-sky: var(--bk-s2);
 }
 
-html.bk-dark {
+html.dm-dark {
   --bk-sw-edge: rgba(244, 237, 230, 0.5);
   --bk-shine: rgba(255, 255, 255, 0.07);
   --bk-pop-shadow: rgba(0, 0, 0, 0.6);
@@ -221,14 +228,14 @@ html.bk-dark {
 
 /* Vuetify's own dark surfaces on Noir's stage (Selldone's fields, menus,
    dialogs and sheets are dark too, not white islands on a black page). */
-html.bk-dark,
-html.bk-dark .v-theme--dark {
-  --v-theme-background: 18, 12, 16 !important;
-  --v-theme-on-background: 244, 237, 230 !important;
-  --v-theme-surface: 28, 20, 25 !important;
-  --v-theme-on-surface: 244, 237, 230 !important;
-  --v-theme-surface-variant: 48, 35, 43 !important;
-  --v-theme-on-surface-variant: 244, 237, 230 !important;
+html.dm-dark,
+html.dm-dark .v-theme--dark {
+  --v-theme-background: 26, 19, 16 !important;
+  --v-theme-on-background: 243, 233, 222 !important;
+  --v-theme-surface: 45, 34, 27 !important;
+  --v-theme-on-surface: 243, 233, 222 !important;
+  --v-theme-surface-variant: 62, 49, 41 !important;
+  --v-theme-on-surface-variant: 243, 233, 222 !important;
 }
 
 /* The page's own ground under the app (overscroll, the moment before the app
@@ -239,13 +246,13 @@ html {
 }
 
 /* Dark: brand marks drawn in black (Apple's sign-in mark) turn white. */
-html.bk-dark img[src*="apple-b"] {
+html.dm-dark img[src*="apple-b"] {
   filter: invert(1);
 }
 
 /* Dark: Selldone's own white rows (Vuetify's .bg-white, e.g. the billing
    Business / Personal choice) take the card's ground. */
-html.bk-dark .bg-white:not(:has(> img, > .v-img)) {
+html.dm-dark .bg-white:not(:has(> img, > .v-img)) {
   background-color: var(--bk-s1) !important;
   color: var(--bk-ink) !important;
 }

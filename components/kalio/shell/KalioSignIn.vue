@@ -33,7 +33,7 @@
       >
         <div :data-step="step" class="lg-card">
           <button :aria-label="t('bakini.n.rd.lgClose', 'Close')" class="iconbtn x nx-lg__x" type="button" @click="close"><nx-icon name="close" /></button>
-          <bakini-logo :to="null" class="lg-wm" />
+          <domino-logo :to="null" class="lg-wm" />
 
           <!-- 1. The ways in -->
           <div class="lg-s lg-start">
@@ -113,7 +113,7 @@
 import { throttle } from "lodash-es";
 import SShopLogin from "@selldone/components-vue/storefront/login/SShopLogin.vue";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
-import BakiniLogo from "../../bakini/BakiniLogo.vue";
+import DominoLogo from "../../domino/DominoLogo.vue";
 import NxIcon from "../../bakini/noir/NxIcon.vue";
 import { guestCheckout } from "../../bakini/noir/read/rd";
 import { isRtl } from "../../region-switcher/region";
@@ -130,7 +130,7 @@ const SOCIAL = [
 
 export default {
   name: "KalioSignIn",
-  components: { SShopLogin, BakiniLogo, NxIcon },
+  components: { SShopLogin, DominoLogo, NxIcon },
   inject: ["$shop"],
 
   data: () => ({

@@ -4,7 +4,7 @@
  * Nothing here names a product, a price, a category or a tag. The only
  * shop-specific things in the Layout are the brand line (kalio-brand.ts)
  * and the lifestyle photos, which are matched to a category by its `name`
- * slug (assets/bakini/<shape>-<slug>.webp). A category without a photo gets a
+ * slug (assets/domino/<shape>-<slug>.webp). A category without a photo gets a
  * collage of its own products wherever a photo would go (BakiniPhoto.vue).
  *
  *  - catalogue(): one read of the shop's product list (products/list), kept
@@ -32,7 +32,7 @@ declare const window: any;
 /* ━━━━━━━━━━━━ Lifestyle photos ━━━━━━━━━━━━
    wide (16:9, a quiet left third for words), portrait (4:5) and square.
    import.meta.glob lists only the files that exist at build time. */
-const FILES = import.meta.glob("../../assets/bakini/*.webp", {
+const FILES = import.meta.glob("../../assets/domino/*.webp", {
   eager: true,
   query: "?url",
   import: "default",

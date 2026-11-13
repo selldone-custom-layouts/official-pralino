@@ -4,7 +4,7 @@
 /* glass-look cards (no backdrop-filter: that stays on the header only) */
 .gcard:is(.nx,.nx *) { border-radius: var(--bk-r-xl); padding: clamp(18px, 2.4vw, 28px); background: linear-gradient(165deg, var(--bk-g-hi), var(--bk-g-lo)), var(--bk-s1); box-shadow: inset 0 0 0 1px var(--bk-line), inset 0 1px 0 var(--bk-g-edge); min-width: 0; }
 :root { --bk-g-hi: rgba(255, 255, 255, .6); --bk-g-lo: rgba(255, 255, 255, 0); --bk-g-edge: rgba(255, 255, 255, .9); }
-html.bk-dark { --bk-g-hi: rgba(255, 240, 228, .055); --bk-g-lo: rgba(255, 240, 228, .012); --bk-g-edge: rgba(255, 240, 228, .08); }
+html.dm-dark { --bk-g-hi: rgba(255, 240, 228, .055); --bk-g-lo: rgba(255, 240, 228, .012); --bk-g-edge: rgba(255, 240, 228, .08); }
 .gc-hd:is(.nx,.nx *) { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
 .gc-hd:is(.nx,.nx *) h2 { font: 400 28px/1.1 var(--bk-fd); margin-right: auto; }
 .gc-hd:is(.nx,.nx *) .muted { font-size: 13px; }

@@ -290,7 +290,7 @@ $font: "Manrope", "Noto Sans Arabic", "Noto Sans Devanagari", system-ui, -apple-
 /* The compare page's empty card and share card: the deep aubergine card
    with lilac words; its main button white with violet words. */
 .k-cmp {
-  --c-share-bg: var(--bk-dark-card);
+  --c-share-bg: var(--dm-dark-card);
   --c-share-head: #d8ccff;
 }
 .k-cmp .k-cmp__share .k-cmp__btn.-main,

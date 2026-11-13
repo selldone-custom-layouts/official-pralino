@@ -43,21 +43,23 @@ import {SetupPageBuilder} from "@selldone/page-builder/page-builder.ts";
 import {SetupService} from "@selldone/core-js/server";
 import {Shop} from "@selldone/core-js/models";
 import { bootThemeSwitcher } from "./components/theme-switcher/theme-switcher"; // the shared theme switcher
-import { BAKINI_THEME } from "./components/bakini/bakini-theme";
+import { DOMINO_THEME } from "./components/domino/domino-theme";
 import { bootRegion, prepareLanguage } from "./components/region-switcher/region"; // language + currency (the owner's choice B)
 import { priceText } from "./components/kalio/i18n/price-text"; // money in sentences written as u-price writes it
-import { EN as BAKINI_EN, LOADERS as BAKINI_LANGUAGES } from "./components/kalio/i18n"; // the Kalio base + Bakini's own words
+import { EN as LAYOUT_EN, LOADERS as LAYOUT_LANGUAGES } from "./components/kalio/i18n"; // the Kalio base + the Layout's own words
 import { bootI18n, i18nGlobals, loadLanguage } from "./components/kalio/i18n/kalio-i18n"; // the Layout's own words in the visitor's language (lazy per language)
 
 const vuetify = VuetifyInstance(i18n);
 // Vuetify's light error red reads 4.5:1 on white (its #ff5252 is 3.3:1); set
 // here, not in the switcher's config, so it stays when the switcher is hidden.
 try { vuetify.theme.themes.value.light.colors.error = "#c4122f"; } catch (e) {}
-// Noir is dark first: the designed default (bakini-theme.settings.ts, mode
-// "dark") is painted before the first paint on every shop, Vuetify's dark
-// theme included. On Bakini's own showcase shop the footer's Theme row lets a
-// shopper pick a palette and Light / Dark, kept in the browser.
-bootThemeSwitcher(BAKINI_THEME, vuetify);
+// Domino is light first (domino-theme.settings.ts, mode "light"): on a shop
+// without the switcher the stock default needs nothing painted (the tokens'
+// :root is the cream ground and pistachio); a merchant's own settings are
+// painted before the first paint. On Domino's showcase shop (Bakio) the
+// footer's Theme row lets a shopper pick a palette and Light / Dark, kept in
+// the browser.
+bootThemeSwitcher(DOMINO_THEME, vuetify);
 
 //█████████████████████████████████████████████████████████████
 //―――――――――――――― Global Types ―――――――――――――――
@@ -103,7 +105,7 @@ StorefrontSDK.Setup(); // Set up the Shop SDK.
 // showSingle: the pill shows even with one currency and one language (the B
 // mockup's "USD" pill; its panel says what the shop sells in).
 bootRegion(store, { showSingle: true, format: (amount, code, decimals) => priceText(amount, code, store.getters.getShop, { decimals }) });
-bootI18n(BAKINI_EN, BAKINI_LANGUAGES); // <html lang/dir>, and a language's words fetched when it is picked
+bootI18n(LAYOUT_EN, LAYOUT_LANGUAGES); // <html lang/dir>, and a language's words fetched when it is picked
 prepareLanguage((code) => loadLanguage(code)); // a picked language arrives with its words, never English first
 
 // ━━━ Community SDK (capi) ━━━

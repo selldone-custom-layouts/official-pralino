@@ -52,8 +52,9 @@
     <!-- ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Primary Header ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ -->
     <!-- This is the primary header at the top of the website, where you can display your site's name, logo, user avatar, and navigation menu. -->
 
-    <!-- Kalio: the Kalio header (wordmark, aisles, search, account, basket,
-         aisle strip). A shop that set custom header code keeps Selldone's
+    <!-- Domino: the top bar and the cocoa header (the collections, the
+         centred wordmark, search, the language & currency pill, the account
+         and the bag). A shop that set custom header code keeps Selldone's
          header, which renders that code. -->
     <template
       v-if="
@@ -63,12 +64,12 @@
       "
     >
       <s-header-section v-if="custom_header_code"></s-header-section>
-      <bakini-header
+      <domino-header
         v-else
         :show-search="!!show_search_box"
         @clear="onClear"
         @search="onSearch"
-      ></bakini-header>
+      ></domino-header>
     </template>
 
     <!-- Kalio: the search box lives in the Kalio header. -->
@@ -141,15 +142,16 @@
     <template v-if="delay_loaded">
       <!-- ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Primary Footer ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ -->
       <!-- Primary footer of the storefront. -->
-      <!-- Kalio: the Kalio footer, on phones too. A shop that set custom
-           footer code keeps Selldone's footer, which renders that code. -->
+      <!-- Domino: the cocoa footer with the Theme row, on phones too. A shop
+           that set custom footer code keeps Selldone's footer, which renders
+           that code. -->
       <template v-if="!isStandalone && $shop && has_footer">
         <s-footer-section
           v-if="theme?.custom_footer_code"
           :dark="!is_light_footer"
           class="m-0"
         />
-        <bakini-footer v-else />
+        <domino-footer v-else />
       </template>
 
       <!-- ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Basket Indicator ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ -->
@@ -182,8 +184,8 @@
 </template>
 
 <script lang="ts">
-import BakiniHeader from "../components/bakini/shell/BakiniHeader.vue";
-import BakiniFooter from "../components/bakini/shell/BakiniFooter.vue";
+import DominoHeader from "../components/domino/shell/DominoHeader.vue";
+import DominoFooter from "../components/domino/shell/DominoFooter.vue";
 import SStorefrontTopMenu from "@selldone/components-vue/storefront/menu/header/SStorefrontTopMenu.vue";
 import SHeaderSection from "@selldone/components-vue/storefront/header/section/SHeaderSection.vue";
 import TemplateMixin from "@selldone/components-vue/mixin/template/TemplateMixin.ts";
@@ -216,8 +218,8 @@ export default {
     SHeaderSection,
     SStorefrontTopMenu,
 
-    BakiniHeader,
-    BakiniFooter,
+    DominoHeader,
+    DominoFooter,
 
     SStorefrontListingCompareBar: defineAsyncComponent(
       () =>

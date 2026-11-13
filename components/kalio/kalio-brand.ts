@@ -1,6 +1,6 @@
 /* ━━━━━━━━━━━━ The Layout's own name and mark ━━━━━━━━━━━━
    Bakini Noir draws the shop's own live title (Bakio: "bakio") as its
-   wordmark (components/bakini/BakiniLogo.vue), so the Layout works when it is
+   wordmark (components/domino/DominoLogo.vue), so the Layout works when it is
    cloned into another bakery: nothing about the shop is written here.
    `name: null` keeps the shop's title; a string would replace it everywhere
    the storefront names the shop (header, footer, page titles), as Medio and

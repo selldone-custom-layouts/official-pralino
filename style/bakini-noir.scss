@@ -171,7 +171,7 @@
   max-width: none;
   object-fit: cover;
 }
-html:not(.bk-dark) .nx .nx-map__img {
+html:not(.dm-dark) .nx .nx-map__img {
   filter: saturate(0.55) sepia(0.12);
 }
 .nx .nx-map__pin {
@@ -239,8 +239,8 @@ html:not(.bk-dark) .nx .nx-map__img {
 /* The deals band's halo takes its collection's warm hue; on the ivory page a
    light hue (rose, butter) leaves the muted words under 4.5:1, so in light
    mode the band's words are the deeper ink. */
-html:not(.bk-dark) .nx .deal-band .db-copy p,
-html:not(.bk-dark) .nx .deal-band .db-copy .eyebrow {
+html:not(.dm-dark) .nx .deal-band .db-copy p,
+html:not(.dm-dark) .nx .deal-band .db-copy .eyebrow {
   color: var(--bk-ink-2);
 }
 
@@ -284,10 +284,10 @@ html:not(.bk-dark) .nx .deal-band .db-copy .eyebrow {
 }
 .nx .hp-card.on { cursor: default; }
 .nx .hp-card.far { opacity: 0; pointer-events: none; }
-html.bk-dark .nx .hp-card:not(.on) { filter: brightness(calc(.78 - var(--a) * .14)) saturate(.85); }
-html:not(.bk-dark) .nx .hp-card:not(.on) { filter: brightness(calc(1 - var(--a) * .05)) saturate(calc(1 - var(--a) * .15)); }
-html.bk-dark .nx .hp-card:hover:not(.on):not(.far) { filter: brightness(.9); }
-html:not(.bk-dark) .nx .hp-card:hover:not(.on):not(.far) { filter: none; }
+html.dm-dark .nx .hp-card:not(.on) { filter: brightness(calc(.78 - var(--a) * .14)) saturate(.85); }
+html:not(.dm-dark) .nx .hp-card:not(.on) { filter: brightness(calc(1 - var(--a) * .05)) saturate(calc(1 - var(--a) * .15)); }
+html.dm-dark .nx .hp-card:hover:not(.on):not(.far) { filter: brightness(.9); }
+html:not(.dm-dark) .nx .hp-card:hover:not(.on):not(.far) { filter: none; }
 .nx .hp-arch {
   display: block; position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--bk-plate);
   border-radius: 50% 50% var(--bk-r-xl) var(--bk-r-xl) / 40% 40% var(--bk-r-xl) var(--bk-r-xl);

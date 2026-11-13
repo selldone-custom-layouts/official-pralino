@@ -100,29 +100,31 @@ export default ({mode}: any) => {
           : []),
     ],
     /* The theme switcher's build step: every fixed colour gets a dark value
-       under html.bk-dark (components/theme-switcher/tools, PORTING.md).
-       Bakini Noir is dark first: html.bk-dark is on by default, so these
-       dark values are what a visitor sees unless they pick Light. The Noir
-       tokens (style/bakini-theme.scss) hold both modes themselves: their
-       html.bk-dark block is skipped by the step and outranks :root. The pastry
+       under html.dm-dark (components/theme-switcher/tools, PORTING.md), the
+       cocoa night of Domino's dark mode. Domino is light first: these dark
+       values show only when a visitor picks Dark in the footer's Theme row.
+       Domino's own tokens and stylesheets (style/domino-theme.scss,
+       style/domino/, style/domino-layout.scss, components/domino/) hold both
+       modes themselves and are skipped, as are the Noir pages still waiting
+       for their Domino port (their tokens hold both modes too). The pastry
        photos are transparent cut-outs, so their plates are tokens that turn
        dark too (no light-tile exceptions beyond the build step's own). */
     css: {
       postcss: {
         plugins: [
           darkTokens({
-            darkSelector: "html.bk-dark",
+            darkSelector: "html.dm-dark",
             include: [/\/style\//, /\/StorefrontApp\.vue/, /\/components\//, /\/pages\//, /\/layouts\//],
-            exclude: [/\/node_modules\//, /\/modules\/pagebuilder\//, /\/theme-switcher\//, /\/style\/noir\//, /\/style\/bakini-noir[\w-]*\.scss/, /\/components\/bakini\/noir\//],
+            exclude: [/\/node_modules\//, /\/modules\/pagebuilder\//, /\/theme-switcher\//, /\/style\/noir\//, /\/style\/bakini-noir[\w-]*\.scss/, /\/components\/bakini\/noir\//, /\/style\/domino\//, /\/style\/domino-[\w-]*\.scss/, /\/components\/domino\//],
             lightVars: [],
-            card: "#1c1419",
-            raise: "#261b22",
-            variant: "#30232b",
-            line: "#30232b",
-            lineStrong: "#4a3b43",
-            ink: "#f4ede6",
-            ink2: "#e2d7d0",
-            muted: "#b8a9af",
+            card: "#2d221b",
+            raise: "#352920",
+            variant: "#3e3129",
+            line: "#3e3129",
+            lineStrong: "#57463b",
+            ink: "#f3e9de",
+            ink2: "#e4d6c8",
+            muted: "#c2b1a2",
           }),
         ],
       },

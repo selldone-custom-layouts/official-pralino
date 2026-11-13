@@ -40,7 +40,7 @@ export default {
       return (String(this.title || "").trim().charAt(0) || "·").toLowerCase();
     },
     dark() {
-      return this.theme.mode === "dark" || document.documentElement.classList.contains("bk-dark");
+      return this.theme.mode === "dark" || document.documentElement.classList.contains("dm-dark");
     },
     src() {
       const l = this.location;
