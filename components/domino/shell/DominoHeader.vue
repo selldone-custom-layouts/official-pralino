@@ -245,8 +245,7 @@
         <div :class="['scrim', { open: scrim }]" @click="closeLayer()"></div>
         <domino-bag-drawer />
       </div>
-      <!-- The quick look of the pages still waiting for their Domino port. -->
-      <div class="nx nx-layers"><nx-quick /></div>
+      <dm-quick-view />
     </teleport>
   </div>
 </template>
@@ -255,7 +254,7 @@
 import DominoLogo from "../DominoLogo.vue";
 import DmIcon from "../DmIcon.vue";
 import DominoBagDrawer from "./DominoBagDrawer.vue";
-import NxQuick from "../../bakini/noir/NxQuick.vue";
+import DmQuickView from "../ui/DmQuickView.vue";
 import RegionChips from "../../region-switcher/RegionChips.vue";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import { catalogueRoute, dealsRoute, percentOff } from "../../kalio/kalio-catalog";
@@ -291,7 +290,7 @@ const STOP = new Set(["and", "with", "the", "of", "a", "an", "in", "on", "mini",
 
 export default {
   name: "DominoHeader",
-  components: { DominoLogo, DmIcon, DominoBagDrawer, NxQuick, RegionChips },
+  components: { DominoLogo, DmIcon, DominoBagDrawer, DmQuickView, RegionChips },
   props: {
     showSearch: { type: Boolean, default: true },
   },

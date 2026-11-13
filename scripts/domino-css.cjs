@@ -13,10 +13,12 @@
 // - Custom properties take the --dm- prefix; the token blocks (:root, the
 //   modes) are left out because style/domino-theme.scss holds them.
 // - [data-mode="dark"] -> html.dm-dark (the theme switcher's dark class).
-// - body -> the .dm root itself; html.locked is left out (the layers lock
-//   the page themselves); html keeps only its scroll padding.
+// - body -> the .dm root itself; body.has-buybar -> html.dm-buybar (the
+//   product page sets it); html.locked is left out (the layers lock the page
+//   themselves); html keeps only its scroll padding.
 // - The mockup's footer theme band (.ts-*) -> .dts-* (the kit's
 //   ThemeSwitcherRow owns .ts-*); keyframes -> dm-*.
+// - pages.css (the inner pages, 13 November 2026) comes last, as in the mockup.
 // Re-run after the mockup changes; style/domino/ is generated, never edited.
 const fs = require("fs");
 const path = require("path");
@@ -25,13 +27,14 @@ const sp = require("postcss-selector-parser");
 
 const SRC = process.argv[2] || path.resolve(__dirname, "../../domino-design/src");
 const OUT = path.resolve(__dirname, "../style/domino");
-const FILES = ["domino", "b"];
+const FILES = ["domino", "b", "pages"];
 const KEYFRAMES = new Map();
 
 const renameVars = (v) => v.replace(/var\(\s*--(?!dm-)([\w-]+)/g, "var(--dm-$1");
 
 function scopeSelector(sel) {
   sel = sel
+    .replace(/body\.has-buybar/g, "html.dm-buybar")
     .replace(/:root\[data-mode=["']?dark["']?\]/g, "html.dm-dark")
     .replace(/\[data-mode=["']?dark["']?\]/g, "html.dm-dark")
     .replace(/\.ts-/g, ".dts-");

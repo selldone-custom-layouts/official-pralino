@@ -13,19 +13,19 @@
   -->
 
 <!--
-  The compare page is Bakini Noir's (NxCompare: bakio-design/compare-b.html),
+  The compare page is Domino's (DmCompare: domino-design/compare-b.html),
   built on Kalio's compare logic. The address keeps Selldone's ?list=
   format, so its old links still open here.
 -->
 <template>
-  <nx-compare />
+  <dm-compare />
 </template>
 
 <script lang="ts">
-import NxCompare from "../../components/bakini/noir/compare/NxCompare.vue";
+import DmCompare from "../../components/domino/compare/DmCompare.vue";
 
 export default {
   name: "StorefrontPageComparison",
-  components: { NxCompare },
+  components: { DmCompare },
 };
 </script>

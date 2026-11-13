@@ -34,7 +34,7 @@ const name = process.env.NAME || "home";
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
       await page.goto(url, { waitUntil: "domcontentloaded", timeout: 180000 });
-      await page.waitForSelector(".dm-home .srow, .dm .ftr", { timeout: 180000 });
+      await page.waitForSelector(process.env.WAIT || ".dm .ftr", { timeout: 180000 });
       await page.waitForTimeout(2500);
       await page.evaluate(async () => {
         document.querySelectorAll('img[loading="lazy"]').forEach((i) => (i.loading = "eager"));

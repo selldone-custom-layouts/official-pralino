@@ -124,6 +124,23 @@
   --dm-sample-bg: var(--dm-act-soft);
   --dm-sample-ink: var(--dm-ink);
   --dm-scrim: rgba(15, 12, 10, 0.5);
+
+  /* ── The inner pages (pages.css): fields, errors, the title band, the map ── */
+  --dm-err: #a3322a;
+  --dm-err-soft: #f7e3de;
+  --dm-field: #fffaf4;
+  --dm-field-line: #a38d79;
+  --dm-seg-bg: #efe5d9;
+  --dm-pt-muted: #e2d3c4;
+  --dm-pt-link: var(--dm-act-dk);
+  --dm-map-land: #efe6da;
+  --dm-map-block: #e6dacb;
+  --dm-map-road: #fffaf4;
+  --dm-map-main: #f4d9b8;
+  --dm-map-water: #cfdfe0;
+  --dm-map-park: #dbe5cc;
+  --dm-map-label: #6b574b;
+  --dm-map-pin: #3a2a22;
   --dm-tex: radial-gradient(rgba(255, 240, 225, 0.05) 1px, transparent 1.4px) 0 0 / 7px 7px,
     radial-gradient(rgba(255, 240, 225, 0.035) 1px, transparent 1.4px) 3px 4px / 11px 11px;
 
@@ -184,6 +201,21 @@ html.dm-dark {
   --dm-count-ink: #1a1310;
   --dm-sample-ink: var(--dm-ink);
   --dm-scrim: rgba(0, 0, 0, 0.62);
+
+  --dm-err: #f1a497;
+  --dm-err-soft: #3b211c;
+  --dm-field: #231a15;
+  --dm-field-line: #7b6656;
+  --dm-seg-bg: #231a15;
+  --dm-pt-muted: #d5c4b4;
+  --dm-map-land: #2a201a;
+  --dm-map-block: #33271f;
+  --dm-map-road: #46382e;
+  --dm-map-main: #5a4434;
+  --dm-map-water: #1c2a2c;
+  --dm-map-park: #27301f;
+  --dm-map-label: #c2b1a2;
+  --dm-map-pin: #f3e9de;
 
   color-scheme: dark;
 }

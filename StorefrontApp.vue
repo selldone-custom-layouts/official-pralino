@@ -578,6 +578,7 @@ export default {
 <style lang="scss" src="./style/domino-theme.scss"></style>
 <style src="./style/domino/domino.css"></style>
 <style src="./style/domino/b.css"></style>
+<style src="./style/domino/pages.css"></style>
 <style lang="scss" src="./style/domino-layout.scss"></style>
 
 <style lang="scss">

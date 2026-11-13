@@ -13,72 +13,68 @@
   -->
 
 <!--
-  Bakini Noir — one package's way to the shopper (checkout-b.html "Delivery
-  method", delivery-b.html): the shop's ways as cards (the mockup's .dmc:
-  icon, name, a line about it, the fee), its pickup points as cards too,
-  then the way's time windows as chips (one chosen, a ring inside). A way
-  that asks for a date gets a date field. The data and every rule are
-  Selldone's (the days and windows the way offers, lead time, the earliest
-  date); choosing a window writes delivery_info.custom, .days and
+  Domino — one package's way to the shopper (checkout-b.html "Delivery",
+  delivery-b.html): the shop's ways as method cards (the mockup's .mc: a
+  radio, the icon, the name, the fee, a line about it), its pickup points as
+  cards too, then the way's time windows as chips (one chosen, a ring
+  inside). A way that asks for a date gets a date field. The data and every
+  rule are Selldone's (the days and windows the way offers, lead time, the
+  earliest date); choosing a window writes delivery_info.custom, .days and
   .time_spans, as Selldone's own "choose a time" does.
 -->
 <template>
-  <section class="nx-ship">
-    <div v-if="transportation_exclude_pickup?.length || pickups?.length" :aria-label="t('bakini.n.co.method', 'Delivery method')" class="dms" role="group">
-      <button
-        v-for="item in transportation_exclude_pickup"
-        :key="item.type"
-        :aria-pressed="transportation?.type === item.type && !selectedPickup ? 'true' : 'false'"
-        class="dmc"
-        type="button"
-        @click="pickWay(item)"
-      >
-        <span class="dm-ic"><nx-icon :name="wayIcon(item.type)" /></span>
-        <b>{{ wayTitleOf(item) }}</b>
-        <span v-if="noteOf(item)" class="dmc-n">{{ noteOf(item) }}</span>
-        <span class="dmc-f">{{ feeOf(item) }}</span>
-      </button>
-      <button
-        v-for="(pickup, i) in pickups || []"
-        :key="'p' + i"
-        :aria-pressed="selectedPickup?.address && selectedPickup.address === pickup.address ? 'true' : 'false'"
-        class="dmc"
-        type="button"
-        @click="pickPickup(pickup)"
-      >
-        <span class="dm-ic"><nx-icon name="store" /></span>
-        <b>{{ pickup_transportation?.title || t("bakini.way.pickupAt", "Pickup at {place}", { place: pickup.title || pickup.name || pickup.address }) }}</b>
-        <span class="dmc-n">{{ pickup.message || MapHelper.GenerateFullAddressFromMapInfo(pickup) }}</span>
-        <span class="dmc-f">{{ t("bakini.n.co.free", "Free") }}</span>
-      </button>
+  <section class="dm-ship">
+    <div v-if="transportation_exclude_pickup?.length || pickups?.length" :aria-label="t('domino.co.method', 'Delivery method')" class="mcs" role="radiogroup">
+      <label v-for="item in transportation_exclude_pickup" :key="item.type" :class="['mc', { on: transportation?.type === item.type && !selectedPickup }]">
+        <input :aria-label="wayTitleOf(item)" :checked="transportation?.type === item.type && !selectedPickup" :name="radioName" class="rdo" type="radio" :value="item.type" @change="pickWay(item)" />
+        <span class="mc-ic"><dm-icon :name="wayIcon(item.type)" /></span>
+        <span class="mc-t">{{ wayTitleOf(item) }}</span>
+        <span class="mc-f">{{ feeOf(item) }}</span>
+        <span v-if="noteOf(item)" class="mc-n">{{ noteOf(item) }}</span>
+      </label>
+      <label v-for="(pickup, i) in pickups || []" :key="'p' + i" :class="['mc', { on: !!(selectedPickup?.address && selectedPickup.address === pickup.address) }]">
+        <input
+          :aria-label="pickupTitle(pickup)"
+          :checked="!!(selectedPickup?.address && selectedPickup.address === pickup.address)"
+          :name="radioName"
+          class="rdo"
+          type="radio"
+          :value="'pickup-' + i"
+          @change="pickPickup(pickup)"
+        />
+        <span class="mc-ic"><dm-icon name="store" /></span>
+        <span class="mc-t">{{ pickupTitle(pickup) }}</span>
+        <span class="mc-f">{{ t("domino.co.free", "Free") }}</span>
+        <span class="mc-n">{{ pickup.message || MapHelper.GenerateFullAddressFromMapInfo(pickup) }}</span>
+      </label>
     </div>
 
     <template v-if="transportation">
-      <template v-if="windowsOn && timeItems.length">
-        <p class="dm-lbl">{{ t("bakini.n.co.window", "Time window") }}</p>
-        <div :aria-label="t('bakini.n.co.window', 'Time window')" class="dm-win" role="group">
+      <div v-if="windowsOn && timeItems.length" class="wins">
+        <p class="fl">{{ selectedPickup ? t("domino.co.pickupWindow", "Pickup window") : t("domino.co.deliveryWindow", "Delivery window") }}</p>
+        <div :aria-label="t('domino.co.window', 'Time window')" class="chips-r" role="radiogroup">
           <button
             v-for="span in timeItems"
             :key="span.value"
-            :aria-pressed="isWindow(span.value) ? 'true' : 'false'"
+            :aria-checked="isWindow(span.value) ? 'true' : 'false'"
             :disabled="span.props?.disabled"
-            class="chip"
+            class="wchip"
+            role="radio"
             type="button"
             @click="pickWindow(span.value)"
           >
-            <nx-icon name="clock" />{{ windowName(span) }}
+            <dm-icon name="clock" />{{ windowName(span) }}
           </button>
         </div>
-      </template>
-      <template v-if="need_ask_shipping_date">
-        <p class="dm-lbl">{{ t("bakini.n.co.date", "Date") }}</p>
-        <label class="fld nx-ship__date">
-          <span class="vh">{{ t("bakini.n.co.date", "Date") }}</span>
-          <input :min="minDate" :type="transportation.eta === ETA.date.code ? 'date' : 'datetime-local'" :value="dateValue" @change="setDate($event.target.value)" />
+      </div>
+      <div v-if="need_ask_shipping_date" class="wins">
+        <label class="fld dm-ship-date">
+          <span class="fl">{{ t("domino.co.date", "Date") }}</span>
+          <input :min="minDate" :type="transportation.eta === ETA.date.code ? 'date' : 'datetime-local'" :value="dateValue" class="inp" @change="setDate($event.target.value)" />
         </label>
-      </template>
-      <p v-if="max_lead_time > 0 || transportation?.etd" class="nx-ship__hint">
-        <nx-icon name="clock" />{{ t("bakini.n.co.readyIn", { one: "Ready in about {n} hour.", other: "Ready in about {n} hours." }, { n: max_lead_time + (transportation?.etd ? transportation.etd : 0) }) }}
+      </div>
+      <p v-if="max_lead_time > 0 || transportation?.etd" class="cdlv-n">
+        <dm-icon name="clock" />{{ t("domino.co.readyIn", { one: "Ready in about {n} hour.", other: "Ready in about {n} hours." }, { n: max_lead_time + (transportation?.etd ? transportation.etd : 0) }) }}
       </p>
     </template>
   </section>
@@ -98,9 +94,9 @@ import { TimeSpans } from "@selldone/core-js/enums/logistic/TimeSpans.ts";
 import TemplateMixin from "@selldone/components-vue/mixin/template/TemplateMixin.ts";
 import ProductMixin from "@selldone/components-vue/mixin/product/ProductMixin.ts";
 import MapMixin from "@selldone/components-vue/mixin/map/MapMixin.ts";
-import NxIcon from "../../../components/bakini/noir/NxIcon.vue";
-import { shopWay, wayIcon } from "../../../components/bakini/noir/buy/noir-cart";
-import { wayTitle } from "../../../components/bakini/noir/noir";
+import DmIcon from "../../../components/domino/DmIcon.vue";
+import { shopWay, wayIcon } from "../../../components/domino/buy/dm-cart";
+import { wayTitle } from "../../../components/domino/dm";
 
 export default defineComponent({
   name: "SCartShippingOptions",
@@ -108,7 +104,7 @@ export default defineComponent({
 
   components: {
     ProductsDenseImagesCircles,
-    NxIcon,
+    DmIcon,
   },
   inject: ["$shop"],
   emits: ["update:transportation", "set-basket-config", "pickupSelected"],
@@ -146,6 +142,11 @@ export default defineComponent({
   }),
 
   computed: {
+    /* One radio group per package (the page and the delivery sheet each draw one). */
+    radioName() {
+      if (!this._dmUid) this._dmUid = "dm-ship-" + Math.random().toString(36).slice(2, 8);
+      return this._dmUid;
+    },
     /* The way offers parts of the day to choose from. */
     windowsOn() {
       return !!this.transportation && [ETA.weekday_timeframe.code, ETA.timeframe.code].includes(this.transportation.eta);
@@ -400,7 +401,11 @@ export default defineComponent({
     moneyFrom,
     t,
     wayIcon,
-    /* ── Bakini Noir ── */
+    /* ── Domino ── */
+    /* A pickup point's card title: the pickup way's own title, else "Pickup at <place>". */
+    pickupTitle(pickup) {
+      return this.pickup_transportation?.title || t("bakini.way.pickupAt", "Pickup at {place}", { place: pickup.title || pickup.name || pickup.address });
+    },
     wayTitleOf(item) {
       return item?.title || wayTitle(item, this.$shop);
     },

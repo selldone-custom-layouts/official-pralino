@@ -296,14 +296,18 @@ export function shopFacts(shop: any): ShopFacts {
 
 export const layer = reactive({ open: "" as string, quick: null as any, product: null as any });
 let opener: HTMLElement | null = null;
-const MODAL = new Set(["drawer", "qv", "langsheet", "fsheet", "menu"]);
+/* The layers that cover the page (the scrim, the page stops scrolling, a
+   click outside does not close them): the side panels and the modal sheets.
+   A collection's filter panel ("fp-…") is one below 1200px. */
+const MODAL = new Set(["drawer", "qv", "langsheet", "fsheet", "menu", "mapm", "dlvm", "paym", "loginm", "cmp-pick"]);
+const isModalId = (id: string) => MODAL.has(id) || /^fp-/.test(id);
 
 /** Open a layer by id; the button that opened it gets focus back on close. */
 export function openLayer(id: string, btn?: HTMLElement | null): void {
   if (layer.open && layer.open !== id) closeLayer(true);
   layer.open = id;
   opener = btn || (document.activeElement as HTMLElement) || null;
-  if (MODAL.has(id)) document.documentElement.style.overflow = "hidden";
+  if (isModalId(id)) document.documentElement.style.overflow = "hidden";
 }
 
 export function closeLayer(silent = false): void {
@@ -331,7 +335,7 @@ export function toggleLayer(id: string, btn?: HTMLElement | null): void {
 }
 
 export function isModal(id: string): boolean {
-  return MODAL.has(id);
+  return isModalId(id);
 }
 
 /** The quick look dialog for a product. */

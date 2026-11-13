@@ -14,14 +14,14 @@
 <!--
   Domino — the shop page: the bare page is the home (DominoHome); a
   collection, a search, the deals and every pastry are the listing
-  (NxListing, until its Domino port). The page keeps Selldone's search-engine data for the listing
+  (DmListing). The page keeps Selldone's search-engine data for the listing
   (StorefrontSeo) and never starts on Selldone's Insta view.
 -->
 <template>
-  <div class="nx-shop-page">
+  <div class="nx-shop-page dm-shop-page">
     <slot name="header" :center="true"></slot>
     <domino-home v-if="show_home" />
-    <nx-listing
+    <dm-listing
       v-else
       :key="'ls-' + (category_name || '') + '|' + search_query + '|' + (deals_page ? 1 : 0)"
       :category-name="category_name"
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import DominoHome from "../../components/domino/DominoHome.vue";
-import NxListing from "../../components/bakini/noir/shop/NxListing.vue";
+import DmListing from "../../components/domino/shop/DmListing.vue";
 import { StorefrontSeo } from "../../helpers/StorefrontSeo";
 
 /* The query keys that ask for the listing. Anything else in the address
@@ -52,7 +52,7 @@ function filterOf(query: any): any {
 
 export default {
   name: "StorefrontPageProducts",
-  components: { DominoHome, NxListing },
+  components: { DominoHome, DmListing },
   inject: ["$shop"],
 
   data: () => ({
