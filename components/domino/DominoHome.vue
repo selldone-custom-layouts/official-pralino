@@ -127,7 +127,7 @@
                 <li v-for="p in x.ps.slice(0, 3)" :key="p.id">
                   <span class="ck"><dm-icon name="check" /></span><router-link :to="productTo(p)">{{ p.title }}</router-link
                   ><span class="ck-pr"
-                    ><span class="now money">{{ money(pv(p).now) }}</span><template v-if="pv(p).was"> <s class="was money">{{ money(pv(p).was) }}</s></template></span
+                    ><span class="now money">{{ money(pv(p).now) }}</span><template v-if="pv(p).was">{{ " " }}<s class="was money">{{ money(pv(p).was) }}</s></template></span
                   >
                 </li>
               </ul>
@@ -267,7 +267,7 @@
               </div>
             </div>
             <p class="s-pr">
-              <span class="now money">{{ money(pv(p).now) }}</span><template v-if="pv(p).was"> <s class="was money">{{ money(pv(p).was) }}</s></template>
+              <span class="now money">{{ money(pv(p).now) }}</span><template v-if="pv(p).was">{{ " " }}<s class="was money">{{ money(pv(p).was) }}</s></template>
             </p>
             <div :class="['s-act', { dark: i % 2 }]"><dm-add :alt="!!(i % 2)" :product="p" /></div>
           </li>
@@ -344,8 +344,6 @@ const list = (items, type = "conjunction") => {
   }
 };
 const NUM_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
-/* A US state's two letters for the counter's address line ("CA"). */
-const US = { California: "CA", "New York": "NY", Texas: "TX", Washington: "WA", Illinois: "IL", Florida: "FL", Massachusetts: "MA", Oregon: "OR" };
 
 export default {
   name: "DominoHome",
@@ -574,15 +572,16 @@ export default {
       if (!this.rank.length) return null;
       const centre = this.rank[0].c;
       const others = this.cats.filter((c) => c.id !== centre.id && inCat(c.id).length);
+      /* The plates: best sellers of the collections that sit farthest from
+         them (the last tiles first), so a plate never stands next to its
+         own collection's tile; then any best seller. */
       const plates = [];
       const seen = new Set();
-      for (const x of this.rank.slice(1).concat(this.rank.slice(0, 1))) {
-        for (const p of x.ps) {
-          if (!seen.has(p.id)) {
-            plates.push(p);
-            seen.add(p.id);
-            break;
-          }
+      for (const c of [...others].reverse()) {
+        const p = bySells(inCat(c.id))[0];
+        if (p && !seen.has(p.id)) {
+          plates.push(p);
+          seen.add(p.id);
         }
       }
       for (const p of this.best) if (!seen.has(p.id)) plates.push(p) && seen.add(p.id);

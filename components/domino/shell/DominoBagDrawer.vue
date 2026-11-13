@@ -91,7 +91,7 @@
             <div class="mini-tx">
               <router-link :to="pTo(p)" class="mini-t" @click="close">{{ p.title }}</router-link>
               <span class="mini-p"
-                ><span class="now money">{{ dmMoney(pv(p).now) }}</span><template v-if="pv(p).was"> <s class="was money">{{ dmMoney(pv(p).was) }}</s></template></span
+                ><span class="now money">{{ dmMoney(pv(p).now) }}</span><template v-if="pv(p).was">{{ " " }}<s class="was money">{{ dmMoney(pv(p).was) }}</s></template></span
               >
             </div>
             <div class="mini-a"><dm-add :label="t('domino.add.short', 'Add')" :product="p" /></div>

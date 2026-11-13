@@ -37,7 +37,7 @@
   /* ── Shape and rhythm ── */
   --dm-wrap: 1320px;
   --dm-gut: max(clamp(16px, 4vw, 40px), env(safe-area-inset-left));
-  --dm-hdr-h: 92px;
+  --dm-hdr-h: 92px; /* at every width, as the mockup renders it */
   --dm-tb-h: 44px; /* the top bar, which scrolls away above the sticky header */
   --dm-frame: 8px;
   --dm-g-gap: 16px;
@@ -188,11 +188,6 @@ html.dm-dark {
   color-scheme: dark;
 }
 
-@media (max-width: 979px) {
-  :root {
-    --dm-hdr-h: 72px;
-  }
-}
 @media (max-width: 760px) {
   :root {
     --dm-tb-h: 38px;

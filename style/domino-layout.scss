@@ -31,6 +31,23 @@ html body,
   color: var(--dm-ink);
   font-family: var(--dm-sans);
 }
+/* The home meets the footer with no gap (the shop page's bottom padding is
+   for the listing). */
+.nx-shop-page:has(> .dm-home) {
+  padding-bottom: 0 !important;
+}
+/* Words start at the line's start (an inherited centring is a bug: the
+   mockup centres only its section heads, explicitly). */
+.dm {
+  text-align: start;
+}
+/* Focus is shown by the mockup's inset rings only: the shared skin's outer
+   outline (.v-application :focus-visible) would draw outside the box, which
+   a row or card can cut (the owner's ring rule). */
+.dm :focus-visible,
+.dm:focus-visible {
+  outline: none !important;
+}
 /* Domino's wrappers take the page's type, not a ground of their own where
    they hold only layers. */
 .dm.dm-layers {
@@ -93,11 +110,14 @@ html body,
   }
 }
 @media (max-width: 979px) {
-  .dm .topbar .tb-rg {
+  /* Phone and tablet: the counter's hours and the phone (the mockup's rule);
+     the pill moves into the menu. */
+  .dm .topbar .tb-rg,
+  .dm .topbar .tb-mail {
     display: none !important;
   }
-  .dm .topbar .tb-r li:nth-child(2)::before {
-    display: none;
+  .dm .topbar .tb-tel::before {
+    display: none !important;
   }
 }
 /* The wordmark: a long shop name steps down and never leaves the bar. */
@@ -152,10 +172,6 @@ html body,
   background: var(--dm-count-bg);
   color: var(--dm-count-ink);
 }
-.dm .order,
-.dm .order:hover {
-  color: var(--dm-on-cocoa-dk) !important;
-}
 .dm .nav-a[aria-current="page"] {
   color: var(--dm-hdr-hover);
 }
@@ -194,6 +210,7 @@ html body,
   height: 28px;
   gap: 6px;
   padding: 0 10px 0 8px;
+  border-radius: 999px !important;
   box-shadow: inset 0 0 0 1px var(--dm-dark-line-2);
   font: 600 10.5px/1 var(--dm-sans);
   letter-spacing: 0.14em;
@@ -677,6 +694,7 @@ html body,
 /* ── The footer: the theme-switcher kit's row in the mockup's band ── */
 .dm .dts-in .ts-row {
   --ts-swatch-edge: rgba(255, 240, 225, 0.42);
+  --ts-ring: var(--dm-dark-ink); /* the chosen swatch's ring reads on the dark footer */
   width: 100%;
   gap: 14px 16px;
   padding: 0;
@@ -691,6 +709,10 @@ html body,
 }
 .dm .dts-in .ts-row__palettes {
   gap: 8px;
+}
+/* The mockup's softer colour wheel for "Custom". */
+.dm .dts-in .ts-swatch.-custom.-rainbow::before {
+  background: conic-gradient(#e0614b, #e8b04a, #8fb35a, #4aa3a0, #4a6fd0, #c4588c, #e0614b);
 }
 .dm .dts-in .ts-row__name {
   font-size: 12.5px;
@@ -761,6 +783,7 @@ html body,
 .dm .ftr-bot .dm-made svg {
   max-height: 16px;
   width: auto;
+  filter: brightness(0) invert(0.82); /* Selldone's dark logo, light on the dark footer */
 }
 .dm .ftr-bot nav a:hover,
 .dm .ftr-bot .dm-made a:hover {

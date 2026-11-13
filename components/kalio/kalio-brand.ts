@@ -1,5 +1,5 @@
 /* ━━━━━━━━━━━━ The Layout's own name and mark ━━━━━━━━━━━━
-   Bakini Noir draws the shop's own live title (Bakio: "bakio") as its
+   Domino draws the shop's own live title (Bakio: "bakio") as its
    wordmark (components/domino/DominoLogo.vue), so the Layout works when it is
    cloned into another bakery: nothing about the shop is written here.
    `name: null` keeps the shop's title; a string would replace it everywhere
@@ -8,7 +8,7 @@
 
    The mark (the browser tab's icon, the avatar on order messages and the
    compare page's share card) is drawn from the same title: its first letter
-   in an italic serif, ivory on the Noir stage, with the gold dot of the
+   in Cormorant italic, cream on cocoa, with the pistachio dot of the
    wordmark. It is an inline SVG, so no image file is needed. */
 
 export const BRAND: { name: string | null; mark: string } = {
@@ -16,17 +16,17 @@ export const BRAND: { name: string | null; mark: string } = {
   mark: markFor(""),
 };
 
-/** The mark as an SVG data URL: the title's first letter on the Noir stage. */
+/** The mark as an SVG data URL: the title's first letter, cream on cocoa. */
 export function markFor(title: string): string {
   const letter = (String(title || "").trim().charAt(0) || "·").toLowerCase();
   const esc = letter.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
   const svg =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">' +
-    '<rect width="64" height="64" rx="16" fill="#120c10"/>' +
-    '<text x="29" y="45" text-anchor="middle" font-family="Instrument Serif, Iowan Old Style, Georgia, serif" font-style="italic" font-size="44" fill="#f4ede6">' +
+    '<rect width="64" height="64" rx="16" fill="#3a2a22"/>' +
+    '<text x="29" y="45" text-anchor="middle" font-family="Cormorant, Cormorant Garamond, Georgia, serif" font-style="italic" font-weight="600" font-size="46" fill="#f7f1ea">' +
     esc +
     "</text>" +
-    '<circle cx="47" cy="42" r="4" fill="#d4a373"/>' +
+    '<circle cx="47" cy="42" r="4" fill="#b9d398"/>' +
     "</svg>";
   return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 }

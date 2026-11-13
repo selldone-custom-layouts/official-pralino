@@ -74,6 +74,29 @@ upload limit is about 360 files.
 - The language & currency pill sits in the top bar's right end (the mockup set's later shell puts it
   there); with one language and one currency it still reads "EN · USD".
 
+**Pages not yet ported (phase 2).** The category, search, deals, product, compare, bag page,
+checkout, order, account, journal, article, About, Contact, FAQ, legal and 404 pages are still the
+Noir components. They already wear Domino's colours and faces: `style/bakini-theme.scss` now gives the
+Noir token names (`--bk-*`) Domino's values in both modes, `html.bk-dark` became `html.dm-dark` in the
+Noir styles, Manrope/Instrument Serif became Jost/Cormorant in the shared skins, and the switcher writes
+the palette into `--bk-act*` too. Their markup and layout are Noir's until each is ported to its
+`<page>-b.html`. The words: Domino's new components use `t("domino.*", "English")` with the English in
+the call; `components/kalio/i18n/*.en.ts` and the Arabic files are re-extracted in phase 2.
+
+**Build (13 November 2026, phase 1).** `npm run build-production`: 359 files once `dist/index.html`
+is removed (release.sh does), the same as Noir 1.0.5 at the upload limit. What fills it: 292 JS
+chunks, of which about 100 are Selldone's own language packs (one lazy chunk per language, about
+80 KB each) and most of the rest Selldone's lazy pages and widgets; 65 assets (20 large Selldone SVGs,
+six IRANSans faces from `storefront.ts`'s Persian font import, four Font Awesome faces, Selldone's
+PNGs, the six collection photos). The Noir chunks (NxCard, NxCrumbs, NxEmpty, NxLegal, NxMap, NxRow,
+NxSampleTag, noir-account, noir-cart, pd, rd) go with the phase 2 port. Planned room before the first
+upload: group Selldone's rarely used lazy pages (Avocado, Hyper, POS, community, Instagram, map) into
+one chunk and load the Persian faces only for Persian; the eight Domino photos will add eight files.
+
+**Dev screenshots.** `node --use-system-ca scripts/dev-shots.cjs http://localhost:9140/
+docs/dev-shots 1440,390 light,dark` (one browser at a time, `/buy/` blocked; `OVERLAYS="menu,drawer"`
+also shoots the layers). The PNGs stay out of git (`.gitignore`).
+
 ## Releases
 
 None yet.

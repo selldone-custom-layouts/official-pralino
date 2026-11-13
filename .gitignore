@@ -19,3 +19,6 @@ yarn-error.log*
 /Backend/bootstrap/cache/
 /dist.zip
 /modules/
+
+# Domino: dev screenshots stay on disk (large PNGs; regenerate with scripts/dev-shots.cjs)
+/docs/dev-shots/

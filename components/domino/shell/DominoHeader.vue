@@ -47,8 +47,8 @@
               <dm-icon name="globe" /><span dir="ltr">{{ regionShort }}</span><dm-icon cls="chev" name="down" />
             </button>
           </li>
-          <li v-if="facts.phone"><a :href="tel" dir="ltr">{{ facts.phone }}</a></li>
-          <li v-if="facts.email"><a :href="'mailto:' + facts.email">{{ facts.email }}</a></li>
+          <li v-if="facts.phone" class="tb-tel"><a :href="tel" dir="ltr">{{ facts.phone }}</a></li>
+          <li v-if="facts.email" class="tb-mail"><a :href="'mailto:' + facts.email">{{ facts.email }}</a></li>
         </ul>
       </div>
     </div>
@@ -175,7 +175,7 @@
         <div v-if="regionOn" id="rgp" ref="rgp" :aria-label="t('region.title', 'Language & currency')" :class="['rgp', 'rs-pop', { open: is('rgp') }]" :style="rgpPos" role="dialog">
           <p class="dd-h">{{ regionTitle }}</p>
           <region-chips :key="regionKey" @picked="closeLayer()" />
-          <p class="rgp-note">{{ regionNote }}</p>
+          <p v-if="regionNote" class="rgp-note">{{ regionNote }}</p>
         </div>
 
         <!-- The phone menu: a panel from the left. -->
@@ -237,7 +237,7 @@
           </div>
           <div class="sh-body">
             <region-chips :key="regionKey" />
-            <p class="rgp-note">{{ regionNote }}</p>
+            <p v-if="regionNote" class="rgp-note">{{ regionNote }}</p>
             <button class="btn block" type="button" @click="closeLayer()">{{ t("region.done", "Done") }}</button>
           </div>
         </div>
@@ -260,7 +260,7 @@ import RegionChips from "../../region-switcher/RegionChips.vue";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import { catalogueRoute, dealsRoute, percentOff } from "../../kalio/kalio-catalog";
 import { journalRoute } from "../../kalio/pages/kalio-journal";
-import { currencies, currentCurrency, currentLanguage, hasChoice, isRtl, languages, regionState, showLanguages } from "../../region-switcher/region";
+import { currencies, currentCurrency, currentLanguage, hasChoice, isRtl, regionState, showLanguages } from "../../region-switcher/region";
 import {
   bySells,
   catOf,
@@ -357,11 +357,11 @@ export default {
       void this.shop;
       return showLanguages() ? t("region.title", "Language & currency") : t("region.currency", "Currency");
     },
+    /* The chips say it themselves with one currency ("Prices and totals are
+       in US dollars."); with a choice, that every price follows. */
     regionNote() {
       void this.shop;
-      const lang = languages().find((l) => l.code === currentLanguage());
-      if (currencies().length <= 1 && !showLanguages())
-        return t("domino.hdr.sellsIn", "{shop} sells in {language} and in {currency}.", { shop: this.shopName, language: lang?.title || "", currency: currentCurrency() });
+      if (currencies().length <= 1 && !showLanguages()) return "";
       return t("region.note", "Prices everywhere change at once: cards, filters, bag and checkout.");
     },
     shopName() {

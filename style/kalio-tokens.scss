@@ -64,8 +64,8 @@
   --k-star-off: #d9d9d9;
 
   /* Type */
-  --k-display: "Manrope", "Noto Sans Arabic", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --k-body: "Manrope", "Noto Sans Arabic", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --k-display: "Jost", "Noto Sans Arabic", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --k-body: "Jost", "Noto Sans Arabic", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Geometry */
   --k-radius: 14px;
@@ -145,9 +145,9 @@ s:has(> .u--price) {
 }
 
 /* Not inside Bakini Noir's own markup (.nx): the mockup's type rules hold there. */
-.v-application h1:not(.nx *),
-.v-application h2:not(.nx *),
-.v-application h3:not(.nx *) {
+.v-application h1:not(.nx *):not(.dm *),
+.v-application h2:not(.nx *):not(.dm *),
+.v-application h3:not(.nx *):not(.dm *) {
   /* Colour is not set: headings sit on white in most places and on coloured
      banners in others. */
   font-family: var(--k-display);
