@@ -31,7 +31,7 @@ fit-in-circle, the release scripts and the live checks).
 | Shell | `components/domino/shell/`: `DominoHeader.vue` (top bar with the counter's days and hours, the way to pay, "Pickup at <street>", the language & currency pill `EN · USD`, phone and email; the sticky cocoa bar with Shop ⌄ (each collection with its best seller and its lowest price), Deals, Journal, About, Contact, the centred wordmark, search with live suggestions, the account, the bag with its count, "Order now"; the phone menu with "Show N more" past 8 collections and the "Language & currency" row and sheet), `DominoBagDrawer.vue`, `DominoFooter.vue` (texture slot, the line, address, contact, the kit's Theme row, the legal row) |
 | Home | `components/domino/DominoHome.vue`: every section of `home-b.html` from live data (hero, counters on the cocoa band, About, the four collections people order most, how ordering works, counters + offer + the ways to receive it, the gallery, today's selection with the add box, the photo band, the marquee, the journal) |
 | Wordmark | `components/domino/DominoLogo.vue`: the shop's live title in lower case, Cormorant italic, a dot in the palette's light shade; a long title steps down in size |
-| Shared state | `components/domino/dm.ts` (the collections and the catalogue read once, the layers, the shop's facts); `components/bakini/noir/noir.ts` now re-exports it for the Noir pages not yet ported, so there is one layer state |
+| Shared state | `components/domino/dm.ts` (the collections and the catalogue read once, the layers, the shop's facts): one layer state for every page |
 | Removed | the Noir header, footer, logo, home and carousel, Bakini's theme config, and `assets/bakini/` (the collection photos moved to `assets/domino/`) |
 
 **Photo slots.** `components/domino/dm-photos.ts` lists the files in `assets/domino/` at build time
@@ -74,28 +74,55 @@ upload limit is about 360 files.
 - The language & currency pill sits in the top bar's right end (the mockup set's later shell puts it
   there); with one language and one currency it still reads "EN · USD".
 
-**Pages not yet ported (phase 2).** The category, search, deals, product, compare, bag page,
-checkout, order, account, journal, article, About, Contact, FAQ, legal and 404 pages are still the
-Noir components. They already wear Domino's colours and faces: `style/bakini-theme.scss` now gives the
-Noir token names (`--bk-*`) Domino's values in both modes, `html.bk-dark` became `html.dm-dark` in the
-Noir styles, Manrope/Instrument Serif became Jost/Cormorant in the shared skins, and the switcher writes
-the palette into `--bk-act*` too. Their markup and layout are Noir's until each is ported to its
-`<page>-b.html`. The words: Domino's new components use `t("domino.*", "English")` with the English in
-the call; `components/kalio/i18n/*.en.ts` and the Arabic files are re-extracted in phase 2.
-
-**Build (13 November 2026, phase 1).** `npm run build-production`: 359 files once `dist/index.html`
-is removed (release.sh does), the same as Noir 1.0.5 at the upload limit. What fills it: 292 JS
-chunks, of which about 100 are Selldone's own language packs (one lazy chunk per language, about
-80 KB each) and most of the rest Selldone's lazy pages and widgets; 65 assets (20 large Selldone SVGs,
-six IRANSans faces from `storefront.ts`'s Persian font import, four Font Awesome faces, Selldone's
-PNGs, the six collection photos). The Noir chunks (NxCard, NxCrumbs, NxEmpty, NxLegal, NxMap, NxRow,
-NxSampleTag, noir-account, noir-cart, pd, rd) go with the phase 2 port. Planned room before the first
-upload: group Selldone's rarely used lazy pages (Avocado, Hyper, POS, community, Instagram, map) into
-one chunk and load the Persian faces only for Persian; the eight Domino photos will add eight files.
-
 **Dev screenshots.** `node --use-system-ca scripts/dev-shots.cjs http://localhost:9140/
 docs/dev-shots 1440,390 light,dark` (one browser at a time, `/buy/` blocked; `OVERLAYS="menu,drawer"`
 also shoots the layers). The PNGs stay out of git (`.gitignore`).
+
+## Phase 2 — every page (14 November 2026)
+
+Every page is the mockup's `<page>-b.html` with live data; the Noir components, styles and generator
+are gone (`components/bakini/noir/`, `style/noir/`, `style/bakini-noir*.scss`, `scripts/noir-css.cjs`).
+`scripts/domino-css.cjs` now also turns `domino-design/src/pages.css` into `style/domino/pages.css`.
+
+| Page | Where |
+| --- | --- |
+| Shared | `components/domino/ui/` (DmPt title band, DmEmpty, DmModal, DmCard, DmQuickView, DmIcLine, DmNumeral, DmSampleTag, DmMark) |
+| Category, search, deals | `components/domino/shop/DmListing.vue` (in `pages/products/StorefrontPageProducts.vue`) |
+| Product | `components/domino/product/` (overview, add box, tabs, buy together), `pages/product/` |
+| Compare | `components/domino/compare/DmCompare.vue` |
+| Bag, checkout, delivery sheet | `pages/basket/cart/` (Selldone's script, Domino's markup) with `components/domino/buy/dm-cart.ts` |
+| Address sheet, payment window | Kalio's sheet and Selldone's window, dressed by `style/domino-sd.scss` (map on or off) |
+| Order | `pages/basket/order/` (title band, missing order) and its physical dashboard; `components/domino/order/` (DmOrderPay, DmOrderReceiver, DmOrderChat over Kalio's scripts; `od.ts` the steps and words) |
+| Account, orders, addresses, profile, sign-in | `components/kalio/account/` (KalioAccountShell, KalioAccountHome, KalioOrdersBoard in Domino markup), `pages/user/addresses/`, `pages/user/profile/`, `components/kalio/shell/KalioSignIn.vue` |
+| Journal, article, About, Contact, FAQ, Terms, Privacy | `pages/blog/`, `pages/official/`, `pages/faq/`; `components/domino/read/` (DmPost, DmLegal, DmMap = the counter on the shop's real map, `rd.ts` the sample copy from the shop's facts) |
+| 404 | `pages/errors/404/` |
+
+**Reversible choices made in phase 2.**
+
+- The order page's crumbs are Home · Your orders · the order's code; its title is "Order SM-41" with
+  where it stands ("Thank you — it's in the oven.") and when it was placed, instead of the mockup's
+  "Sample order". A pickup order's steps read Placed · Baking · Ready to collect · Collected.
+- The order's Invoice and Share sit beside "Pastries" as quiet links; the chat opens with the
+  Layout's own invitation in the shop's voice, then Selldone's messages; starters show while empty.
+- The address book adds and edits in the address sheet (the checkout's, with the map when the shop
+  uses maps) rather than an inline form under the list.
+- A guest's account shows the orders kept on this device with "Sign in" in the menu; the mockup's
+  login page (an empty state) is the same sheet.
+- Contact shows the shop's real map (Selldone's map service) in place of the mockup's drawn streets;
+  without a location or a map key, the map's calm colour and the pin.
+- Article links are not underlined (the owner's rule: no line under any text).
+
+**Build.** `vite.config.ts` groups code only lazy routes use (Domino's small shared pieces, Selldone's
+rare pages — community, Avocado, POS, hyper, Instagram, maps, vendor listings, other kinds of order —
+and Selldone's language packs four to a file), and only when everything a grouped module imports
+outside core is in the same group, so no common page loads a group's file: **274 files** (was 359).
+
+**Words.** `components/kalio/i18n/domino.en.ts` (Domino's own `domino.*` words, generated by the
+kit's `i18n-extract.cjs` with the prefix `domino.`) and `domino.ar.ts`; `bakini.en.ts`/`bakini.ar.ts`
+now hold only the `bakini.*` keys the code still uses.
+
+**Checks.** `bash scripts/run-checks.sh http://localhost:9140 <log folder>` runs every kit check one
+after the other (palette `pistachio`, key `domino-theme`, Arabic forced through `local-shop-bakio`).
 
 ## Releases
 
