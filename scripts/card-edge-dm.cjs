@@ -1,4 +1,4 @@
-// card-edge-noir.cjs: the kit's card-edge-check.cjs, with Bakini Noir's own card classes counted as cards
+// card-edge-dm.cjs: the kit's card-edge-check.cjs, with Domino's own card classes counted as cards
 // (the kit looks for class names with card/tile/panel/item). Same usage, plus STORAGE (a theme, a language).
 //
 // card-edge-check.cjs: does any card's content touch its card's edge?
@@ -43,8 +43,8 @@ function check(min) {
     return solid(cs.backgroundColor) && cs.backgroundColor !== bgOf(el.parentElement);
   };
   const leafs = "a, button, input, label, output, b, strong, em, span, p, h2, h3, h4, [role=radio]";
-  /* Bakini Noir: the kit's names plus the mockup's own boxes (pc = product card, lu = collection card, bt = bento tile, wc = side-by-side card, gcard = glass card, brow/mini = bag rows, …). */
-  const looksCard = (el) => /card|tile|panel|item|(^|\s)(pc|lu|bt|wc|gcard|brow|mini|post|empty|visit|trio|deal-band|cath|dl-head|lv-hero|qv|rc-card|fp-sheet|pro|spec-g|bt2|tr-col|sr-sum|ftr-col)(\s|$)/i.test(el.className && el.className.toString());
+  /* Domino: the kit's names plus the mockup's own boxes (pc = product card, cc = collection card, bc/bf = journal cards, ci-c = contact cards, tri = trio panels, acc-c = About's collections, apc = the article's pastries, oc/od-c = order cards, ab = address rows, ol-a = order rows, co-c = checkout cards, …). */
+  const looksCard = (el) => /card|tile|panel|item|(^|\s)(pc|cc|bc|bf|ci-c|tri|acc-c|apc|ap|oc|od-c|od-tl|ab|ol-a|acc-nav|co-c|cart-sum|co-sum|chat|faq-ct|toc-d|prof|ab-form|ct-f|auth|empty|bt|qa|ftr-col|md-card|dw|pd-buy|spec-g|crit|revs|dl|mc|pm|feat|offer|step|ccs)(\s|$)/i.test(el.className && el.className.toString());
   const cards = [...document.querySelectorAll("article, li, div, a")].filter((el) => {
     if (!looksCard(el) || !el.offsetParent) return false;
     const r = el.getBoundingClientRect();

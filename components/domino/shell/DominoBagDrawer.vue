@@ -24,7 +24,7 @@
             <div class="dw-tx">
               <router-link :to="productTo(it)" class="dw-n" @click="close">{{ it.product?.title }}</router-link>
               <small
-                ><span class="money">{{ amount(it.price, it) }}</span> {{ t("domino.card.per", "per {unit}", { unit: unitOf(it.product) }) }}<template v-if="it.dis > 0">
+                ><span class="money">{{ amount(it.price, it) }}</span> {{ t("domino.card.perLow", "per {unit}", { unit: unitOf(it.product) }) }}<template v-if="it.dis > 0">
                   · <s class="money">{{ amount(it.price + it.dis, it) }}</s></template
                 ></small
               >

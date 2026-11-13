@@ -154,7 +154,7 @@
                     <span class="th"><img :src="thumb(p)" alt="" /></span>
                     <span class="tx"
                       ><b>{{ p.title }}</b
-                      ><small><bdi>{{ catTitle(catOf(p.category_id)) }}</bdi> · {{ t("domino.card.per", "per {unit}", { unit: unitOf(p) }) }}</small></span
+                      ><small><bdi>{{ catTitle(catOf(p.category_id)) }}</bdi> · {{ t("domino.card.perLow", "per {unit}", { unit: unitOf(p) }) }}</small></span
                     >
                     <span class="pr money">{{ money(priceView(shop, p).now) }}</span>
                   </router-link>

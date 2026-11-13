@@ -279,7 +279,98 @@ function coreChunk(id: string, { getModuleInfo, getModuleIds }: any) {
   }
   const info = getModuleInfo(id);
   if (info?.isEntry) return undefined;
-  return entryStaticGraph.has(id) ? "core" : undefined;
+  if (entryStaticGraph.has(id)) return "core";
+  return groupedChunk(id, getModuleInfo);
+}
+
+/**
+ * Domino (14 November 2026): fewer files for the upload limit (~360 per
+ * archive). Code only lazy routes use is grouped instead of one file per
+ * component: Domino's own shared pieces in one chunk; the pages a bakery
+ * rarely opens (Selldone's community, Avocado, POS, hyper, Instagram, maps,
+ * vendor listings, the info page, other kinds of order) in one; Selldone's
+ * language packs four to a file (a visitor who picks a language loads three
+ * neighbours with it, once).
+ */
+const RARE_PAGES = [
+  /\/pages\/(avocado|hyper|instagram|listing|map|pos|info|login|landing)\//,
+  /\/pages\/user\/orders\/(avocado|file|pos|service|subscription|virtual)\//,
+  /\/pages\/basket\/order\/(file|service|subscription|virtual)\//,
+  /\/components(-vue)?\/community\//,
+];
+const LANG_DIR = path.resolve(__dirname, "lang").split(path.sep).join("/");
+const LANG_PACKS = fs
+  .readdirSync(LANG_DIR)
+  .filter((f) => /^[a-z]{2,3}(-[a-z]+)?\.ts$/.test(f) && f !== "en.ts")
+  .sort();
+
+/* The group a module starts in by its path. */
+function seedGroup(id: string): string | undefined {
+  const file = id.split("?")[0].split("\\").join("/");
+  if (/\/components\/domino\//.test(file) && !file.includes("/node_modules/")) return "domino";
+  if (RARE_PAGES.some((re) => re.test(file))) return "selldone-rare";
+  if (file.startsWith(LANG_DIR + "/")) {
+    const at = LANG_PACKS.indexOf(file.slice(LANG_DIR.length + 1));
+    if (at >= 0) return `lang-pack-${Math.floor(at / 4)}`;
+  }
+  return undefined;
+}
+
+/* A module belongs to a group when its path seeds it there, or when every
+   module that imports it (statically or lazily) belongs to that one group:
+   code only the rare pages use travels with them. Rollup pulls a grouped
+   module's unassigned imports into the group's chunk, so a module is only
+   grouped when everything it imports outside core is in the same group;
+   otherwise it keeps its own chunk (a shared piece never drags a page into
+   a group's file, nor a group into a common page). */
+const groupMemo = new Map<string, string | null>();
+function groupOf(id: string, getModuleInfo: any, stack: Set<string>): string | null {
+  if (groupMemo.has(id)) return groupMemo.get(id)!;
+  if (entryStaticGraph!.has(id)) return null;
+  const seeded = seedGroup(id);
+  if (seeded) {
+    groupMemo.set(id, seeded);
+    return seeded;
+  }
+  if (stack.has(id)) return null;
+  stack.add(id);
+  const info = getModuleInfo(id);
+  const importers = [...(info?.importers || []), ...(info?.dynamicImporters || [])];
+  let group: string | null = null;
+  for (const importer of importers) {
+    const g = groupOf(importer, getModuleInfo, stack);
+    if (!g || (group && g !== group)) {
+      group = null;
+      break;
+    }
+    group = g;
+  }
+  stack.delete(id);
+  groupMemo.set(id, group);
+  return group;
+}
+const closedMemo = new Map<string, boolean>();
+function closedIn(id: string, group: string, getModuleInfo: any, stack: Set<string>): boolean {
+  const key = id + "\u0000" + group;
+  if (closedMemo.has(key)) return closedMemo.get(key)!;
+  if (stack.has(id)) return true;
+  stack.add(id);
+  let ok = true;
+  for (const dep of getModuleInfo(id)?.importedIds || []) {
+    if (entryStaticGraph!.has(dep)) continue;
+    if (groupOf(dep, getModuleInfo, new Set()) !== group || !closedIn(dep, group, getModuleInfo, stack)) {
+      ok = false;
+      break;
+    }
+  }
+  stack.delete(id);
+  closedMemo.set(key, ok);
+  return ok;
+}
+function groupedChunk(id: string, getModuleInfo: any): string | undefined {
+  const group = groupOf(id, getModuleInfo, new Set());
+  if (!group) return undefined;
+  return closedIn(id, group, getModuleInfo, new Set()) ? group : undefined;
 }
 
 /**

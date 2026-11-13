@@ -334,6 +334,8 @@ import { catalogueRoute, dealsRoute, dropSrcset, percentOff, photoSrcset } from 
 import { journalPage, journalRoute, postRoute } from "../kalio/pages/kalio-journal";
 import { currentCurrency } from "../region-switcher/region";
 import { t } from "../kalio/i18n/kalio-i18n";
+import { isEnglish } from "./product/pd";
+import { windowWord } from "./buy/dm-cart";
 
 const lang = () => document.documentElement.lang || "en";
 const list = (items, type = "conjunction") => {
@@ -677,7 +679,7 @@ export default {
     },
     /* "six" in English; the number itself in a language without the word. */
     numWord(n) {
-      return n >= 0 && n < NUM_WORDS.length ? t("domino.num." + n, NUM_WORDS[n]) : String(n);
+      return isEnglish() && n >= 0 && n < NUM_WORDS.length ? NUM_WORDS[n] : String(n);
     },
     feeText(w) {
       if (!w.fee) return t("domino.home.free", "Free");
@@ -686,10 +688,10 @@ export default {
     /* A way's line from its own data: the courier's radius and windows, the
        shipping's free threshold, the pickup counter's own note. */
     wayNote(w) {
-      if (w.pickup) return this.facts.pickupNote || (w.windows.length ? w.windows.join(", ") : "");
+      if (w.pickup) return this.facts.pickupNote || (w.windows.length ? list(w.windows.map(windowWord)) : "");
       if (w.type === "Global" || w.type === "Post") return w.freeOver ? t("domino.home.shipsFree", "Ships anywhere; free on orders over {amount}", { amount: money(w.freeOver, true) }) : t("domino.home.ships", "Ships anywhere");
       const near = w.distance ? t("domino.home.courierWithinShort", "Local delivery within {km} km of the bakery", { km: w.distance }) : t("domino.home.courierLocalShort", "Local delivery");
-      return w.windows.length ? `${near} · ${w.windows.join(", ")}` : near;
+      return w.windows.length ? `${near} · ${list(w.windows.map(windowWord))}` : near;
     },
     selMeta(p) {
       const v = this.pv(p);
