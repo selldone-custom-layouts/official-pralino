@@ -1411,3 +1411,114 @@ html.dm-dark .dm .dm-map__img {
 .dm .s--product-section-tax .-shipping-box .v-icon {
   color: inherit !important;
 }
+
+/* ── Checkout: Selldone's discount code and coupons in Domino's dress ── */
+.dm .dm-code {
+  margin-top: 12px;
+}
+.dm .dm-code .discount-code-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dm .dm-code .discount-code-row > .v-btn:not(.v-btn--icon) {
+  height: auto !important;
+  min-height: 40px;
+  padding: 8px 4px !important;
+  background: transparent !important;
+  color: var(--dm-act-text) !important;
+  box-shadow: none !important;
+  font: 500 13px/1.2 var(--dm-sans) !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+.dm .dm-code .discount-code-row > .v-btn:not(.v-btn--icon):hover {
+  color: var(--dm-ink) !important;
+}
+.dm .dm-code .discount-code-row > .v-btn .v-icon {
+  font-size: 15px !important;
+  margin-inline: 0 8px !important;
+}
+.dm .dm-code .discount-code-row > .v-btn--icon {
+  background: var(--dm-act) !important;
+  color: var(--dm-act-on) !important;
+}
+.dm .dm-code .discount-code-row > .v-btn--icon.v-btn--variant-text {
+  background: transparent !important;
+  color: var(--dm-ink) !important;
+}
+.dm .dm-code .v-field {
+  border-radius: 999px !important;
+  background: var(--dm-field) !important;
+  color: var(--dm-ink) !important;
+}
+.dm .dm-code .v-field__outline {
+  --v-field-border-opacity: 1;
+  color: var(--dm-field-line) !important;
+}
+.dm .dm-code .v-btn__overlay,
+.dm .dm-code .v-btn__underlay,
+.dm .dm-offers .v-btn__overlay,
+.dm .dm-offers .v-btn__underlay {
+  display: none;
+}
+/* The coupons (only when the shopper has some): a card like the checkout's. */
+.dm .dm-offers.s--storefront-coupons {
+  margin-top: 16px;
+  padding: 20px 24px !important;
+  background: var(--dm-surface);
+  border-radius: var(--dm-r-card);
+}
+.dm .dm-offers > p > .v-btn {
+  height: auto !important;
+  min-height: 36px;
+  padding: 6px 4px !important;
+  background: transparent !important;
+  color: var(--dm-act-text) !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  font: 500 13px/1.2 var(--dm-sans) !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+.dm .dm-offers .s--coupon-card {
+  border: 1.5px dashed var(--dm-line) !important;
+  border-radius: 14px;
+  padding: 12px;
+  background: var(--dm-bg);
+  color: var(--dm-ink);
+}
+.dm .dm-offers .s--coupon-card.selected {
+  background: var(--dm-act-soft) !important;
+  color: var(--dm-ink);
+  border: 0 !important;
+  box-shadow: inset 0 0 0 2px var(--dm-act-text);
+}
+.dm .dm-offers .s--coupon-card.selected small {
+  color: var(--dm-muted) !important;
+}
+.dm .dm-offers .coupon-slide > .v-btn {
+  border-radius: 14px !important;
+  background: var(--dm-bg) !important;
+  color: var(--dm-ink) !important;
+  box-shadow: inset 0 0 0 1.5px var(--dm-line) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font: 600 14px/1.2 var(--dm-sans) !important;
+}
+/* The checkout's columns never grow past the page: Selldone's coupon row
+   (fixed-width cards) and checkout form ask for more than a phone has. */
+.dm .co > *,
+.dm .cart > *,
+.dm .co-main > *,
+.dm .co-sum > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.dm .co-main .v-container {
+  max-width: 100% !important;
+  padding-inline: 0 !important;
+}
+.dm .dm-offers .coupon-title img {
+  display: none;
+}

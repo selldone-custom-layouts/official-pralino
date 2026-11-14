@@ -181,7 +181,7 @@
       <section :aria-label="t('domino.co.checkout', 'Checkout')" class="sec-s">
         <div class="wrap co">
           <div class="co-main">
-            <div v-if="nx_missing.length && Object.keys(nx_touched).length" class="co-alert" data-miss role="alert">
+            <div v-if="nx_missing.length && nx_tried" class="co-alert" data-miss role="alert">
               <span class="em-ic sm"><dm-icon name="info" /></span>
               <div>
                 <b>{{ t("domino.co.almost", "Almost there") }}</b>
@@ -471,13 +471,15 @@
     <dm-modal id="dlvm" :title="t('domino.co.deliveryH', 'Delivery')">
       <template v-if="delivery_sheet && basket && bill">
         <p class="md-lead">{{ nx_cod_only ? t("domino.co.dlvLeadCod", "Every method is paid in cash on delivery. Pick one, then a time window.") : t("domino.co.dlvLead", "Pick a method, then a time window.") }}</p>
-        <s-order-shipping-stores-options
-          :basket="basket"
-          :delivery-info="delivery_info"
-          :start-package-index="bill?.connect_shipping_options?.length + bill?.vendor_shipping_options?.length"
-          class="dm-dlsheet"
-          @set-basket-config="setBasketConfig"
-        ></s-order-shipping-stores-options>
+        <dm-ship-sheet>
+          <s-order-shipping-stores-options
+            :basket="basket"
+            :delivery-info="delivery_info"
+            :start-package-index="bill?.connect_shipping_options?.length + bill?.vendor_shipping_options?.length"
+            class="dm-dlsheet"
+            @set-basket-config="setBasketConfig"
+          ></s-order-shipping-stores-options>
+        </dm-ship-sheet>
       </template>
       <template #foot>
         <button class="btn" type="button" @click="delivery_sheet = false">{{ t("domino.co.done", "Done") }}</button>
@@ -550,6 +552,7 @@ import DmPt from "../../../components/domino/ui/DmPt.vue";
 import DmEmpty from "../../../components/domino/ui/DmEmpty.vue";
 import DmCard from "../../../components/domino/ui/DmCard.vue";
 import DmModal from "../../../components/domino/ui/DmModal.vue";
+import DmShipSheet from "../../../components/domino/buy/DmShipSheet.vue";
 import DmNumeral from "../../../components/domino/ui/DmNumeral.vue";
 
 export default {
@@ -572,6 +575,7 @@ export default {
     DmEmpty,
     DmCard,
     DmModal,
+    DmShipSheet,
     DmNumeral,
     KalioCartLines,
     KalioOftenAdded,

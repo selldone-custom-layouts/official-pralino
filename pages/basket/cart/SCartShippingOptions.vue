@@ -24,7 +24,83 @@
 -->
 <template>
   <section class="dm-ship">
-    <div v-if="transportation_exclude_pickup?.length || pickups?.length" :aria-label="t('domino.co.method', 'Delivery method')" class="mcs" role="radiogroup">
+    <!-- The delivery sheet (delivery-b): every way as a row with its days,
+         its fee and its own windows; a window of another way picks that way. -->
+    <div v-if="dmShipSheet && (transportation_exclude_pickup?.length || pickups?.length)" :aria-label="t('domino.co.method', 'Delivery method')" class="dls" role="radiogroup">
+      <div v-for="item in transportation_exclude_pickup" :key="item.type" :class="['dl', { on: isWayOn(item) }]">
+        <label class="dl-hd">
+          <input :aria-label="wayTitleOf(item)" :checked="isWayOn(item)" :name="radioName" class="rdo" type="radio" :value="item.type" @change="pickWay(item)" />
+          <span class="mc-ic"><dm-icon :name="wayIcon(item.type)" /></span>
+          <span class="dl-t"
+            ><b>{{ wayTitleOf(item) }}</b><small v-if="noteOf(item)">{{ noteOf(item) }}</small></span
+          >
+          <span class="mc-f">{{ feeOf(item) }}</span>
+        </label>
+        <div class="dl-b">
+          <ul class="ils sm">
+            <li class="il">
+              <span class="il-ic"><dm-icon name="cal" /></span>
+              <div class="il-tx">
+                <b>{{ daysOf(item) }}</b><span>{{ feeLineOf(item) }}</span>
+              </div>
+            </li>
+          </ul>
+          <div v-if="winsOf(item).length" :aria-label="t('domino.co.windowsOf', '{way} windows', { way: wayTitleOf(item) })" class="chips-r" role="radiogroup">
+            <button
+              v-for="w in winsOf(item)"
+              :key="w"
+              :aria-checked="isWayOn(item) && isWindow(w) ? 'true' : 'false'"
+              class="wchip"
+              role="radio"
+              type="button"
+              @click="pickWayWindow(item, w)"
+            >
+              <dm-icon name="clock" />{{ windowName({ value: w, name: w }) }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div v-for="(pickup, i) in pickups || []" :key="'p' + i" :class="['dl', { on: isPickupOn(pickup) }]">
+        <label class="dl-hd">
+          <input :aria-label="pickupTitle(pickup)" :checked="isPickupOn(pickup)" :name="radioName" class="rdo" type="radio" :value="'pickup-' + i" @change="pickPickup(pickup)" />
+          <span class="mc-ic"><dm-icon name="store" /></span>
+          <span class="dl-t"
+            ><b>{{ pickupTitle(pickup) }}</b><small v-if="pickup.message">{{ pickup.message }}</small></span
+          >
+          <span class="mc-f">{{ t("domino.co.free", "Free") }}</span>
+        </label>
+        <div class="dl-b">
+          <ul class="ils sm">
+            <li class="il">
+              <span class="il-ic"><dm-icon name="pin" /></span>
+              <div class="il-tx">
+                <b>{{ [pickup.address, pickup.city].filter(Boolean).join(", ") }}</b><span v-if="pickup.message">{{ pickup.message }}</span>
+              </div>
+            </li>
+            <li v-if="openWords" class="il">
+              <span class="il-ic"><dm-icon name="clock" /></span>
+              <div class="il-tx">
+                <b>{{ openWords }}</b><span>{{ t("domino.co.comeToCounter", "Choose a window and come to the counter") }}</span>
+              </div>
+            </li>
+          </ul>
+          <div v-if="winsOf(pickup_transportation).length" :aria-label="t('domino.co.windowsOf', '{way} windows', { way: pickupTitle(pickup) })" class="chips-r" role="radiogroup">
+            <button
+              v-for="w in winsOf(pickup_transportation)"
+              :key="w"
+              :aria-checked="isPickupOn(pickup) && isWindow(w) ? 'true' : 'false'"
+              class="wchip"
+              role="radio"
+              type="button"
+              @click="pickPickupWindow(pickup, w)"
+            >
+              <dm-icon name="clock" />{{ windowName({ value: w, name: w }) }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else-if="transportation_exclude_pickup?.length || pickups?.length" :aria-label="t('domino.co.method', 'Delivery method')" class="mcs" role="radiogroup">
       <label v-for="item in transportation_exclude_pickup" :key="item.type" :class="['mc', { on: transportation?.type === item.type && !selectedPickup }]">
         <input :aria-label="wayTitleOf(item)" :checked="transportation?.type === item.type && !selectedPickup" :name="radioName" class="rdo" type="radio" :value="item.type" @change="pickWay(item)" />
         <span class="mc-ic"><dm-icon :name="wayIcon(item.type)" /></span>
@@ -50,7 +126,7 @@
     </div>
 
     <template v-if="transportation">
-      <div v-if="windowsOn && timeItems.length" class="wins">
+      <div v-if="windowsOn && timeItems.length && !dmShipSheet" class="wins">
         <p class="fl">{{ selectedPickup ? t("domino.co.pickupWindow", "Pickup window") : t("domino.co.deliveryWindow", "Delivery window") }}</p>
         <div :aria-label="t('domino.co.window', 'Time window')" class="chips-r" role="radiogroup">
           <button
@@ -96,7 +172,7 @@ import ProductMixin from "@selldone/components-vue/mixin/product/ProductMixin.ts
 import MapMixin from "@selldone/components-vue/mixin/map/MapMixin.ts";
 import DmIcon from "../../../components/domino/DmIcon.vue";
 import { shopWay, wayIcon } from "../../../components/domino/buy/dm-cart";
-import { wayTitle } from "../../../components/domino/dm";
+import { openLine, shopFacts, wayTitle } from "../../../components/domino/dm";
 
 export default defineComponent({
   name: "SCartShippingOptions",
@@ -106,7 +182,7 @@ export default defineComponent({
     ProductsDenseImagesCircles,
     DmIcon,
   },
-  inject: ["$shop"],
+  inject: { $shop: { default: null }, dmShipSheet: { default: false } },
   emits: ["update:transportation", "set-basket-config", "pickupSelected"],
   props: {
     basket: {
@@ -153,6 +229,10 @@ export default defineComponent({
     },
     MapHelper() {
       return MapHelper;
+    },
+    /* "Open every day 8:00–18:00", for the pickup counter in the sheet. */
+    openWords() {
+      return openLine(shopFacts(this.$shop));
     },
     /** The shop's pickup points for this package. */
     pickups() {
@@ -357,7 +437,13 @@ export default defineComponent({
       if (!this.has_delivery) return;
 
       this.deliveryInfo.type = transportation ? transportation.type : null;
-      this.$nextTick(() => this.firstWindow());
+      this.$nextTick(() => {
+        /* A window picked on another way's row in the sheet: that way, then that window. */
+        const w = this._pendingWin;
+        this._pendingWin = null;
+        if (w && transportation?.time_spans?.includes(w)) this.pickWindow(w);
+        else this.firstWindow();
+      });
     },
 
     transportations() {
@@ -422,15 +508,58 @@ export default defineComponent({
       const line = parts.join("; ");
       return line.charAt(0).toUpperCase() + line.slice(1);
     },
+    /* The fee alone on the card's head (the free threshold is in its line). */
     feeOf(given) {
       if (!given) return "";
       const item = { ...given, ...shopWay(this.$shop, given) };
       const free = item.free_shipping && !(item.free_shipping_limit > 0);
       const fee = Number(item.const) || 0;
-      const over = item.free_shipping && item.free_shipping_limit > 0 ? moneyFrom(item.free_shipping_limit, item.currency, { short: "auto" }) : "";
-      if (free || !fee) return over ? t("bakini.n.co.freeOver", "Free over {amount}", { amount: over }) : t("bakini.n.co.free", "Free");
-      const base = moneyFrom(fee, item.currency);
-      return over ? t("bakini.n.co.feeFreeOver", "{fee} · free over {amount}", { fee: base, amount: over }) : base;
+      if (free || !fee) return t("bakini.n.co.free", "Free");
+      return moneyFrom(fee, item.currency);
+    },
+    /* ── The delivery sheet's rows ── */
+    isWayOn(item) {
+      return this.transportation?.type === item.type && !this.selectedPickup;
+    },
+    isPickupOn(pickup) {
+      return !!(this.selectedPickup?.address && this.selectedPickup.address === pickup.address);
+    },
+    /* "Every day", or the days the way runs. */
+    daysOf(given) {
+      const item = { ...given, ...shopWay(this.$shop, given) };
+      const days = Array.isArray(item.days) ? item.days : [];
+      if (!days.length || days.length >= 7) return t("domino.co.everyDay", "Every day");
+      const names = days.map((d) => (WeekDays[d] ? this.$t(WeekDays[d].name) : d));
+      try {
+        return new Intl.ListFormat(document.documentElement.lang || "en", { style: "short", type: "conjunction" }).format(names);
+      } catch {
+        return names.join(", ");
+      }
+    },
+    /* "Free on orders over $500", "$10.00 per order" or "No delivery fee". */
+    feeLineOf(given) {
+      const item = { ...given, ...shopWay(this.$shop, given) };
+      if (item.free_shipping && item.free_shipping_limit > 0) return t("domino.co.freeOverOrders", "Free on orders over {amount}", { amount: moneyFrom(item.free_shipping_limit, item.currency, { short: "auto" }) });
+      const fee = Number(item.const) || 0;
+      if (item.free_shipping || !fee) return t("domino.co.noFee", "No delivery fee");
+      return t("domino.co.perOrder", "{fee} per order", { fee: moneyFrom(fee, item.currency) });
+    },
+    /* The parts of the day a way offers (when it offers a choice). */
+    winsOf(given) {
+      if (!given) return [];
+      const item = { ...given, ...shopWay(this.$shop, given) };
+      if (![ETA.weekday_timeframe.code, ETA.timeframe.code].includes(item.eta)) return [];
+      return (item.time_spans || []).filter((v) => TimeSpans[v]);
+    },
+    pickWayWindow(item, w) {
+      if (this.isWayOn(item)) return this.pickWindow(w);
+      this._pendingWin = w;
+      this.pickWay(item);
+    },
+    pickPickupWindow(pickup, w) {
+      if (this.isPickupOn(pickup)) return this.pickWindow(w);
+      this._pendingWin = w;
+      this.pickPickup(pickup);
     },
     /* The shop's window by its own name ("Morning"), not Selldone's hours. */
     windowName(span) {

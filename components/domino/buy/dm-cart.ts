@@ -53,8 +53,12 @@ export function windowWord(value: string): string {
 /** "<way> · <window>" when the shopper chose one window. */
 export function wayWindowLine(shop: any, info: any): string {
   if (!info?.type) return "";
-  const name = wayTitle(shopWay(shop, { type: info.type }), shop);
-  const win = info.custom && (info.time_spans || []).length === 1 ? windowWord(info.time_spans[0]) : "";
+  const way = shopWay(shop, { type: info.type });
+  const name = wayTitle(way, shop);
+  /* Only a window the way itself offers (a way the bill switched to keeps
+     the old way's window in delivery_info). */
+  const one = info.custom && (info.time_spans || []).length === 1 ? info.time_spans[0] : null;
+  const win = one && (!Array.isArray(way?.time_spans) || way.time_spans.includes(one)) ? windowWord(one) : "";
   return win ? `${name} · ${win}` : name;
 }
 
@@ -79,7 +83,7 @@ export function isPickupWay(info: any): boolean {
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export default {
-  data: () => ({ dm, layer, nx_touched: {} as Record<string, boolean>, nx_billing_other: false, nx_note: "" }),
+  data: () => ({ dm, layer, nx_touched: {} as Record<string, boolean>, nx_tried: false, nx_billing_other: false, nx_note: "" }),
 
   computed: {
     /* The delivery sheet is the layer "dlvm" (one layer at a time, dm.ts). */
@@ -436,6 +440,7 @@ export default {
     nx_place(this: any) {
       const miss = this.nx_missing;
       if (miss.length) {
+        this.nx_tried = true;
         const touched: Record<string, boolean> = { ...this.nx_touched };
         miss.forEach((x: any) => (touched[x.key] = true));
         this.nx_touched = touched;

@@ -38,8 +38,15 @@ run card-edge   node "$KIT/single-vendor-shop/card-edge-check.cjs" "$BASE/" "$BA
 run card-edge-dm-dark  env STORAGE="$DARK"  node "$ROOT/scripts/card-edge-dm.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D" "$BASE/blog" "$BASE/about-us" "$BASE/faq" "$BASE/contact-us" "$BASE/user"
 run card-edge-dm-light env STORAGE="$LIGHT" node "$ROOT/scripts/card-edge-dm.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/blog" "$BASE/terms"
 run corner      env PAGES="$PAGES_MAIN" STORAGE="$DARK" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
-run circle      env PAGES='home=/,deals=/?filter={"only_has_discount":true}' LONG=1 node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
-run circle-ar   env PAGES='home=/,deals=/?filter={"only_has_discount":true}' LONG=1 STORAGE="$AR" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
+# CIRCLE_CURRENCIES="USD,AED,DKK,SAR": the circle checks try each currency (set the way the shop's picker
+# does). LONG=1 reloads after each page, so a product page (a cold /product/ load gets Selldone's SEO page
+# in a headless browser) is checked on its own without LONG.
+CIRCLE_PAGES='home=/,deals=/?filter={"only_has_discount":true}'
+run circle      env PAGES="$CIRCLE_PAGES" LONG=1 CURRENCIES="${CIRCLE_CURRENCIES:-}" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
+run circle-ar   env PAGES="$CIRCLE_PAGES" LONG=1 CURRENCIES="${CIRCLE_CURRENCIES:-}" STORAGE="$AR" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
+run circle-dark env PAGES="$CIRCLE_PAGES" LONG=1 CURRENCIES="${CIRCLE_CURRENCIES:-}" STORAGE="$DARK" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
+run circle-pd   env PAGES='product=/product/720375,product2=/product/720359' CURRENCIES="${CIRCLE_CURRENCIES:-}" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
+run circle-pd-ar env PAGES='product=/product/720375' CURRENCIES="${CIRCLE_CURRENCIES:-}" STORAGE="$AR" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
 run contrast-dark   env PAGES="$PAGES_ALL" STORAGE="$DARK"   node "$ROOT/components/theme-switcher/tools/contrast-audit.cjs" "$BASE" "$WAIT"
 run contrast-light  env PAGES="$PAGES_ALL" STORAGE="$LIGHT"  node "$ROOT/components/theme-switcher/tools/contrast-audit.cjs" "$BASE" "$WAIT"
 run contrast-yellow env PAGES="$PAGES_MAIN" STORAGE="$YELLOW" node "$ROOT/components/theme-switcher/tools/contrast-audit.cjs" "$BASE" "$WAIT"
