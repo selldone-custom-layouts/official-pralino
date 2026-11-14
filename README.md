@@ -74,7 +74,7 @@ Everything is read live from the shop: its title (drawn as the wordmark), collec
 Every check runs one browser at a time against the live shop, at 1440px and 390px, dark and light, a custom yellow brand colour and Arabic (right to left). Each is delivered at **TOTAL 0**.
 
 <!-- TESTS:START -->
-Live shop **domino.selldone.shop**, version **1.0.1**, 14 November 2026 (`CIRCLE_CURRENCIES=USD,AED,DKK,SAR bash scripts/run-checks.sh https://domino.selldone.shop <logs>`): 28 checks, each at 1440px and 390px.
+Live shop **domino.selldone.shop**, version **1.0.2**, 14 November 2026 (`CIRCLE_CURRENCIES=USD,AED,DKK,SAR bash scripts/run-checks.sh https://domino.selldone.shop <logs>`): 28 checks, each at 1440px and 390px.
 
 | Check | What it looks for | Where | TOTAL |
 | --- | --- | --- | --- |
@@ -91,7 +91,7 @@ Live shop **domino.selldone.shop**, version **1.0.1**, 14 November 2026 (`CIRCLE
 | Console sweep | no console or page error on any page type, opened in-app; every grouped chunk of the release evaluates | 26 pages and flows (product pages, compare, order, account, sign-in sheet, bag drawer, checkout, delivery sheet, address sheet, payment window…), light and dark, English and Arabic, 1440 and 390 | **0** |
 | Checkout walk | the guest checkout from "Add to bag" to Selldone's payment window, compared with the mockups; nothing is ordered and the bag is emptied | desktop and phone | **0** |
 
-Bakio sells in USD only, so AED, DKK and SAR stay USD on its pages; the long made-up amount stands in for them. The walk on 1.0.0 led to 1.0.1: the delivery sheet drawn as the mockup's rows (each way with its days, fee line and its own windows), the fee alone on the method card, "Almost there" only after a place attempt, the checkout never wider than a phone (Selldone's coupon row), the discount code and coupons in Domino's dress.
+Bakio sells in USD only, so AED, DKK and SAR stay USD on its pages; the long made-up amount stands in for them. The same suite was at 0 on 1.0.0 and 1.0.1 too. 1.0.2 put Selldone's pickup chip under the product's price and its hover card in Domino's dress (it was a black label) and drew Selldone's cookie-settings icon in the footer's light ink. The walk on 1.0.0 led to 1.0.1: the delivery sheet drawn as the mockup's rows (each way with its days, fee line and its own windows), the fee alone on the method card, "Almost there" only after a place attempt, the checkout never wider than a phone (Selldone's coupon row), the discount code and coupons in Domino's dress.
 <!-- TESTS:END -->
 
 ## Languages

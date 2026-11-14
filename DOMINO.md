@@ -137,6 +137,10 @@ payment window on desktop and phone (a guard refuses any pay/buy request; nothin
 emptied after each run); its findings became 1.0.1. Docs: `scripts/doc-shots.cjs` takes
 `docs/screenshots/` from the live shop (and empties its bag).
 
+Final pass on live **1.0.2** (pinned on domain 1248): the 28 checks at TOTAL 0; the console sweep at 0
+(light and dark, English and Arabic, 1440 and 390); the checkout walk to the payment window clean on
+desktop and phone; the README and docs screenshots retaken from it.
+
 ## Releases
 
 Layout id **38** (`https://selldone.com/developer/layouts/38`). Upload with
