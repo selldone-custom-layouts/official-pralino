@@ -1,10 +1,10 @@
-# Bakini Noir Patisserie
+# Domino Cocoa Patisserie
 
-![Bakini Noir Patisserie on desktop and phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/cover.jpg)
+![Domino Cocoa Patisserie on desktop and phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/cover.jpg)
 
-**Bakini Noir Patisserie** is a custom storefront **Layout** for Selldone shops: a single bakery dressed as a dark pastry theatre. A deep stage with ivory type, one deep caramel for every action, gold for small accents and hairlines, Instrument Serif over Manrope, and every pastry a cut-out floating on a dark plate under a warm halo. A stage hero, the collections as tall dark cards, a bento of the shop's real facts, a compare strip and a deals band; real spec filters; a product page with a sticky buy column and Buy together; a bag drawer, glass checkout cards, a desk account and a 404 inside the Layout. Dark is the default, with an ivory light mode. It says **bag**, never cart. Every word it writes is in English and Arabic (right to left).
+**Domino Cocoa Patisserie** is a custom storefront **Layout** for Selldone shops: a single bakery in cocoa and pistachio, in the manner of a calm bakery website. A cream ground with cocoa ink, a cocoa top bar and header, a dark cocoa footer, one pistachio for every action, rounded photos and pill buttons, Cormorant over Jost, and scalloped cocoa bands with faint line drawings of pastries. A top bar with the counter's hours and contact, the shop's name as a centred italic wordmark, a hero of the collection names over photos, counters on a cocoa band, the best-selling collections as cards, how ordering works, a gallery, today's selection as rows with **Add to bag**, a marquee of the collections and the journal; collection pages with a filter panel; a product page with a sticky buy column, tabs and Buy together; a bag drawer, the checkout with a delivery sheet, the order page, an account and a 404 inside the Layout. Light is the default, with a cocoa-night dark mode. It says **bag**, never cart. Every word it writes is in English and Arabic (right to left).
 
-It runs on **[bakini.selldone.shop](https://bakini.selldone.shop)**, the default Layout of the Selldone shop Bakio. It went live on that one domain first, then became the whole shop's (see [Go Live](Go-Live)). It is built on the official [selldone/storefront](https://github.com/selldone/storefront), so Selldone's basket, checkout, payments and orders keep working underneath a new design.
+It runs on **[domino.selldone.shop](https://domino.selldone.shop)**, one domain of the Selldone shop Bakio. The shop's default address and its other domains carry other Layouts (the default is Bakini Noir); Domino is pinned on its own domain only (see [Go Live](Go-Live)). It is built on the official [selldone/storefront](https://github.com/selldone/storefront), so Selldone's basket, checkout, payments and orders keep working underneath a new design.
 
 ## Start here
 
@@ -15,7 +15,7 @@ It runs on **[bakini.selldone.shop](https://bakini.selldone.shop)**, the default
 | Know what my shop's data needs | [Shop Requirements](Shop-Requirements) |
 | Build, upload and verify a release | [Build and Upload](Build-and-Upload) |
 | Put it live on my shop or one domain | [Go Live](Go-Live) |
-| Change the name, sections, pages, languages | [Customize](Customize) |
+| Change the name, sections, pages, photos, languages | [Customize](Customize) |
 | Change the colours, dark or light, the visitor switcher | [Theme and colours](Theme-and-colours) |
 | Fix a problem | [Troubleshooting](Troubleshooting) |
 
@@ -24,47 +24,64 @@ It runs on **[bakini.selldone.shop](https://bakini.selldone.shop)**, the default
 1. A **Layout** is a complete storefront app (Vue 3) that runs on Selldone's own servers instead of the default storefront.
 2. You build it, zip it, and **upload** it to your Selldone developer account with the official [selldone-cli](https://github.com/selldone/cli). Each upload is a new **version**.
 3. You **attach** a version to your shop, or to one domain of it.
-4. Selldone injects **your** shop into the Layout: its title, collections, products, prices, delivery ways, payment methods, articles, languages, currencies and settings. Nothing about Bakio is hard-coded: not the name (the wordmark is your shop's title), not a photo (every picture is your shop's own), not a delivery window or an opening hour. Another bakery that imports the Layout gets its own data.
+4. Selldone injects **your** shop into the Layout: its title, collections, products, prices, delivery ways, payment methods, articles, languages, currencies and settings. Nothing about Bakio is hard-coded: not the name (the wordmark is your shop's title), not a price, a delivery window or an opening hour. The only shop-specific files are the optional photos in `assets/domino/`; without them every photo slot shows a designed fallback made of drawings and your own products. Another bakery that imports the Layout gets its own data.
 
 ## The look
 
-| Part | Bakini |
+| Part | Domino |
 | --- | --- |
-| Action colour | one deep caramel `#a0522d` (white words 5.62:1): every button, chosen states, links |
-| Accents | gold `#d4a373` (`#8a5e2e` in light mode) for small type, savings and hairlines only |
-| Grounds | the dark stage `#120c10`, cards `#1c1419` and `#261b22`, ivory words `#f4ede6`; each collection gets a warm hue for its halo, in the shop's order |
-| Pastries | transparent cut-outs on dark plates under a warm halo, a soft shadow beneath |
-| Type and icons | Instrument Serif (display, italic accents) over Manrope (text); inline line icons |
+| Grounds | a cream ground `#f7f1ea`, cream cards `#fffaf4` and bands `#efe5d9`, cocoa ink `#3a2a22`; a cocoa top bar `#2c1f19` and header `#3a2a22`; cocoa title bands with a scalloped lower edge; a dark cocoa footer `#2a1e18` |
+| Action colour | one pistachio `#5a7440` (white words 5.24:1): every button, chosen state and link. On the cocoa header and footer, the palette's light shade (`--dm-act-dk`, `#b7d192` for Pistachio) with cocoa words |
+| Pastries | transparent cut-outs on a rounded warm plate `#f2e8db`, with a round `−%` roundel when there is a saving |
+| Type and icons | Cormorant for headings, numbers set large and the italic wordmark; Jost for reading, and in spaced capitals for eyebrows, buttons, the nav and the top bar; inline line icons; the mockup's hand-drawn pastry drawings (croissant, macaron, cupcake, tart, cake, whisk), faint behind sections and in the title bands |
+| Shapes | rounded photos, plates and cards; pill buttons and chips; outlined serif numerals on cards and steps |
 | Buttons | flat; hover changes the colour only; no line under any word or icon; selection rings inside the box |
-| Theme | dark by default, an ivory light mode; five palettes and a custom colour; a visitor switcher (a footer row) on Bakini's showcase shop only (see [Theme and colours](Theme-and-colours)) |
-| Languages | English and Arabic (right to left); the language and currency pill in the header |
+| Photos | eight photo slots (the hero's two, About, How ordering works, the offer card, the photo band, the journal, the footer's texture) and one portrait per collection: your own photo when the Layout has one, else a designed fallback (a tinted surface with a drawing, or your own pastries as cut-outs); never a caption or a file name |
+| Theme | light by default; a cocoa-night dark mode (ground `#1a1310`, cards `#2d221b`, words `#f3e9de`, pistachio `#a9c584` with cocoa words); four palettes (Pistachio, Cherry, Caramel, Blueberry) and a custom colour; the header and footer stay cocoa in every palette; a visitor switcher (a footer row) on the showcase shop only (see [Theme and colours](Theme-and-colours)) |
+| Languages | English and Arabic (right to left); the language and currency pill at the right end of the top bar |
 
 ## What you get
 
-- **Header:** a slim glass bar that sticks to the top. The wordmark (your shop's title); "Shop" (a panel with every collection, its photo and line, plus Deals, Most loved, Compare and Journal); the collections themselves on wide screens; Deals; search with live suggestions; the language and currency pill; the account; the bag with its count. On a phone: the menu button, the wordmark, search and the bag; the menu lists the collections, Deals, the bakery's pages, the account and a "Language & currency" row that opens a bottom sheet.
-- **Footer:** the wordmark and one line about the shop from its own data, the collections, your footer menu, Help, "Visit the counter" (address, days and counter hours, phone, email), the Theme row (showcase only) and the legal row.
-- **Home:** the carousel (every collection as an arched card with its own portrait photo, best-selling first; the chosen one's best seller and button under it; arrows, a click, the arrow keys or a swipe turn it, it never moves by itself); Explore the collections; Tonight's selection; a bento of the shop's real facts (open days and counter hours, the courier's windows, shipping and its free threshold, the way to pay, pickup); Most loved; "Which <unit> is yours?" (the top collection's four best sellers side by side); a deals band with a Save roundel; Compose a trio; the bakery's story; Visit & pickup with a real map; the journal (the four newest posts) last.
-- **Listings:** a collection, a search, the deals and every pastry. Real spec filters, a price range, On offer and Sort; on a phone a Filter button opens the panel as a sheet.
-- **Cards:** the cut-out on its plate, a round + that turns into "− n +" in place, a quick-look eye, the name, "per <unit>", the price with the struck was-price and the saving in gold.
-- **Product page:** the gallery and a sticky buy column (price, saving, stock, options when the product has them, "Add to bag", Compare, Copy link, delivery, pickup and payment lines); a phone buy bar; Why you'll love it (the product's pros); Product information (the spec in your groups); Buy together; the reviews (an honest empty state with your rating criteria until the first review); More <collection>.
-- **Compare and quick look:** the picks side by side with differences marked; a quick look dialog (a bottom sheet on a phone).
-- **Bag and checkout:** a bag drawer with "Often added", the bag page, then the checkout: step pills, contact, delivery method cards with your time windows, an address sheet (with or without a map), billing, a note and Selldone's payment window. Without a payment method it says plainly that the shop is not taking payment.
-- **Orders and account:** the order page (receipt, delivery and a chat with the shop); the account as a desk (Overview, Orders, Addresses, Profile) where each order shows its steps (Placed, Baking, On the way, Delivered); a sign-in sheet.
-- **Content pages:** the journal and each story (a panel with the pastries the story links to and "Add all"), About, Terms, Privacy, FAQ, Contact and a 404 inside the Layout.
+- **Header:** a cocoa top bar that scrolls away: the counter's days and hours, the way to pay and "Pickup at <street>" on the left; the language and currency pill (`EN · USD`), the phone and the email on the right. Under it a cocoa bar that sticks: **Shop ⌄** (every collection with its best seller's photo and "From $x", then the deals line, such as "25% off every piece"), Deals, Journal, About and Contact on the left; the wordmark (your shop's title in lower case, Cormorant italic, with a small dot in the palette's light shade) in the centre; search (live suggestions from the catalogue, a "Popular" row of the words most products share, Enter opens every result), the account, the bag with its count and **Order now** (today's selection on the home) on the right. Shop ⌄ opens on a click; a second click, Esc or a click outside closes it. On a phone (979px and narrower): the menu button, the wordmark, search and the bag; the menu is a panel from the left with the collections (past eight, the first six and "Show N more"), the pages, the account, a "Language & currency" row that opens a bottom sheet, and the counter's lines. There is no bottom tab bar.
+- **Footer:** a dark cocoa band over a fine texture (the `domino-footer` photo when the Layout has it): one line in the large serif on how orders reach the buyer (from your delivery ways), the counter's address, days and hours, the email and the phone set large; the Theme row (showcase only); the legal row (Privacy, Terms, FAQ, Selldone's cookie settings, your social links, the copyright and city, a small "made with" credit).
+- **Home,** in this order (a section without its data folds away or shrinks to what the shop has):
+  1. **Hero:** your shop's name and "Pastry, one by one", "Every pastry, sold on its own" and one line from your facts (the collections, the counter's street, the saving, how orders arrive), **Shop the collections**; beside it the `domino-hero-back` photo with your three most-ordered collections over it, the framed `domino-hero-inset` photo and your best seller as a cut-out;
+  2. **counters** on the scalloped cocoa band: the collections, the saving, the counter's days and hours, the ways to receive an order (four, two or one; never a count of products);
+  3. **About:** the `domino-about` photo and two lines written from your shop's facts (address, collections, ways, payment), with links to Delivery, Pickup and Payment;
+  4. **The collections people order most:** four (or two, or one) cards, each with an outlined numeral, the collection's photo, its description, three best sellers with their prices and **Shop <collection>**;
+  5. **How ordering works:** the `domino-how` photo; Piece by piece, Pick a window (the courier's windows), the way to pay, Or pick it up / Or have it shipped; the courier's card (its radius, days, fee and how it is paid);
+  6. the courier's numbers (windows, radius, free shipping from), the **offer card** (`domino-offer`: "25% off every piece" or "Up to X% off", "Every pastry on the counter, from $x", **See the deals**) and **<n> ways to receive it** with each way's note and fee;
+  7. a **gallery** of the collections around the most-ordered one, with pastry plates where a collection is missing;
+  8. **Today's selection:** six best sellers in stock, mixed across collections, as numbered rows with **Add to bag**;
+  9. the **photo band** (`domino-parallax`);
+  10. a **marquee** of the collections (it holds on hover and keyboard focus, and stands still for reduced motion);
+  11. **the journal:** the four newest posts beside the `domino-journal` photo, and All journal posts.
+- **Photo slots:** each shows your photo from `assets/domino/` when the Layout has one, else its designed fallback (see [Customize](Customize#photos)).
+- **Collection page:** the cocoa title band (the collection's name, its line and the saving); every collection as a chip, this one marked; the filter panel beside the grid; a bar with the active filters as chips and **Sort**; the grid of cards (a short result keeps the card width and centres the row); then a strip of three panels: the courier (its radius, days and windows), the collection's photo, and pickup at the counter.
+- **Search, Deals and every pastry** share the grid: search has "Results for “q”" with its box, the collections it found as tabs, posts from the journal, and a calm card with suggestions when nothing matches; Deals opens with the biggest saving today on a cocoa band with its round "Save" and sorts by Biggest saving first.
+- **Filters:** a side panel (a side sheet below 1200px): the price with two thumbs and short boxes, On offer, then every spec group of the products on the page, the groups with several values first; long values show four at a time with "Show N more". Sort: Featured, Best sellers, Customer review, Price low to high, Price high to low, Newest. A change dims the cards in place with "Updating results…", then the new ones fade up (no motion when the visitor asks for less).
+- **Cards:** the cut-out on its plate with a `−%` roundel and a quick-view eye in the plate's top corners (no words there), the collection, the name, "Per <unit>" (and "only n left" at five or fewer), the price with the struck was-price, the saving, then **Add to bag**, which turns into "− n +" in place.
+- **Product page:** the slim title band with the breadcrumb; the gallery (the pastry on its plate with the `−%` roundel, a row of thumbnails) beside a buy column that stays in view: the collection, the name, "Per <unit> · No reviews yet" (the count once there are reviews; never stars without them), the price with the was-price and "Save $x · n%", a deal clock only when the deal has a real end date, the stock, options only when the product has real variants (tiles with their own photo), **Add to bag** (then "− n +") beside Compare, and your delivery, pickup and payment lines. Then the tabs: **Description** (a lead from the product's spec, its own article if it has one, and "Why you'll love it": its pros), **Additional information** (the spec in your groups, the SKU) and **Reviews** (an honest card with your rating criteria, each "No score yet", until the first review); **Buy together** (this pastry and the best seller of two other collections, ticks, the live total and "Add all three to bag"); **More <collection>**; a buy bar on a phone.
+- **Compare and quick view:** the picks side by side, "Only differences" and "Copy link", rows that differ marked; a quick view sheet from each card's eye.
+- **Bag and checkout:** a bag drawer ("Your bag", the lines with "− n +", the receipt, Checkout and View bag, "Often added"); the bag page ("How it reaches you" with your ways as cards, "Compare the options" opens the delivery sheet, the receipt); the checkout: step pills in the title band, numbered cards (Contact, Delivery with its windows, the address or the pickup counter, Billing, a note), the receipt with "Place order · pay $x on delivery", and what is still missing named above the cards. The delivery sheet lists every way with its days, fee line and own windows; the address sheet works with or without a map; then Selldone's payment window. Without a payment method it says plainly that the shop is not taking payment.
+- **Orders and account:** the order page ("Order SM-41", where it stands, the progress Placed · Baking · On the way · Delivered, or Ready to collect · Collected for pickup, the pastries, how it is paid, who receives it, the invoice, and a chat with the shop); the account (Overview, Orders, Addresses, Profile; a row of pills on a phone); a sign-in sheet with your shop's own ways in and "Continue as guest" when guests may buy.
+- **Content pages:** the journal (the newest post as a featured card, then every post with a search), each post (one reading column, a panel with the pastries it links to and "Add all", Share, the comments, More from the journal), About, Terms, Privacy, FAQ, Contact (the counter on your real map and a message form) and a 404 inside the Layout ("This page is not on the counter", a search and six pastries to try).
+
+Domino keeps Bakini Noir's buy flow underneath (Selldone's and the Kalio base's scripts for the bag, checkout, order, account, sign-in and compare); every page's markup and style is Domino's own.
 
 ## Screens
 
 | Desktop | Phone |
 | --- | --- |
-| ![Home](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/desktop-home.jpg) | ![Home on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/phone-home.jpg) |
-| ![A collection](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/desktop-category.jpg) | ![A collection on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/phone-category.jpg) |
-| ![A product](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/desktop-product.jpg) | ![A product on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/phone-product.jpg) |
-| ![The bag](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/desktop-cart.jpg) | ![The bag on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-bakini/main/docs/screenshots/phone-cart.jpg) |
+| ![Home](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/desktop-home.jpg) | ![Home on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/phone-home.jpg) |
+| ![A collection](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/desktop-category.jpg) | ![A collection on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/phone-category.jpg) |
+| ![A product](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/desktop-product.jpg) | ![A product on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/phone-product.jpg) |
+| ![The bag](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/desktop-cart.jpg) | ![The bag on a phone](https://raw.githubusercontent.com/selldone-custom-layouts/official-domino/main/docs/screenshots/phone-cart.jpg) |
 
 ## Links
 
-- Live shop: <https://bakini.selldone.shop>
-- Repository: <https://github.com/selldone-custom-layouts/official-bakini>
-- What Bakini is, how the pages were built and its releases: [`BAKINI.md`](https://github.com/selldone-custom-layouts/official-bakini/blob/main/BAKINI.md); shared behaviours: [`KALIO.md`](https://github.com/selldone-custom-layouts/official-bakini/blob/main/KALIO.md)
+- Live shop: <https://domino.selldone.shop>
+- Repository: <https://github.com/selldone-custom-layouts/official-domino>
+- What Domino is, how the pages were built, its reversible choices and releases: [`DOMINO.md`](https://github.com/selldone-custom-layouts/official-domino/blob/main/DOMINO.md); shared behaviours: [`KALIO.md`](https://github.com/selldone-custom-layouts/official-domino/blob/main/KALIO.md)
 - All official custom Layouts: <https://github.com/selldone-custom-layouts>
 - Selldone: <https://selldone.com>

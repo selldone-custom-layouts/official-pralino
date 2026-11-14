@@ -124,6 +124,19 @@ now hold only the `bakini.*` keys the code still uses.
 **Checks.** `bash scripts/run-checks.sh http://localhost:9140 <log folder>` runs every kit check one
 after the other (palette `pistachio`, key `domino-theme`, Arabic forced through `local-shop-bakio`).
 
+## Phase 3 — live checks (14 November 2026)
+
+On domino.selldone.shop (domain 1248): `CIRCLE_CURRENCIES=USD,AED,DKK,SAR bash scripts/run-checks.sh
+https://domino.selldone.shop <logs>` (28 checks, 1440 and 390, light, dark, yellow, Arabic) at TOTAL 0 on
+1.0.0 and again on 1.0.1. Bakio sells in USD only, so the other currencies stay USD; the circles' long
+made-up amount stands in for them. A console sweep (every page type opened in-app, the sign-in sheet, the
+bag drawer, checkout, the delivery and address sheets and the payment window; light and dark, English and
+Arabic, 1440 and 390) found no console or page error, and every grouped chunk of the release (language
+packs, the rare pages, Domino's shared pieces) evaluates on its own. The guest checkout was walked to the
+payment window on desktop and phone (a guard refuses any pay/buy request; nothing is ordered; the bag is
+emptied after each run); its findings became 1.0.1. Docs: `scripts/doc-shots.cjs` takes
+`docs/screenshots/` from the live shop (and empties its bag).
+
 ## Releases
 
 Layout id **38** (`https://selldone.com/developer/layouts/38`). Upload with

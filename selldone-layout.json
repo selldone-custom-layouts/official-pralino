@@ -5,7 +5,16 @@
   "summary": "A single bakery in cocoa and pistachio: a cream ground, cocoa ink and header, a pistachio accent, rounded photos and pill buttons, Cormorant over Jost; a top bar with the shop’s hours and contact, a centred italic wordmark drawn from the shop’s live title, the collections, search, a language and currency pill and the bag; a hero of collection names over photos, counters on a scalloped cocoa band, the best-selling collections, how ordering works, today’s selection, a marquee of the collections and the journal. Light by default, with a dark mode and the palettes in the footer’s Theme row.",
   "live": "https://domino.selldone.shop",
   "cover": "docs/screenshots/cover.jpg",
-  "screenshots": [],
+  "screenshots": [
+    "docs/screenshots/desktop-home.jpg",
+    "docs/screenshots/desktop-category.jpg",
+    "docs/screenshots/desktop-product.jpg",
+    "docs/screenshots/desktop-cart.jpg",
+    "docs/screenshots/phone-home.jpg",
+    "docs/screenshots/phone-category.jpg",
+    "docs/screenshots/phone-product.jpg",
+    "docs/screenshots/phone-cart.jpg"
+  ],
   "tags": [
     "bakery",
     "patisserie",
@@ -17,5 +26,5 @@
   ],
   "package": "domino-cocoa-patisserie",
   "base": "selldone/storefront",
-  "status": "in development"
+  "status": "live"
 }

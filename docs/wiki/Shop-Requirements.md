@@ -1,89 +1,108 @@
 # Shop Requirements
 
-The Layout reads everything from your shop. Nothing about Bakio is hard-coded. Here is what your shop's data needs so that each part looks as it does on [bakini.selldone.shop](https://bakini.selldone.shop). A section with no data folds away; it never shows an empty box, and no fact is invented to fill one.
+The Layout reads everything from your shop. Nothing about Bakio is hard-coded. Here is what your shop's data needs so that each part looks as it does on [domino.selldone.shop](https://domino.selldone.shop). A section with no data folds away or shrinks to what the shop has; it never shows an empty box, and no fact is invented to fill one.
 
 ## Settings (yours to choose)
 
 | Setting | What to set | What the Layout does |
 | --- | --- | --- |
 | **OAuth client id** | Set it up for your shop first | Sign-in uses your shop's own sign-in. Without it, sign-in leaves for Selldone and shows an error. |
-| **Business model** | A normal shop with one seller | Bakini is made for one bakery. |
-| **Shop title** | The name you want read | It is drawn as the wordmark, the tab icon's letter and the page titles. |
-| **Guest checkout** | Your choice | When guests may buy, the sign-in sheet offers "Continue as guest"; otherwise the shopper signs in first. |
-| **Payment methods** | At least one, for your currency (cash on delivery is fine) | The bento, the product page and the footer name it. Without one, the checkout says "This shop is not taking payment right now" instead of showing Pay. |
-| **Delivery ways** (transportations) | What you offer, each with a title, a fixed fee, a free-shipping threshold if you have one, and **time windows** | The home's bento, the product page's delivery lines, the bag and the checkout's delivery cards. A way without a title gets words from its kind ("<Shop> courier", "Worldwide shipping", "By post", "Pickup"). The windows (`time_spans`) are the choices at checkout. |
-| **Pickup point** | If you have a counter: a pickup point with a note that holds the hours, e.g. "Open daily, 8:00-18:00" | The counter hours are read from that note (a time range like `8:00-18:00`, `8:00–18:00` or `8:00 to 18:00`). They show in the stage's line, the bento, the story, Visit & pickup, Contact and the footer. With no hours in the note, the hours are left out. |
+| **Business model** | A normal shop with one seller | Domino is made for one bakery. |
+| **Shop title** | The name you want read | It is drawn as the wordmark (in lower case, italic), the hero's first line, the tab icon's letter, the shop's mark and the page titles. |
+| **Guest checkout** | Your choice | When guests may buy, the sign-in sheet offers "Continue as guest", the checkout's Contact card says "Checkout does not need an account", and a guest's account shows the orders kept on that device; otherwise the shopper signs in to place the order. |
+| **Payment methods** | At least one, for your currency (cash on delivery is fine) | The top bar, About, How ordering works (the method's name and its own description), the strip under a collection, the product page's payment line, the bag ("Pay in cash when the order arrives"), the checkout ("Place order · pay $x on delivery") and the order page name it. With cash on delivery, How ordering works says "pay when they arrive. Nothing is charged online." Without one, the checkout says "This shop is not taking payment right now" instead of showing Place order. |
+| **Delivery ways** (transportations) | What you offer, each with a title, a fixed fee, a free-shipping threshold if you have one, a distance for a courier, its **days** and **time windows** | The hero's line ("brought by the <courier>, shipped or picked up"), the counters ("n ways to receive an order"), About, How ordering works (Pick a window, Or have it shipped, the courier's card with its radius, days, fee and how it is paid), the courier's numbers (windows, radius, free shipping from), **<n> ways to receive it**, the footer's line, the strip under each collection, the product page's delivery lines, the bag's "How it reaches you", the delivery sheet, the checkout's method cards and windows, and the order page. A way without a title gets words from its kind ("<Shop> courier", "Worldwide shipping", "By post", "Pickup"). The windows (`time_spans`) are the choices at checkout; a window shows only for the way that offers it. |
+| **Pickup point** | If you have a counter: a pickup point with an address and a note that holds the hours, e.g. "Open daily, 8:00-18:00" | The counter hours are read from that note (a time range like `8:00-18:00`, `8:00–18:00` or `8:00 to 18:00`), else from the shop info's own hours line. They show in the top bar ("Open every day 8:00–18:00"), the counters, How ordering works, the footer and Contact. The street shows as "Pickup at <street>" in the top bar. With no hours anywhere, the hours are left out. |
 | **Checkout map** | On or off | On: the address sheet has a map and a pin. Off: it is a short form with search. |
 | **Login modes** | Your choice | The sign-in sheet shows your shop's own ways in (social logins as you switch them on, an email code, phone). |
-| **Currency, country, language** | Your market | Prices, the address form, and the language and currency pill in the header (the phone menu's "Language & currency" row). The pill shows even with one currency and one language. Bakini's own words are in English and Arabic; another language needs one file (see [Customize](Customize#languages)). |
+| **Currency, country, language** | Your market | Prices, the address form, and the language and currency pill at the right end of the top bar (the phone menu's "Language & currency" row). The pill shows even with one currency and one language ("EN · USD"). Domino's own words are in English and Arabic; another language needs a few files (see [Customize](Customize#languages)). |
 | **Home of the domain** | The shop page | The designed home is the shop page. A Page Builder page set as Home replaces it on `/`. |
 
 ## Shop info
 
-The facts on the home, the footer, Contact and the sample pages come from the shop's own info (Selldone dashboard, the shop's contact information):
+The facts on the home, the header, the footer, Contact and the sample pages come from the shop's own info (Selldone dashboard, the shop's contact information):
 
-- **Address**, city, region and postal code: the stage's eyebrow, the story, Visit & pickup, Contact, the footer ("A counter at <address>.").
-- **Location** (the pin on the map): the real map on Visit & pickup and Contact, dark in dark mode. Without a location the map is a calm plate with the pin, no streets.
-- **Open days:** "Open every day" or the days you list, in the bento, the footer and Contact.
-- **Phone** and **email:** the footer's "Visit the counter" and Contact.
+- **Address**, city, region and postal code: the top bar's "Pickup at <street>" (the pickup point's street first), the hero's line, About ("<Shop> is a bakery counter at <street> in <city>."), How ordering works' pickup line, the footer, the copyright line, About and Contact.
+- **Location** (the pin on the map): the map on Contact. Without a location (or without a map key), Contact shows the map's calm water colour and the pin, nothing invented.
+- **Open days:** "Open every day" or "Open n days a week", in the top bar, the counters, the footer and Contact's Hours card (the days as pills).
+- **Phone** and **email:** the top bar, the footer (set large), Contact and the FAQ's "Still wondering?".
 
 ## Collections (categories)
 
-- Each **top-level category** is a collection: a tall dark card in the home's "Explore the collections", an entry in the header's Shop panel and the phone menu, a chip on every listing and the 404, a column in the footer, and its own listing page.
-- Give each one an **image**: a pastry cut-out on a transparent ground. It sits on the collection's card, in the Shop panel, in the listing head and on the chips.
-- Give each one a short **description**: its line in the Shop panel and the listing head.
-- Order them in Selldone; the Layout keeps your order. The six warm hues behind the pastries are given to the collections in that order, then repeat.
-- The carousel starts on the **best-selling** collection; the trio and "Which <unit> is yours?" pick the best-selling collections; Buy together takes the best seller of two other collections.
+- Each **top-level category** is a collection: a link in **Shop ⌄** and the phone menu, a card or a gallery tile on the home, a word in the marquee, a chip on every collection page, a tab on search, and its own collection page.
+- **Shop ⌄** shows each collection's **best seller's photo** and its lowest price ("From $2.81"); a product count is never shown.
+- Each collection's portrait photo is `assets/domino/hero-<collection name>.webp` in the Layout (see [Photos](#photos-for-the-photo-slots-optional)); without it, its three best sellers on a plate. The category's own **image** in Selldone is used only on the empty bag's collection links.
+- Give each one a short **description**: it shows on the home's collection cards, in the collection page's title band and on About.
+- Order them in Selldone; collections with the same sales keep your order.
+- The hero names the three collections with the most pieces sold; **The collections people order most** shows the top four (or two, or one); the gallery puts the most-ordered collection in its centre; **Buy together** takes the best seller of the two best-selling other collections.
 
-## Collection photos (the home's carousel)
+## Photos for the photo slots (optional)
 
-- One **portrait photo per collection** (4:5; the Layout serves 900 × 1125), file name `assets/bakini/hero-<collection name>.webp`, where the collection name is its address name in Selldone (`cookies`, `mini-cakes`). Plain wall in the top 40% (the arch crops it) and the pastries in the centre and lower centre; the name sits on glass over the bottom quarter.
-- A collection without a photo shows its three best sellers on a plate, so a new collection never shows an empty card. Codex prompts: `bakio-design/hero/CODEX-PROMPTS.md` in the project.
+The home's hero (two), About, How ordering works, the offer card, the photo band, the journal and the footer's texture are **photo slots**, and each collection has a portrait. Each reads one file from `assets/domino/` in the repository:
+
+| File | Size |
+| --- | --- |
+| `domino-hero-back.webp` (the hero's big photo; the collection names sit over it) | 2000 × 1250 |
+| `domino-hero-inset.webp` (the framed photo over the hero) | 900 × 1100 |
+| `domino-about.webp` (About on the home and the top of the About page) | 1200 × 800 |
+| `domino-how.webp` (How ordering works) | 1200 × 1500 |
+| `domino-offer.webp` (the tall dark offer card; its words sit at the foot) | 900 × 1350 |
+| `domino-parallax.webp` (the full-width photo band) | 2400 × 1100 |
+| `domino-journal.webp` (beside the journal's posts; "Journal" sits over it) | 1200 × 1400 |
+| `domino-footer.webp` (the footer's dark texture) | 2400 × 900 |
+| `hero-<collection name>.webp` (the collection's portrait, where `<collection name>` is its address name in Selldone: `cookies`, `mini-cakes`) | 1200 × 1500 |
+
+- A slot without its file shows its designed fallback (the tinted surface with one of the mockup's drawings, or your own pastries as cut-outs), so a new collection or a missing photo never shows an empty box, a caption or a file name.
+- No words, logos, price tags or people on any photo, and no pastry cut by the edge. On the deep slots (the hero's big photo, the offer card, the journal) the Layout's words sit over a soft scrim: leave that part of the photo plain.
+- The photos are part of the Layout, so a new one needs a new release. See [Customize](Customize#photos).
 
 ## Products
 
-- The **main photo** as a **transparent cut-out** (PNG or WebP, the pastry alone on no ground). Every card, the quick look and the product page set it on a dark plate under a warm halo; a photo with its own ground shows as a square. More photos make the product page's gallery.
-- A **unit** (Selldone's `unit` field, for example "croissant"): "per croissant" on every card, "per croissant · sold individually" on the product page, "In stock · 3 croissants left", and the home's "Which croissant is yours?". Without one, the Layout says "piece".
-- A **price**, and a **discount** for a saving: the struck was-price, "Save $X" in gold, the Deals page, the deals band and its Save roundel. The deals band's headline is "Up to X% off.", or "X% off. Every piece." when every product has the same saving.
+- The **main photo** as a **transparent cut-out** (PNG or WebP, the pastry alone on no ground). Every card, the quick view, the product page, the bag, the hero and the photo slots' fallbacks set it on a rounded warm plate; a photo with its own ground shows as a square on the plate. More photos make the product page's gallery.
+- A **unit** (Selldone's `unit` field, for example "croissant"): "Per croissant" on every card, the quick view and the product page, "Sold as one croissant" in the Description tab, and the home's "an order can be as small as a single croissant" and "one croissant, one tart or a single mini cake". Without one, the Layout says "piece".
+- A **price**, and a **discount** for a saving: the struck was-price, the `−%` roundel, the saving line, "Save $X · n%" on the product page. The header's deals line, the hero's line, the counters and the offer card say "25% off every piece" when every product has the same saving, else "Up to X% off".
+- **Deals** (in the header and the menus) lists the pieces that have a saving, biggest saving first. When every piece has one, as on Bakio, that is every piece.
 - **Discount dates:** a deal with a real end date gets a clock on the product page. Without an end date there is no clock; no date is ever invented.
-- **Pros** (Selldone's product pros, a title and a line each): "Why you'll love it" on the product page (numbered), its first line in the quick look, "Why pick it" on Compare.
-- **Rating criteria** (for example "Flakiness", "Flavor"): shown as "Not rated yet" beside "No reviews yet." until the first review.
-- **Stock:** "Only n left" on a card at five or fewer; out-of-stock pieces leave Tonight's selection, the trio and the deals band, and the stage picks a piece in stock when its collection has one.
-- **Variants** only when the product really has options: tiles with their own photo on the product page; the quick look then says "Choose options" and opens the product.
-- A **product code** (SKU) shows under Product information.
-- **Sales:** best sellers, the stage, Most loved, the trio and the compare strip are ranked by Selldone's own sales count. With no sales yet, the older products come first.
-- Bakini reads up to **250 products** in one go; a larger catalogue shows its first 250 in the listings and on the home.
+- **Pros** (Selldone's product pros, a title and a line each): "Why you'll love it" in the product page's Description tab; Compare's "Why pick it" lists the first two.
+- **Spec for the Description's lead:** when a product's spec has a "Visual Finish" (or "Surface") and a "Suggested Pairing" value, the Description tab opens with them (the finish, then "Sold as one <unit>, and good with <pairing>."). Without them the lead is shorter.
+- **Rating criteria** (for example "Flakiness", "Flavor"): shown as "No score yet" in the Reviews tab's honest card until the first review; "No reviews yet" beside the unit.
+- **Stock:** "only n left" on a card at five or fewer; the product page, the quick view and the bag show the stock.
+- **Variants** only when the product really has options: tiles with their own photo on the product page; the quick view then says "Choose options" and opens the product.
+- A **product code** (SKU) shows in the Additional information tab.
+- **Sales:** the hero, the collection cards, the gallery, Today's selection, Shop ⌄'s photos, the 404's pastries and Buy together are ranked by Selldone's own sales count. With no sales yet, the shop's order comes first.
+- Domino reads up to **250 products** in one go; a larger catalogue shows its first 250 in the listings and on the home.
 
 ## Specs and filters
 
-The listing's filter panel (and its phone sheet), the product page's Product information, Compare and the home's "Which <unit> is yours?" come from each product's **spec**:
+The filter panel, the product page's Additional information and Compare come from each product's **spec**:
 
 - Write specs **flat**: `{"Group": "group", "Key": ["value"]}` with `spec_order`. A nested spec is not shown anywhere.
-- Keep the values you want as filters **short**. A spec key becomes a filter only when the products on that page have **two or more different values** for it, each **28 characters or fewer**. A long sentence (an allergen note, a description of the finish) is never a filter, but it still shows under Product information.
+- Every spec key of the products on the page becomes a filter group, the groups with **two or more different values** first. A note in sentences is never a filter: a key whose every value is longer than 80 characters, or that has one value longer than 30 characters. A group with a value longer than 30 characters shows four values, then "Show N more". Keep the values you want as filters short.
 - **Price** (a two-thumb range with short boxes) is always there, and **On offer** whenever something on the page has a saving. Nothing else is invented, so a collection may show fewer filters than another.
-- The filters are read live from the products, so a spec change shows on the next visit. No category filter list is needed.
-- Sort: Featured, Best sellers, Customer review, Price low to high, Price high to low, Newest (the Deals page adds Biggest saving first).
-- "Which <unit> is yours?" shows two rows of the first spec group whose values are short and differ between the four pastries.
+- The filters open in a side panel (a side sheet below 1200px). They are read live from the products, so a spec change shows on the next visit. No category filter list is needed.
+- Sort: Featured, Best sellers, Customer review, Price low to high, Price high to low, Newest. Deals starts on Biggest saving; search starts on Best sellers.
+- Compare shows the spec in your own groups, with the collections' "… Profile" groups as one "Profile".
 
 ## Content
 
-- **Articles** (blog posts) with **cover images**: the four newest show as the journal, last on the home; the journal page shows them all, newest first. Publish **four or more** for a full row.
-- In an article's text, **link the pastries** it talks about (`/product/<id>` links): the article ends with one panel of those pastries (four at most) and "Add all". Without links, the panel shows the pastries the text names.
-- **FAQ** entries: the FAQ page, with topic tabs from the FAQ's tags. Until you add some, it shows sample questions (ordering pieces, delivery windows, pickup, the way to pay, allergens) built from your shop's facts, under the sample label below.
-- **About us, Terms, Privacy, Contact us** pages (Selldone's shop profiles). Until you write them, About, Terms and Privacy show sample text built only from your shop's facts (no invented history, names or reviews), under a clear "Sample text — the shop has not written this page yet" label. Contact always shows your real lines and the message form; your own Contact text shows above the form.
-- A **footer menu** (Selldone menu, type Footer): the footer's column under your shop's name. Without one: Home, About and Contact.
+- **Articles** (blog posts) with **cover images**: the home's journal shows the four newest; the journal page shows the newest as a featured card, then every other post in a grid with a search, newest first, and "More posts". Publish **five or more** to fill both. A post without a cover gets the card's plate with the whisk drawing.
+- In an article's text, **link the pastries** it talks about (`/product/<id>` links): the article has one panel of those pastries (four at most) with "Add all". Without links, the panel shows the pastries the text names.
+- **FAQ** entries: the FAQ page, grouped by topic (each entry's first tag), with the topics as chips. Until you add some, it shows sample questions (ordering pieces, delivery windows, pickup, the way to pay, allergens) built from your shop's facts, under the sample label below.
+- **About us, Terms, Privacy, Contact us** pages (Selldone's shop profiles). Until you write them, About, Terms and Privacy show sample text built only from your shop's facts (no invented history, names or reviews), under a clear "Sample text — the shop has not written this page yet" label. Your own Terms and Privacy headings become the page's index. Contact always shows your real lines and the message form; your own Contact text shows above the form.
 - **Social links:** shown in the footer's legal row.
+- Domino's footer does not read a Selldone footer menu: its legal row links Privacy, Terms and FAQ.
 
 ## Checklist
 
 - [ ] The shop's OAuth client id is set up
 - [ ] The shop's title reads the way the wordmark should
-- [ ] Collections have cut-out images and a short description
+- [ ] Collections have a short description
 - [ ] Products have a cut-out main photo, a unit, pros, flat specs with short values, and an SKU
 - [ ] Some products have discounts, with end dates only where the deal really ends
 - [ ] At least one payment method (cash on delivery is fine)
-- [ ] Delivery ways with titles, fees and time windows; a pickup point whose note holds the hours
+- [ ] Delivery ways with titles, fees, days and time windows; a pickup point whose note holds the hours
 - [ ] The shop info has an address, a location on the map, open days, a phone and an email
-- [ ] Four or more articles with covers, linking the pastries they talk about
+- [ ] Five or more articles with covers, linking the pastries they talk about
 - [ ] FAQ entries, and your own About, Terms and Privacy
+- [ ] Optional: photos for the photo slots and the collection portraits in `assets/domino/`
 - [ ] The domain's Home is the shop page
