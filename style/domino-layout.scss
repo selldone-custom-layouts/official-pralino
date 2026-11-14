@@ -646,6 +646,13 @@ html body,
 .dm .offer .dm-cut img {
   filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.35));
 }
+/* On a phone the card is shorter: a smaller piece, higher, clear of the words. */
+@media (max-width: 760px) {
+  .dm .offer .dm-cuts.-one .c0 {
+    top: 25%;
+    width: 42%;
+  }
+}
 /* The words over a deep slot stay above the cut-outs. */
 .dm .ph .hero-words,
 .dm .ph .offer-tx,
@@ -1366,4 +1373,41 @@ html.dm-dark .dm .dm-map__img {
 }
 .dm .cmts .ap-t {
   margin-bottom: 16px;
+}
+/* The 404's six pastries: three to a row until there is room for six (at
+   1024px six cards left a long name no room). */
+@media (min-width: 761px) and (max-width: 1279px) {
+  .dm .nf-try .grid.six {
+    --dm-cols: 3;
+  }
+}
+/* Words in a circle keep to about 80% of it so a long amount takes two
+   lines and fit-in-circle shrinks it inside (any currency, any language). */
+.dm .pc-off > span,
+.dm .dt-sv > * {
+  max-width: 80%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+/* A tick box draws no words, but its value ("on") takes the box's ink:
+   the ink of a word on the box's own ground. */
+.dm .cbx {
+  color: var(--dm-ink);
+}
+.dm .cbx:checked {
+  color: var(--dm-act-on);
+}
+/* Selldone's tax and free-shipping line under the price, in Domino's ink. */
+.dm .s--product-section-tax {
+  padding-inline: 0 !important;
+  color: var(--dm-muted);
+  font-size: 13px;
+}
+.dm .s--product-section-tax .-shipping-box {
+  margin-inline: 0 8px !important;
+  color: var(--dm-act-text) !important;
+  font-weight: 600;
+}
+.dm .s--product-section-tax .-shipping-box .v-icon {
+  color: inherit !important;
 }

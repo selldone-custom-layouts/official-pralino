@@ -222,6 +222,7 @@ import { percentOff } from "../../kalio/kalio-catalog";
 import { journalPage, postRoute } from "../../kalio/pages/kalio-journal";
 import { currentCurrency, isRtl, regionState, signOf } from "../../region-switcher/region";
 import { breakable, fitInCircle } from "../../bakini/fit-in-circle";
+import { fitOnResize } from "../dm-fit";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 /* A spec key whose every value reads like a paragraph is a note, not a filter. */
@@ -506,6 +507,7 @@ export default {
   },
 
   mounted() {
+    this.unfit = fitOnResize(() => fitInCircle(this.$refs.dtsv));
     this.mq = window.matchMedia("(min-width: 1200px)");
     this.wide = this.mq.matches;
     this.onMq = () => {
@@ -532,6 +534,7 @@ export default {
   },
 
   beforeUnmount() {
+    this.unfit?.();
     this.mq?.removeEventListener?.("change", this.onMq);
     document.removeEventListener("click", this.onDoc, true);
     document.removeEventListener("keydown", this.onKey);

@@ -181,6 +181,7 @@ import { deliveryLines, galleryOf, isEnglish, plural } from "./pd";
 import { colourName, dealEnd, moneyOf, swatchBg, variantDimension } from "../../bakini/bakini";
 import { currentCurrency } from "../../region-switcher/region";
 import { fitInCircle } from "../../bakini/fit-in-circle";
+import { fitOnResize } from "../dm-fit";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 export default {
@@ -297,6 +298,7 @@ export default {
   },
 
   mounted() {
+    this.unfit = fitOnResize(() => fitInCircle(this.$refs.off));
     document.documentElement.classList.add("dm-buybar");
     this.$nextTick(() => fitInCircle(this.$refs.off));
     document.fonts?.ready?.then(() => fitInCircle(this.$refs.off));
@@ -313,6 +315,7 @@ export default {
   },
 
   beforeUnmount() {
+    this.unfit?.();
     document.documentElement.classList.remove("dm-buybar");
     this.io?.disconnect();
   },

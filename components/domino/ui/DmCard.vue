@@ -56,6 +56,7 @@ import { catOf, catTitle, money, openQuick, priceView, productImage, productTo, 
 import { dropSrcset, productSrcset } from "../../kalio/kalio-catalog";
 import { currentCurrency } from "../../region-switcher/region";
 import { fitInCircle } from "../../bakini/fit-in-circle";
+import { fitOnResize } from "../dm-fit";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 export default {
@@ -101,7 +102,11 @@ export default {
       this.$nextTick(() => fitInCircle(this.$refs.off));
     },
   },
+  beforeUnmount() {
+    this.unfit?.();
+  },
   mounted() {
+    this.unfit = fitOnResize(() => fitInCircle(this.$refs.off));
     this.$nextTick(() => fitInCircle(this.$refs.off));
     document.fonts?.ready?.then(() => fitInCircle(this.$refs.off));
   },
