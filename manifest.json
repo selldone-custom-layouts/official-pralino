@@ -3,7 +3,7 @@
   "deploy_path": "",
   "package": "domino-cocoa-patisserie",
   "name": "Domino Cocoa Patisserie",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "storefront": true,
   "backoffice": false,
   "description": "A light cocoa-and-pistachio pâtisserie for a single bakery: a top bar with the shop’s hours and contact, a cocoa header with the shop’s name drawn as a centred italic wordmark, a hero of collection names over photos, counters on a scalloped cocoa band, the four best-selling collections as cards, how ordering works, three ways to receive an order, a gallery of the collections, today’s selection as rows, a photo band, a marquee of the collections and the journal; a bag drawer and a footer with a Theme row; dark through the footer."
