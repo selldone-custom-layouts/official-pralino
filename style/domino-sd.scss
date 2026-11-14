@@ -311,3 +311,25 @@ html.dm-dark .s--storefront-master-payment-dialog,
     box-shadow: 0 40px 80px -30px rgba(15, 12, 10, 0.6) !important;
   }
 }
+
+/* The pickup chip's hover card (Selldone's black sheet with the counter's
+   map and address) on Domino's surface. */
+.v-overlay__content > .v-sheet:has(.v-avatar.hover-scale-small) {
+  background: var(--dm-surface) !important;
+  color: var(--dm-ink) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 18px 40px -18px rgba(15, 12, 10, 0.45), inset 0 0 0 1px var(--dm-line) !important;
+  .v-list,
+  .v-list-item,
+  .text-subtitle-2 {
+    color: var(--dm-ink) !important;
+    font-family: var(--dm-sans);
+  }
+  .v-list-item-subtitle {
+    color: var(--dm-muted) !important;
+    opacity: 1 !important;
+  }
+  .v-avatar {
+    border-radius: 12px !important;
+  }
+}

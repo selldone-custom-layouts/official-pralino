@@ -1522,3 +1522,31 @@ html.dm-dark .dm .dm-map__img {
 .dm .dm-offers .coupon-title img {
   display: none;
 }
+
+/* Selldone's pickup chip under the product's price: a Domino chip (the soft
+   accent, a pill) instead of Selldone's black label. Its hover card is
+   dressed in domino-sd.scss. */
+.dm .s--product-section-tax .-pickup-box.v-chip {
+  height: auto !important;
+  min-height: 24px;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  background: var(--dm-act-soft) !important;
+  color: var(--dm-act-text) !important;
+  font: 600 12px/1.2 var(--dm-sans) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+.dm .s--product-section-tax .-pickup-box .v-chip__underlay,
+.dm .s--product-section-tax .-pickup-box .v-chip__overlay {
+  display: none;
+}
+.dm .s--product-section-tax .-pickup-box .v-icon {
+  color: inherit !important;
+  font-size: 14px !important;
+}
+/* Selldone's cookie-settings icon in the legal row (its blue-and-gold EU
+   stars) drawn in the footer's own light ink, like Selldone's mark beside it. */
+.dm .ftr-bot .dm-gdpr .v-img {
+  filter: brightness(0) invert(0.82);
+}
