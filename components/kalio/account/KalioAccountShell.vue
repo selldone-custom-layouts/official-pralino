@@ -1,5 +1,5 @@
 <!--
-  Domino — the account (domino-design/account-b.html, addresses-b.html;
+  Pralino — the account (pralino-design/account-b.html, addresses-b.html;
   pages-buy.js accNav): the title band (Home · Account · the open section;
   its own title; one line on where the orders stand), then the side menu
   (the shopper with their mark, Overview · Orders · Addresses · Profile ·
@@ -10,39 +10,39 @@
   in. The data is Kalio's (kalio-account.ts).
 -->
 <template>
-  <div class="dm dm-acct">
-    <dm-pt :crumbs="crumbs" :lead="summary" :title="heading" art="cookie" art2="croissant" cls="compact" />
+  <div class="pr pr-acct">
+    <pr-pt :crumbs="crumbs" :lead="summary" :title="heading" art="cookie" art2="croissant" cls="compact" />
     <section :aria-label="heading" class="sec-s">
       <div class="wrap acc">
-        <nav :aria-label="t('domino.acc.nav', 'Account')" class="acc-nav">
+        <nav :aria-label="t('pralino.acc.nav', 'Account')" class="acc-nav">
           <div class="acc-me">
-            <dm-mark :word="user?.name || ''" />
+            <pr-mark :word="user?.name || ''" />
             <div>
-              <b>{{ user ? user.name : pending ? t("domino.acc.moment", "One moment…") : t("domino.acc.guest", "Shopping as a guest") }}</b>
-              <small>{{ user ? user.email || user.phone : t("domino.acc.guestNote", "Orders placed on this device") }}</small>
+              <b>{{ user ? user.name : pending ? t("pralino.acc.moment", "One moment…") : t("pralino.acc.guest", "Shopping as a guest") }}</b>
+              <small>{{ user ? user.email || user.phone : t("pralino.acc.guestNote", "Orders placed on this device") }}</small>
             </div>
           </div>
           <ul>
             <li v-for="item in mainItems" :key="item.key">
               <router-link :aria-current="isOn(item) ? 'page' : undefined" :class="['an', { on: isOn(item) }]" :to="item.route"
-                ><span class="il-ic"><dm-icon :name="item.icon" /></span><span>{{ item.word }}</span></router-link
+                ><span class="il-ic"><pr-icon :name="item.icon" /></span><span>{{ item.word }}</span></router-link
               >
             </li>
             <li v-if="user">
               <button :aria-disabled="busy_out ? 'true' : undefined" class="an" type="button" @click="busy_out || signOut()">
-                <span class="il-ic"><dm-icon name="out" /></span><span>{{ t("domino.acc.signOut", "Sign out") }}</span>
+                <span class="il-ic"><pr-icon name="out" /></span><span>{{ t("pralino.acc.signOut", "Sign out") }}</span>
               </button>
             </li>
             <li v-else-if="!pending">
               <button class="an" type="button" @click="signIn">
-                <span class="il-ic"><dm-icon name="user" /></span><span>{{ t("domino.acc.signIn", "Sign in") }}</span>
+                <span class="il-ic"><pr-icon name="user" /></span><span>{{ t("pralino.acc.signIn", "Sign in") }}</span>
               </button>
             </li>
           </ul>
-          <ul v-if="moreItems.length" :aria-label="t('domino.acc.more', 'More in your account')" class="dm-acc-more">
+          <ul v-if="moreItems.length" :aria-label="t('pralino.acc.more', 'More in your account')" class="pr-acc-more">
             <li v-for="item in moreItems" :key="item.key">
               <router-link :aria-current="isOn(item) ? 'page' : undefined" :class="['an', { on: isOn(item) }]" :to="item.route"
-                ><span class="il-ic"><dm-icon :name="item.icon" /></span><span>{{ item.word }}</span></router-link
+                ><span class="il-ic"><pr-icon :name="item.icon" /></span><span>{{ item.word }}</span></router-link
               >
             </li>
           </ul>
@@ -58,14 +58,14 @@
 <script>
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import { t } from "../i18n/kalio-i18n";
-import DmIcon from "../../domino/DmIcon.vue";
-import DmMark from "../../domino/ui/DmMark.vue";
-import DmPt from "../../domino/ui/DmPt.vue";
+import PrIcon from "../../pralino/PrIcon.vue";
+import PrMark from "../../pralino/ui/PrMark.vue";
+import PrPt from "../../pralino/ui/PrPt.vue";
 import { ACCOUNT_HOME, ACCOUNT_STYLE, account, greeting, loadAddresses, loadOrders, sections, standing } from "./kalio-account";
 
 export default {
   name: "KalioAccountShell",
-  components: { DmIcon, DmMark, DmPt },
+  components: { PrIcon, PrMark, PrPt },
   inject: ["$shop"],
 
   data() {
@@ -99,16 +99,16 @@ export default {
     hello() {
       return greeting();
     },
-    /* ── Domino ── */
+    /* ── Pralino ── */
     /* The mockup's menu: Overview, Orders, Addresses, Profile. */
     mainItems() {
       const r = window.$storefront.routes;
       const items = [];
-      if (this.user) items.push({ key: "home", word: t("domino.acc.overview", "Overview"), icon: "home", route: { name: ACCOUNT_HOME } });
-      items.push({ key: "orders", word: t("domino.acc.orders", "Orders"), icon: "box", route: { name: r.HISTORY_ORDERS_PHYSICAL } });
+      if (this.user) items.push({ key: "home", word: t("pralino.acc.overview", "Overview"), icon: "home", route: { name: ACCOUNT_HOME } });
+      items.push({ key: "orders", word: t("pralino.acc.orders", "Orders"), icon: "box", route: { name: r.HISTORY_ORDERS_PHYSICAL } });
       if (this.user) {
-        items.push({ key: "addresses", word: t("domino.acc.addresses", "Addresses"), icon: "pin", route: { name: r.USER_ADDRESSES_PAGE } });
-        items.push({ key: "profile", word: t("domino.acc.profile", "Profile"), icon: "user", route: { name: r.USER_PROFILE_PAGE } });
+        items.push({ key: "addresses", word: t("pralino.acc.addresses", "Addresses"), icon: "pin", route: { name: r.USER_ADDRESSES_PAGE } });
+        items.push({ key: "profile", word: t("pralino.acc.profile", "Profile"), icon: "user", route: { name: r.USER_PROFILE_PAGE } });
       }
       return items;
     },
@@ -117,11 +117,11 @@ export default {
       if (!this.user) return [];
       const r = window.$storefront.routes;
       return [
-        { key: "saved", word: t("domino.acc.saved", "Saved"), icon: "heart", route: { name: r.USER_FAVORITES_PAGE } },
-        { key: "wallet", word: t("domino.acc.wallet", "Wallet"), icon: "cash", route: { name: r.USER_WALLETS_PAGE } },
-        { key: "gift", word: t("domino.acc.gift", "Gift cards"), icon: "gift", route: { name: r.USER_GIFTCARDS_PAGE } },
-        { key: "returns", word: t("domino.acc.returns", "Returns"), icon: "back", route: { name: r.USER_RETURN_REQUESTS } },
-        { key: "reviews", word: t("domino.acc.reviews", "Reviews"), icon: "star", route: { name: r.USER_COMMENTS_PAGE } },
+        { key: "saved", word: t("pralino.acc.saved", "Saved"), icon: "heart", route: { name: r.USER_FAVORITES_PAGE } },
+        { key: "wallet", word: t("pralino.acc.wallet", "Wallet"), icon: "cash", route: { name: r.USER_WALLETS_PAGE } },
+        { key: "gift", word: t("pralino.acc.gift", "Gift cards"), icon: "gift", route: { name: r.USER_GIFTCARDS_PAGE } },
+        { key: "returns", word: t("pralino.acc.returns", "Returns"), icon: "back", route: { name: r.USER_RETURN_REQUESTS } },
+        { key: "reviews", word: t("pralino.acc.reviews", "Reviews"), icon: "star", route: { name: r.USER_COMMENTS_PAGE } },
       ];
     },
     /* The open section: the band's title and the last crumb. */
@@ -129,20 +129,20 @@ export default {
       const r = window.$storefront.routes;
       const name = this.$route.name;
       if (name === ACCOUNT_HOME) return null;
-      if (this.$route.matched.some((m) => m.name === r.ORDERS_PAGE)) return t("domino.acc.orders", "Orders");
+      if (this.$route.matched.some((m) => m.name === r.ORDERS_PAGE)) return t("pralino.acc.orders", "Orders");
       const item = [...this.mainItems, ...this.moreItems].find((x) => x.route.name === name);
       return item ? item.word : null;
     },
     heading() {
       const r = window.$storefront.routes;
-      if (!this.section) return t("domino.acc.title", "Your account");
-      if (this.$route.matched.some((m) => m.name === r.ORDERS_PAGE)) return t("domino.acc.titleOrders", "Your orders");
+      if (!this.section) return t("pralino.acc.title", "Your account");
+      if (this.$route.matched.some((m) => m.name === r.ORDERS_PAGE)) return t("pralino.acc.titleOrders", "Your orders");
       return this.section;
     },
     crumbs() {
       const home = this.user ? { name: ACCOUNT_HOME } : { name: window.$storefront.routes.HISTORY_ORDERS_PHYSICAL };
-      if (!this.section) return [{ label: t("domino.acc.account", "Account") }];
-      return [{ label: t("domino.acc.account", "Account"), to: home }, { label: this.section }];
+      if (!this.section) return [{ label: t("pralino.acc.account", "Account") }];
+      return [{ label: t("pralino.acc.account", "Account"), to: home }, { label: this.section }];
     },
     shown() {
       return sections().filter((item) => this.user || !item.user);

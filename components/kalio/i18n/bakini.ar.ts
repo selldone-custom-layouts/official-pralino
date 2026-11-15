@@ -1,5 +1,5 @@
 /*
- * Bakini's own words (bakini.*): Arabic (ar). Translated from bakini.en.ts; only the keys the code still uses (Domino, 14 Nov 2026).
+ * Bakini's own words (bakini.*): Arabic (ar). Translated from bakini.en.ts; only the keys the code still uses (Pralino, 14 Nov 2026).
  * Keeps the base glossary (base/ar.ts) and adds Bakini's: bag (the basket) = الحقيبة · Add to bag = أضف إلى الحقيبة ·
  * Your bag = حقيبتك · collection = التشكيلة (التشكيلات) · pastry / piece = قطعة (pastries as food = الحلويات) ·
  * counter (the shop counter) = الكاونتر · bakery = المخبز · pâtisserie = باتيسري · pickup = الاستلام من المحل ·

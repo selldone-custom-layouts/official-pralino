@@ -1,6 +1,6 @@
 /* ━━━━━━━━━━━━ The Layout's own name and mark ━━━━━━━━━━━━
-   Domino draws the shop's own live title (Bakio: "bakio") as its
-   wordmark (components/domino/DominoLogo.vue), so the Layout works when it is
+   Pralino draws the shop's own live title (Bakio: "bakio") as its
+   wordmark (components/pralino/PralinoLogo.vue), so the Layout works when it is
    cloned into another bakery: nothing about the shop is written here.
    `name: null` keeps the shop's title; a string would replace it everywhere
    the storefront names the shop (header, footer, page titles), as Medio and

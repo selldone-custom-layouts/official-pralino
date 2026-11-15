@@ -1,5 +1,5 @@
 <!--
-  Domino — the journal (domino-design/blog-b.html, pages-read.js blog,
+  Pralino — the journal (pralino-design/blog-b.html, pages-read.js blog,
   nicdark's classic list): the title band ("The <shop> journal" and a
   line), the newest post as a wide featured card ("Newest post", its date,
   title and description, "Read the post"), then "Every post" with a search
@@ -9,35 +9,35 @@
   the list and says so in the band. No posts: the mockup's empty card.
 -->
 <template>
-  <div class="dm dm-journal">
-    <dm-pt :crumbs="crumbs" :lead="lede" :title="heading" art="whisk" art2="cookie" cls="compact" />
-    <section :aria-label="t('domino.rd.posts', 'Posts')" class="sec-s">
+  <div class="pr pr-journal">
+    <pr-pt :crumbs="crumbs" :lead="lede" :title="heading" art="whisk" art2="cookie" cls="compact" />
+    <section :aria-label="t('pralino.rd.posts', 'Posts')" class="sec-s">
       <div class="wrap">
         <article v-if="feature" class="bf">
           <router-link :to="postRoute(feature)" aria-hidden="true" class="bf-ph" tabindex="-1">
             <img v-if="feature.image" :src="image(feature)" :srcset="srcset(feature)" alt="" height="1000" sizes="(max-width: 760px) 92vw, 760px" width="1600" @error="dropSrcset" />
-            <dm-art v-else name="whisk" wrap="dm-bc-art" />
+            <pr-art v-else name="whisk" wrap="pr-bc-art" />
           </router-link>
           <div class="bf-tx">
-            <p class="eyebrow">{{ t("domino.rd.newest", "Newest post") }}</p>
+            <p class="eyebrow">{{ t("pralino.rd.newest", "Newest post") }}</p>
             <p v-if="feature.created_at" class="p-m">
-              <dm-icon name="cal" /><time :datetime="feature.created_at">{{ fmtDate(feature.created_at) }}</time>
+              <pr-icon name="cal" /><time :datetime="feature.created_at">{{ fmtDate(feature.created_at) }}</time>
             </p>
             <h2 class="bf-t">
               <router-link :to="postRoute(feature)">{{ feature.title }}</router-link>
             </h2>
             <p v-if="feature.description" class="bf-d">{{ feature.description }}</p>
-            <router-link :to="postRoute(feature)" class="btn sm">{{ t("domino.rd.readPost", "Read the post") }}</router-link>
+            <router-link :to="postRoute(feature)" class="btn sm">{{ t("pralino.rd.readPost", "Read the post") }}</router-link>
           </div>
         </article>
 
         <div v-if="articles.length > 1 || filtered" class="bl-bar">
-          <h2 class="h3x">{{ filtered ? t("domino.rd.matching", "Matching posts") : t("domino.rd.every", "Every post") }}</h2>
+          <h2 class="h3x">{{ filtered ? t("pralino.rd.matching", "Matching posts") : t("pralino.rd.every", "Every post") }}</h2>
           <form class="bl-s" role="search" @submit.prevent="search">
-            <label class="sr" for="bl-q">{{ t("domino.rd.searchJournal", "Search the journal") }}</label><dm-icon name="search" /><input
+            <label class="sr" for="bl-q">{{ t("pralino.rd.searchJournal", "Search the journal") }}</label><pr-icon name="search" /><input
               id="bl-q"
               v-model="q"
-              :placeholder="t('domino.rd.searchJournal', 'Search the journal')"
+              :placeholder="t('pralino.rd.searchJournal', 'Search the journal')"
               autocomplete="off"
               type="search"
               @input="searchSoon"
@@ -46,25 +46,25 @@
         </div>
 
         <div v-if="rest.length" class="bgrid">
-          <dm-post v-for="b in rest" :key="b.id" :post="b" />
+          <pr-post v-for="b in rest" :key="b.id" :post="b" />
         </div>
-        <div v-else-if="busy && !articles.length" :aria-label="t('domino.rd.loading', 'Loading the journal')" class="bgrid" role="status">
-          <div v-for="n in 3" :key="n" class="bc dm-bc-skel"><span class="bc-ph"></span><span class="dm-sk-l"></span><span class="dm-sk-l -s"></span></div>
+        <div v-else-if="busy && !articles.length" :aria-label="t('pralino.rd.loading', 'Loading the journal')" class="bgrid" role="status">
+          <div v-for="n in 3" :key="n" class="bc pr-bc-skel"><span class="bc-ph"></span><span class="pr-sk-l"></span><span class="pr-sk-l -s"></span></div>
         </div>
-        <dm-empty
+        <pr-empty
           v-else-if="!articles.length || filtered"
-          :text="filtered ? t('domino.rd.noMatchP', 'Try a collection name, delivery or pickup.') : t('domino.rd.noPostsP', 'The bakery has not published any posts yet.')"
-          :title="filtered ? t('domino.rd.noMatchT', 'No post matches this') : t('domino.rd.noPostsT', 'No posts yet')"
+          :text="filtered ? t('pralino.rd.noMatchP', 'Try a collection name, delivery or pickup.') : t('pralino.rd.noPostsP', 'The bakery has not published any posts yet.')"
+          :title="filtered ? t('pralino.rd.noMatchT', 'No post matches this') : t('pralino.rd.noPostsT', 'No posts yet')"
           cls="boxed"
           :icon="filtered ? 'search' : 'chat'"
         >
           <template #acts>
-            <router-link v-if="filtered" :to="journalRoute()" class="btn">{{ t("domino.rd.allPosts", "All posts") }}</router-link>
-            <router-link v-else :to="{ path: '/' }" class="btn">{{ t("domino.rd.backShop", "Back to the shop") }}</router-link>
+            <router-link v-if="filtered" :to="journalRoute()" class="btn">{{ t("pralino.rd.allPosts", "All posts") }}</router-link>
+            <router-link v-else :to="{ path: '/' }" class="btn">{{ t("pralino.rd.backShop", "Back to the shop") }}</router-link>
           </template>
-        </dm-empty>
-        <div v-if="articles.length && articles.length < total" class="dm-or-more dm-bl-more">
-          <button :aria-disabled="busy ? 'true' : undefined" class="btn quiet" type="button" @click="loadMore">{{ t("domino.rd.morePosts", "More posts") }}</button>
+        </pr-empty>
+        <div v-if="articles.length && articles.length < total" class="pr-or-more pr-bl-more">
+          <button :aria-disabled="busy ? 'true' : undefined" class="btn quiet" type="button" @click="loadMore">{{ t("pralino.rd.morePosts", "More posts") }}</button>
         </div>
       </div>
     </section>
@@ -72,12 +72,12 @@
 </template>
 
 <script lang="ts">
-import DmIcon from "@app-storefront/components/domino/DmIcon.vue";
-import DmArt from "@app-storefront/components/domino/DmArt.vue";
-import DmPost from "@app-storefront/components/domino/read/DmPost.vue";
-import DmPt from "@app-storefront/components/domino/ui/DmPt.vue";
-import DmEmpty from "@app-storefront/components/domino/ui/DmEmpty.vue";
-import { fmtDate } from "@app-storefront/components/domino/dm";
+import PrIcon from "@app-storefront/components/pralino/PrIcon.vue";
+import PrArt from "@app-storefront/components/pralino/PrArt.vue";
+import PrPost from "@app-storefront/components/pralino/read/PrPost.vue";
+import PrPt from "@app-storefront/components/pralino/ui/PrPt.vue";
+import PrEmpty from "@app-storefront/components/pralino/ui/PrEmpty.vue";
+import { fmtDate } from "@app-storefront/components/pralino/pr";
 import { dropSrcset, photoSrcset } from "@app-storefront/components/kalio/kalio-catalog";
 import { journalExtra, journalPage, journalRoute, postRoute } from "@app-storefront/components/kalio/pages/kalio-journal";
 import { t } from "@app-storefront/components/kalio/i18n/kalio-i18n";
@@ -87,7 +87,7 @@ const FIRST = 13;
 
 export default {
   name: "StorefrontPageBlogsList",
-  components: { DmIcon, DmArt, DmPost, DmPt, DmEmpty },
+  components: { PrIcon, PrArt, PrPost, PrPt, PrEmpty },
   inject: ["$shop"],
 
   data: () => ({ articles: [] as any[], total: 0, busy: false, page: 1, categories: [] as any[], q: "" }),
@@ -119,20 +119,20 @@ export default {
       return n.charAt(0).toUpperCase() + n.slice(1);
     },
     heading() {
-      if (!this.filtered) return t("domino.rd.jrTitle", "The {shop} journal", { shop: this.shopName });
-      if (this.current_category) return this.category?.title || this.category?.name || t("domino.rd.topic", "Topic");
-      if (this.current_author_id) return this.articles[0]?.user?.name || this.current_author || t("domino.rd.author", "Author");
+      if (!this.filtered) return t("pralino.rd.jrTitle", "The {shop} journal", { shop: this.shopName });
+      if (this.current_category) return this.category?.title || this.category?.name || t("pralino.rd.topic", "Topic");
+      if (this.current_author_id) return this.articles[0]?.user?.name || this.current_author || t("pralino.rd.author", "Author");
       if (this.current_tag) return `#${this.current_tag}`;
-      return t("domino.rd.searchFor", "“{q}”", { q: String(this.current_search) });
+      return t("pralino.rd.searchFor", "“{q}”", { q: String(this.current_search) });
     },
     crumbs() {
-      const j = { label: t("domino.rd.journal", "Journal") };
+      const j = { label: t("pralino.rd.journal", "Journal") };
       return this.filtered ? [{ ...j, to: journalRoute() }, { label: this.heading }] : [j];
     },
     lede() {
-      if (this.current_category) return this.category?.description || t("domino.rd.ledeTopic", "Every post on this topic, newest first.");
-      if (this.filtered) return t("domino.rd.ledeMatch", "The posts that match, newest first.");
-      return t("domino.rd.jrLede", "Guides to the collections, and plain answers about delivery, pickup and ordering for a group.");
+      if (this.current_category) return this.category?.description || t("pralino.rd.ledeTopic", "Every post on this topic, newest first.");
+      if (this.filtered) return t("pralino.rd.ledeMatch", "The posts that match, newest first.");
+      return t("pralino.rd.jrLede", "Guides to the collections, and plain answers about delivery, pickup and ordering for a group.");
     },
     feature() {
       return this.filtered ? null : this.articles[0] || null;

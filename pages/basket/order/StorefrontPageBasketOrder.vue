@@ -13,7 +13,7 @@
   -->
 
 <!--
-  Domino — an order's page (domino-design/order-b.html): the title band
+  Pralino — an order's page (pralino-design/order-b.html): the title band
   (Home · Your orders · the order's own code; "Order SM-41"; where it
   stands and when it was placed), then the order itself (the router's
   child; a physical order draws its own cards, physical/dashbaord). Other
@@ -21,31 +21,31 @@
   be opened says why and where to go. Fetching the order is Selldone's.
 -->
 <template>
-  <div class="dm dm-order">
-    <dm-pt :crumbs="crumbs" :lead="lead" :title="title" art="whisk" art2="cupcake" cls="compact" />
+  <div class="pr pr-order">
+    <pr-pt :crumbs="crumbs" :lead="lead" :title="title" art="whisk" art2="cupcake" cls="compact" />
     <section v-if="!basket" :aria-label="title" class="sec-s">
       <div class="wrap">
-        <dm-empty
+        <pr-empty
           v-if="failed"
           :icon="USER() ? 'doc' : 'lock'"
-          :text="USER() ? t('domino.od.missingUser', 'It isn’t in your account. The link may be wrong, or the order belongs to someone else.') : t('domino.od.missingGuest', 'If you placed it, sign in to see it, or open the link in your order email on the device you ordered from.')"
-          :title="t('domino.od.missingT', 'We can’t open this order')"
+          :text="USER() ? t('pralino.od.missingUser', 'It isn’t in your account. The link may be wrong, or the order belongs to someone else.') : t('pralino.od.missingGuest', 'If you placed it, sign in to see it, or open the link in your order email on the device you ordered from.')"
+          :title="t('pralino.od.missingT', 'We can’t open this order')"
           cls="boxed"
           tag="h2"
         >
           <template #acts>
-            <button v-if="!USER()" class="btn" type="button" @click="signIn">{{ t("domino.od.signIn", "Sign in") }}</button>
-            <router-link :class="USER() ? 'btn' : 'btn quiet'" :to="buildReturnRoute(history_list_page_name || window.$storefront.routes.HISTORY_ORDERS_PHYSICAL)">{{ t("domino.od.yourOrders", "Your orders") }}</router-link>
+            <button v-if="!USER()" class="btn" type="button" @click="signIn">{{ t("pralino.od.signIn", "Sign in") }}</button>
+            <router-link :class="USER() ? 'btn' : 'btn quiet'" :to="buildReturnRoute(history_list_page_name || window.$storefront.routes.HISTORY_ORDERS_PHYSICAL)">{{ t("pralino.od.yourOrders", "Your orders") }}</router-link>
           </template>
-        </dm-empty>
-        <div v-else :aria-label="t('domino.od.loading', 'Loading the order')" class="dm-od-load" role="status">
-          <span class="dm-od-sk"></span><span class="dm-od-sk"></span><span class="dm-od-sk"></span>
+        </pr-empty>
+        <div v-else :aria-label="t('pralino.od.loading', 'Loading the order')" class="pr-od-load" role="status">
+          <span class="pr-od-sk"></span><span class="pr-od-sk"></span><span class="pr-od-sk"></span>
         </div>
       </div>
     </section>
     <router-view v-else-if="isPhysical" :basket="basket" @request:refresh="fetchOrderInfo()" />
     <section v-else :aria-label="title" class="sec-s">
-      <div class="wrap dm-od-other">
+      <div class="wrap pr-od-other">
         <s-order-delivery-status-stepper
           v-if="orders_states"
           :has-subscription="isSubscription"
@@ -71,15 +71,15 @@ import { Basket } from "@selldone/core-js";
 import TemplateMixin from "@selldone/components-vue/mixin/template/TemplateMixin.ts";
 import {EventBus} from "@selldone/components-vue/utils/events/EventBus.ts";
 import { t } from "../../../components/kalio/i18n/kalio-i18n";
-import DmPt from "../../../components/domino/ui/DmPt.vue";
-import DmEmpty from "../../../components/domino/ui/DmEmpty.vue";
-import { orderLead } from "../../../components/domino/order/od";
+import PrPt from "../../../components/pralino/ui/PrPt.vue";
+import PrEmpty from "../../../components/pralino/ui/PrEmpty.vue";
+import { orderLead } from "../../../components/pralino/order/od";
 
 export default {
   name: "StorefrontPageBasketOrder",
   mixins: [RouteMixin, TemplateMixin],
 
-  components: { SOrderDeliveryStatusStepper, DmPt, DmEmpty },
+  components: { SOrderDeliveryStatusStepper, PrPt, PrEmpty },
   inject: ["$shop"],
   props: {},
 
@@ -98,16 +98,16 @@ export default {
       return this.getBasketOrderCode({ ...this.basket, type: this.basket.type || this.type.code });
     },
     title() {
-      return this.code ? t("domino.od.title", "Order {code}", { code: this.code }) : t("domino.od.titleNone", "Your order");
+      return this.code ? t("pralino.od.title", "Order {code}", { code: this.code }) : t("pralino.od.titleNone", "Your order");
     },
     lead() {
       return this.basket ? orderLead(this.basket) : "";
     },
     crumbs() {
       const back = this.$route.query.return_id
-        ? { label: t("domino.od.returns", "Your returns"), to: this.buildReturnRoute(window.$storefront.routes.USER_RETURN_REQUESTS) }
-        : { label: t("domino.od.yourOrders", "Your orders"), to: this.buildReturnRoute(this.history_list_page_name || window.$storefront.routes.HISTORY_ORDERS_PHYSICAL) };
-      return [back, { label: this.code || t("domino.od.orderWord", "Order") }];
+        ? { label: t("pralino.od.returns", "Your returns"), to: this.buildReturnRoute(window.$storefront.routes.USER_RETURN_REQUESTS) }
+        : { label: t("pralino.od.yourOrders", "Your orders"), to: this.buildReturnRoute(this.history_list_page_name || window.$storefront.routes.HISTORY_ORDERS_PHYSICAL) };
+      return [back, { label: this.code || t("pralino.od.orderWord", "Order") }];
     },
     isSubscription() {
       return this.basket && this.basket.type === ProductType.SUBSCRIPTION.code;

@@ -14,9 +14,9 @@
 
 
 <!--
-  Domino — the bag and the checkout (domino-design/cart-b.html,
+  Pralino — the bag and the checkout (pralino-design/cart-b.html,
   checkout-b.html, delivery-b.html, map-b.html, payment-b.html;
-  src/pages-buy.js). One Selldone basket page in two stages (dm-cart.ts):
+  src/pages-buy.js). One Selldone basket page in two stages (pr-cart.ts):
 
   - the bag: the title band; a row per line (the pastry on its plate, the
     collection, the name, the price per unit and the stock, − n +, the line
@@ -39,42 +39,42 @@
   and the service order.
 -->
 <template>
-  <div class="dm dm-cartpage">
+  <div class="pr pr-cartpage">
     <!-- ▆▆▆▆ Empty ▆▆▆▆ -->
     <template v-if="!(basket && basket.items && basket.items.length)">
-      <dm-pt :crumbs="[{ label: t('domino.co.yourBag', 'Your bag') }]" :title="t('domino.co.yourBag', 'Your bag')" art="cupcake" art2="croissant" cls="compact" />
-      <section :aria-label="t('domino.co.bagAria', 'Bag')" class="sec-s">
+      <pr-pt :crumbs="[{ label: t('pralino.co.yourBag', 'Your bag') }]" :title="t('pralino.co.yourBag', 'Your bag')" art="cupcake" art2="croissant" cls="compact" />
+      <section :aria-label="t('pralino.co.bagAria', 'Bag')" class="sec-s">
         <div class="wrap">
-          <dm-empty :text="t('domino.co.emptyP', 'Pastries are sold one by one, so add exactly the pieces you want — a single piece is an order.')" :title="t('domino.co.emptyT', 'Your bag is empty')" cls="boxed" icon="bag">
+          <pr-empty :text="t('pralino.co.emptyP', 'Pastries are sold one by one, so add exactly the pieces you want — a single piece is an order.')" :title="t('pralino.co.emptyT', 'Your bag is empty')" cls="boxed" icon="bag">
             <template #acts>
-              <router-link :to="shopTo" class="btn">{{ t("domino.co.continue", "Continue shopping") }}</router-link>
+              <router-link :to="shopTo" class="btn">{{ t("pralino.co.continue", "Continue shopping") }}</router-link>
             </template>
-            <template v-if="dm.cats.length" #extra>
-              <p class="em-k">{{ t("domino.co.orStart", "Or start with a collection") }}</p>
+            <template v-if="pr.cats.length" #extra>
+              <p class="em-k">{{ t("pralino.co.orStart", "Or start with a collection") }}</p>
               <ul class="cat-sc">
-                <li v-for="c in dm.cats" :key="c.id">
+                <li v-for="c in pr.cats" :key="c.id">
                   <router-link :to="catTo(c)" class="chip th"
                     ><span class="cs-pl"><img v-if="catTop(c)" :src="catTop(c)" alt="" loading="lazy" /></span><bdi>{{ c.title || c.name }}</bdi></router-link
                   >
                 </li>
               </ul>
             </template>
-          </dm-empty>
+          </pr-empty>
         </div>
       </section>
     </template>
 
     <!-- ▆▆▆▆ Bag ▆▆▆▆ -->
     <template v-else-if="nx_stage === 'bag'">
-      <dm-pt
-        :crumbs="[{ label: t('domino.co.yourBag', 'Your bag') }]"
-        :lead="t('domino.co.bagLead', 'Pastries are sold one by one. Change the pieces here, then choose how they reach you.')"
-        :title="t('domino.co.yourBag', 'Your bag')"
+      <pr-pt
+        :crumbs="[{ label: t('pralino.co.yourBag', 'Your bag') }]"
+        :lead="t('pralino.co.bagLead', 'Pastries are sold one by one. Change the pieces here, then choose how they reach you.')"
+        :title="t('pralino.co.yourBag', 'Your bag')"
         art="cupcake"
         art2="croissant"
         cls="compact"
       />
-      <section :aria-label="t('domino.co.bagAria', 'Bag')" class="sec-s">
+      <section :aria-label="t('pralino.co.bagAria', 'Bag')" class="sec-s">
         <div class="wrap cart">
           <div class="cart-main">
             <ul class="crl">
@@ -84,43 +84,43 @@
                   <span v-if="nx_cat(it)" class="pc-c"><bdi>{{ nx_cat(it) }}</bdi></span>
                   <router-link :to="productTo({ id: it.product_id })" class="cr-n">{{ it.product?.title }}</router-link>
                   <span class="cr-u"
-                    >{{ t("domino.co.perUnit", "{price} per {unit}", { price: nx_money(it.price), unit: nx_unit(it) }) }} · <span :class="{ low: dmLow(it) }">{{ dmStock(it) }}</span></span
+                    >{{ t("pralino.co.perUnit", "{price} per {unit}", { price: nx_money(it.price), unit: nx_unit(it) }) }} · <span :class="{ low: dmLow(it) }">{{ dmStock(it) }}</span></span
                   >
                 </div>
-                <div class="cr-q"><dm-line-qb :item="it" /></div>
+                <div class="cr-q"><pr-line-qb :item="it" /></div>
                 <p class="cr-lt">
                   <span class="now money">{{ nx_money(it.price * nx_shown(it)) }}</span><s v-if="it.dis > 0" class="was money">{{ nx_money((it.price + it.dis) * nx_shown(it)) }}</s>
                 </p>
-                <button :aria-label="t('domino.co.removeOf', 'Remove {name} from the bag', { name: it.product?.title || '' })" class="cr-rm" type="button" @click="nx_remove(it)"><dm-icon name="trash" /></button>
+                <button :aria-label="t('pralino.co.removeOf', 'Remove {name} from the bag', { name: it.product?.title || '' })" class="cr-rm" type="button" @click="nx_remove(it)"><pr-icon name="trash" /></button>
               </li>
             </ul>
 
             <div v-if="transportation_list.length && has_delivery && !isService" class="cdlv">
               <div class="cdlv-hd">
-                <h2 class="h3x">{{ t("domino.co.reaches", "How it reaches you") }}</h2>
+                <h2 class="h3x">{{ t("pralino.co.reaches", "How it reaches you") }}</h2>
                 <button :aria-expanded="delivery_sheet ? 'true' : 'false'" aria-controls="dlvm" class="qlink" type="button" @click="openLayer('dlvm', $event.currentTarget)">
-                  {{ t("domino.co.compareWays", "Compare the options") }}<dm-icon name="arrow" />
+                  {{ t("pralino.co.compareWays", "Compare the options") }}<pr-icon name="arrow" />
                 </button>
               </div>
-              <div :aria-label="t('domino.co.method', 'Delivery method')" class="mcs" role="radiogroup">
+              <div :aria-label="t('pralino.co.method', 'Delivery method')" class="mcs" role="radiogroup">
                 <label v-for="way in nx_ways_in_order" :key="way.type + (way.id || '')" :class="['mc', { on: delivery_info?.type === way.type }]">
-                  <input :aria-label="wayTitleOf(way)" :checked="delivery_info?.type === way.type" class="rdo" name="dm-cdm" type="radio" :value="way.type" @change="nx_pick_way(way)" />
-                  <span class="mc-ic"><dm-icon :name="wayIcon(way.type)" /></span>
+                  <input :aria-label="wayTitleOf(way)" :checked="delivery_info?.type === way.type" class="rdo" name="pr-cdm" type="radio" :value="way.type" @change="nx_pick_way(way)" />
+                  <span class="mc-ic"><pr-icon :name="wayIcon(way.type)" /></span>
                   <span class="mc-t">{{ wayTitleOf(way) }}</span>
                   <span class="mc-f">{{ nx_way_fee(way) }}</span>
                   <span v-if="dmWayNote(way)" class="mc-n">{{ dmWayNote(way) }}</span>
                 </label>
               </div>
-              <p class="cdlv-n"><dm-icon name="info" />{{ t("domino.co.windowLater", "The time window is chosen at checkout.") }}</p>
+              <p class="cdlv-n"><pr-icon name="info" />{{ t("pralino.co.windowLater", "The time window is chosen at checkout.") }}</p>
             </div>
           </div>
 
-          <aside :aria-label="t('domino.co.receipt', 'Receipt')" class="cart-sum">
+          <aside :aria-label="t('pralino.co.receipt', 'Receipt')" class="cart-sum">
             <div :class="['rc', { '-busy': busy_bill || refreshing_price }]">
-              <h2 class="rc-h">{{ t("domino.co.receipt", "Receipt") }}</h2>
+              <h2 class="rc-h">{{ t("pralino.co.receipt", "Receipt") }}</h2>
               <dl v-if="bill" class="rc-s">
                 <div>
-                  <dt>{{ t("domino.co.full", "Items at full price") }}</dt>
+                  <dt>{{ t("pralino.co.full", "Items at full price") }}</dt>
                   <dd class="money">{{ nx_money(nx_rc.full) }}</dd>
                 </div>
                 <div v-if="nx_rc.save > 0" class="sv">
@@ -128,36 +128,36 @@
                   <dd class="money">−{{ nx_money(nx_rc.save) }}</dd>
                 </div>
                 <div v-if="nx_rc.offer > 0" class="sv">
-                  <dt>{{ t("domino.co.offers", "Offers") }}</dt>
+                  <dt>{{ t("pralino.co.offers", "Offers") }}</dt>
                   <dd class="money">−{{ nx_money(nx_rc.offer) }}</dd>
                 </div>
                 <div v-if="!isService">
                   <dt>
-                    {{ t("domino.co.delivery", "Delivery") }}<small v-if="nx_way">{{ nx_delivery_label }}</small>
+                    {{ t("pralino.co.delivery", "Delivery") }}<small v-if="nx_way">{{ nx_delivery_label }}</small>
                   </dt>
-                  <dd>{{ nx_rc.delivery < 0 && !nx_way_is_free ? t("domino.co.atCheckout", "Chosen at checkout") : nx_delivery_value }}</dd>
+                  <dd>{{ nx_rc.delivery < 0 && !nx_way_is_free ? t("pralino.co.atCheckout", "Chosen at checkout") : nx_delivery_value }}</dd>
                 </div>
                 <div class="tot">
-                  <dt>{{ t("domino.co.total", "Total") }}</dt>
+                  <dt>{{ t("pralino.co.total", "Total") }}</dt>
                   <dd class="money">{{ nx_money(nx_rc.total) }}</dd>
                 </div>
               </dl>
-              <p v-else-if="!busy_bill" class="rc-note"><dm-icon name="info" />{{ t("domino.co.billError", "We could not work out the bill. Please reload the page.") }}</p>
-              <button class="btn block" type="button" @click="nx_go_checkout">{{ t("domino.co.checkout", "Checkout") }}<dm-icon name="arrow" /></button>
-              <p v-if="nx_cod_only" class="rc-note"><dm-icon name="cash" />{{ nx_is_pickup ? t("domino.co.codPickup", "Pay in cash when you collect it.") : t("domino.co.cod", "Pay in cash when the order arrives.") }}</p>
+              <p v-else-if="!busy_bill" class="rc-note"><pr-icon name="info" />{{ t("pralino.co.billError", "We could not work out the bill. Please reload the page.") }}</p>
+              <button class="btn block" type="button" @click="nx_go_checkout">{{ t("pralino.co.checkout", "Checkout") }}<pr-icon name="arrow" /></button>
+              <p v-if="nx_cod_only" class="rc-note"><pr-icon name="cash" />{{ nx_is_pickup ? t("pralino.co.codPickup", "Pay in cash when you collect it.") : t("pralino.co.cod", "Pay in cash when the order arrives.") }}</p>
             </div>
           </aside>
         </div>
       </section>
 
-      <section v-if="dm_often.length" aria-labelledby="oa-h" class="sec-s oa">
+      <section v-if="pr_often.length" aria-labelledby="oa-h" class="sec-s oa">
         <div class="wrap">
           <header class="sec-hd sm">
-            <p class="eyebrow">{{ t("domino.co.oftenEyebrow", "From other collections") }}</p>
-            <h2 id="oa-h" class="h2">{{ t("domino.co.often", "Often added") }}</h2>
+            <p class="eyebrow">{{ t("pralino.co.oftenEyebrow", "From other collections") }}</p>
+            <h2 id="oa-h" class="h2">{{ t("pralino.co.often", "Often added") }}</h2>
           </header>
           <div class="grid six">
-            <dm-card v-for="p in dm_often" :key="p.id" :product="p" />
+            <pr-card v-for="p in pr_often" :key="p.id" :product="p" />
           </div>
         </div>
       </section>
@@ -165,44 +165,44 @@
 
     <!-- ▆▆▆▆ Checkout ▆▆▆▆ -->
     <template v-else>
-      <dm-pt :crumbs="[{ to: { query: {} }, label: t('domino.co.yourBag', 'Your bag') }, { label: t('domino.co.checkout', 'Checkout') }]" :title="t('domino.co.checkout', 'Checkout')" art="tart" art2="macaron" cls="compact">
-        <ol :aria-label="t('domino.co.steps', 'Checkout steps')" class="steps">
-          <li v-for="s in dm_steps" :key="s.key" :aria-current="s.state === 'cur' ? 'step' : undefined" :class="['step', s.state]">
+      <pr-pt :crumbs="[{ to: { query: {} }, label: t('pralino.co.yourBag', 'Your bag') }, { label: t('pralino.co.checkout', 'Checkout') }]" :title="t('pralino.co.checkout', 'Checkout')" art="tart" art2="macaron" cls="compact">
+        <ol :aria-label="t('pralino.co.steps', 'Checkout steps')" class="steps">
+          <li v-for="s in pr_steps" :key="s.key" :aria-current="s.state === 'cur' ? 'step' : undefined" :class="['step', s.state]">
             <a v-if="s.key === 'bag'" href="#" @click.prevent="nx_go_bag"
-              ><span class="st-ic"><dm-icon name="check" /></span><span>{{ s.label }}</span></a
+              ><span class="st-ic"><pr-icon name="check" /></span><span>{{ s.label }}</span></a
             >
             <a v-else :href="'#' + s.anchor" @click.prevent="nx_scroll_to(s.anchor)"
-              ><span class="st-ic"><dm-icon :name="s.state === 'done' ? 'check' : s.icon" /></span><span>{{ s.label }}</span></a
+              ><span class="st-ic"><pr-icon :name="s.state === 'done' ? 'check' : s.icon" /></span><span>{{ s.label }}</span></a
             >
           </li>
         </ol>
-      </dm-pt>
+      </pr-pt>
 
-      <section :aria-label="t('domino.co.checkout', 'Checkout')" class="sec-s">
+      <section :aria-label="t('pralino.co.checkout', 'Checkout')" class="sec-s">
         <div class="wrap co">
           <div class="co-main">
             <div v-if="nx_missing.length && nx_tried" class="co-alert" data-miss role="alert">
-              <span class="em-ic sm"><dm-icon name="info" /></span>
+              <span class="em-ic sm"><pr-icon name="info" /></span>
               <div>
-                <b>{{ t("domino.co.almost", "Almost there") }}</b>
+                <b>{{ t("pralino.co.almost", "Almost there") }}</b>
                 <p>
-                  {{ t("domino.co.addTo", "Add {list} to place the order.", { list: dmList(nx_missing.map((x) => x.label)) }) }}
+                  {{ t("pralino.co.addTo", "Add {list} to place the order.", { list: dmList(nx_missing.map((x) => x.label)) }) }}
                 </p>
               </div>
             </div>
 
             <!-- 1. Contact -->
             <section id="co-details" aria-labelledby="co1" class="co-c">
-              <dm-numeral :n="1" />
+              <pr-numeral :n="1" />
               <div class="co-b">
-                <h2 id="co1" class="co-h">{{ t("domino.co.contact", "Contact") }}</h2>
-                <p v-if="user" class="co-p">{{ t("domino.co.signedAs", "Signed in as {name}.", { name: user.name || user.email || "" }) }}</p>
-                <p v-else-if="busy_user" class="co-p">{{ t("domino.co.checking", "Checking your sign-in…") }}</p>
-                <p v-else-if="has_guest_payment" class="co-p">{{ t("domino.co.forUpdates", "For the order updates. Checkout does not need an account.") }}</p>
-                <p v-else class="co-p">{{ t("domino.co.signInToOrder", "Sign in to place the order.") }}</p>
+                <h2 id="co1" class="co-h">{{ t("pralino.co.contact", "Contact") }}</h2>
+                <p v-if="user" class="co-p">{{ t("pralino.co.signedAs", "Signed in as {name}.", { name: user.name || user.email || "" }) }}</p>
+                <p v-else-if="busy_user" class="co-p">{{ t("pralino.co.checking", "Checking your sign-in…") }}</p>
+                <p v-else-if="has_guest_payment" class="co-p">{{ t("pralino.co.forUpdates", "For the order updates. Checkout does not need an account.") }}</p>
+                <p v-else class="co-p">{{ t("pralino.co.signInToOrder", "Sign in to place the order.") }}</p>
                 <div class="g2">
                   <div id="co-f-email" :class="['fld', 'f-email', { bad: nx_touched.email && !nx_email_ok }]">
-                    <label class="fl" for="co-email">{{ t("domino.co.email", "Email") }}</label>
+                    <label class="fl" for="co-email">{{ t("pralino.co.email", "Email") }}</label>
                     <input
                       id="co-email"
                       :disabled="!!user || (!user && !has_guest_payment)"
@@ -215,29 +215,29 @@
                       @blur="nx_save_contact"
                       @input="nx_email = $event.target.value"
                     />
-                    <span class="err">{{ t("domino.co.emailHint", "Add an email address") }}</span>
+                    <span class="err">{{ t("pralino.co.emailHint", "Add an email address") }}</span>
                   </div>
                   <div v-if="has_delivery && !isService" id="co-f-phone" :class="['fld', 'f-phone', { bad: nx_touched.phone && !nx_phone_ok }]">
-                    <label class="fl" for="co-phone">{{ t("domino.co.phone", "Phone") }}</label>
+                    <label class="fl" for="co-phone">{{ t("pralino.co.phone", "Phone") }}</label>
                     <input id="co-phone" :value="nx_phone" autocomplete="tel" class="inp" dir="ltr" name="phone" type="tel" @blur="nx_save_contact" @input="nx_phone = $event.target.value" />
-                    <span class="err">{{ t("domino.co.phoneHint", "Add a phone number") }}</span>
+                    <span class="err">{{ t("pralino.co.phoneHint", "Add a phone number") }}</span>
                   </div>
                 </div>
                 <p v-if="!user" class="co-p sm">
-                  {{ t("domino.co.haveAccount", "Have an account?") }}
-                  <a class="qlink in" href="#" @click.prevent="NeedLogin">{{ t("domino.co.signIn", "Sign in") }}</a>
+                  {{ t("pralino.co.haveAccount", "Have an account?") }}
+                  <a class="qlink in" href="#" @click.prevent="NeedLogin">{{ t("pralino.co.signIn", "Sign in") }}</a>
                 </p>
               </div>
             </section>
 
             <!-- 2. Delivery: the ways and their windows (Selldone's shipping options, SCartShippingOptions) -->
             <section v-if="has_delivery && !isService && bill" id="co-delivery" aria-labelledby="co2" class="co-c">
-              <dm-numeral :n="2" />
+              <pr-numeral :n="2" />
               <div class="co-b">
                 <div class="co-hr">
-                  <h2 id="co2" class="co-h">{{ t("domino.co.deliveryH", "Delivery") }}</h2>
+                  <h2 id="co2" class="co-h">{{ t("pralino.co.deliveryH", "Delivery") }}</h2>
                   <button :aria-expanded="delivery_sheet ? 'true' : 'false'" aria-controls="dlvm" class="qlink" type="button" @click="openLayer('dlvm', $event.currentTarget)">
-                    {{ t("domino.co.compareWays", "Compare the options") }}<dm-icon name="arrow" />
+                    {{ t("pralino.co.compareWays", "Compare the options") }}<pr-icon name="arrow" />
                   </button>
                 </div>
                 <s-shop-connect-shipping-options
@@ -268,11 +268,11 @@
 
             <!-- 3. Delivery address, or the pickup counter -->
             <section v-if="has_delivery" id="co-address" aria-labelledby="co3" class="co-c">
-              <dm-numeral :n="has_delivery && !isService && bill ? 3 : 2" />
+              <pr-numeral :n="has_delivery && !isService && bill ? 3 : 2" />
               <div class="co-b">
-                <h2 id="co3" class="co-h">{{ nx_is_pickup ? t("domino.co.pickup", "Pickup") : isService ? t("domino.co.serviceAddress", "Service address") : t("domino.co.address", "Delivery address") }}</h2>
+                <h2 id="co3" class="co-h">{{ nx_is_pickup ? t("pralino.co.pickup", "Pickup") : isService ? t("pralino.co.serviceAddress", "Service address") : t("pralino.co.address", "Delivery address") }}</h2>
                 <div v-if="nx_is_pickup" class="pk-card">
-                  <span class="mc-ic"><dm-icon name="store" /></span>
+                  <span class="mc-ic"><pr-icon name="store" /></span>
                   <div>
                     <b><bdi>{{ receiver_info?.name || receiver_info?.title || nx_pickup_point?.name }}</bdi></b>
                     <p><bdi>{{ [receiver_info?.address, receiver_info?.city, receiver_info?.postal].filter(Boolean).join(", ") }}</bdi></p>
@@ -280,7 +280,7 @@
                   </div>
                 </div>
                 <div v-else-if="nx_has_address" class="addr-card">
-                  <span class="mc-ic"><dm-icon name="pin" /></span>
+                  <span class="mc-ic"><pr-icon name="pin" /></span>
                   <div class="ac-tx">
                     <b
                       ><bdi>{{ receiver_info.name }}</bdi
@@ -291,56 +291,56 @@
                       ><template v-if="receiver_info.city">{{ ", " + [receiver_info.city, receiver_info.state, receiver_info.postal].filter(Boolean).join(" ") }}</template>
                     </p>
                   </div>
-                  <button class="qlink" type="button" @click="openAddress()">{{ t("domino.co.change", "Change") }}</button>
+                  <button class="qlink" type="button" @click="openAddress()">{{ t("pralino.co.change", "Change") }}</button>
                 </div>
                 <template v-else>
                   <button class="addr-add" type="button" @click="openAddress()">
-                    <span class="em-ic sm"><dm-icon name="pin" /></span
+                    <span class="em-ic sm"><pr-icon name="pin" /></span
                     ><span
-                      ><b>{{ no_map ? t("domino.co.addAddress", "Add your address") : t("domino.co.addOnMap", "Add on the map") }}</b
-                      ><small>{{ no_map ? t("domino.co.addAddressP", "The receiver, the street and the city") : t("domino.co.addOnMapP", "Search a street or drop the pin at your door") }}</small></span
-                    ><dm-icon name="arrow" />
+                      ><b>{{ no_map ? t("pralino.co.addAddress", "Add your address") : t("pralino.co.addOnMap", "Add on the map") }}</b
+                      ><small>{{ no_map ? t("pralino.co.addAddressP", "The receiver, the street and the city") : t("pralino.co.addOnMapP", "Search a street or drop the pin at your door") }}</small></span
+                    ><pr-icon name="arrow" />
                   </button>
-                  <p v-if="nx_touched.address" class="err-l"><dm-icon name="info" />{{ t("domino.co.needAddress", "Add a delivery address") }}</p>
+                  <p v-if="nx_touched.address" class="err-l"><pr-icon name="info" />{{ t("pralino.co.needAddress", "Add a delivery address") }}</p>
                 </template>
               </div>
             </section>
 
             <!-- 4. Billing -->
             <section id="co-billing" aria-labelledby="co4" class="co-c">
-              <dm-numeral :n="(has_delivery && !isService && bill ? 3 : 2) + (has_delivery ? 1 : 0)" />
+              <pr-numeral :n="(has_delivery && !isService && bill ? 3 : 2) + (has_delivery ? 1 : 0)" />
               <div class="co-b">
-                <h2 id="co4" class="co-h">{{ t("domino.co.billing", "Billing") }}</h2>
-                <div :aria-label="t('domino.co.billingAria', 'Billing address')" class="bills" role="radiogroup">
+                <h2 id="co4" class="co-h">{{ t("pralino.co.billing", "Billing") }}</h2>
+                <div :aria-label="t('pralino.co.billingAria', 'Billing address')" class="bills" role="radiogroup">
                   <label class="bill"
-                    ><input :checked="!nx_billing_custom" class="rdo" name="dm-bill" type="radio" value="same" @change="nx_set_billing(false)" /><span
-                      ><b>{{ t("domino.co.same", "Same as delivery") }}</b
-                      ><small>{{ nx_is_pickup ? t("domino.co.sameReceiver", "Use the receiver details") : t("domino.co.sameAddress", "Use the delivery address on the receipt") }}</small></span
+                    ><input :checked="!nx_billing_custom" class="rdo" name="pr-bill" type="radio" value="same" @change="nx_set_billing(false)" /><span
+                      ><b>{{ t("pralino.co.same", "Same as delivery") }}</b
+                      ><small>{{ nx_is_pickup ? t("pralino.co.sameReceiver", "Use the receiver details") : t("pralino.co.sameAddress", "Use the delivery address on the receipt") }}</small></span
                     ></label
                   >
                   <label class="bill"
-                    ><input :checked="nx_billing_custom" class="rdo" name="dm-bill" type="radio" value="diff" @change="nx_set_billing(true)" /><span
-                      ><b>{{ t("domino.co.other", "Different billing address") }}</b><small>{{ t("domino.co.otherP", "Add another name and address") }}</small></span
+                    ><input :checked="nx_billing_custom" class="rdo" name="pr-bill" type="radio" value="diff" @change="nx_set_billing(true)" /><span
+                      ><b>{{ t("pralino.co.other", "Different billing address") }}</b><small>{{ t("pralino.co.otherP", "Add another name and address") }}</small></span
                     ></label
                   >
                 </div>
                 <div v-if="nx_billing_custom" class="bill-f">
-                  <s-shop-billing-address-form v-model="billing" :receiver-info="receiver_info" class="dm-billform" force-show-form @change="setBasketConfig"></s-shop-billing-address-form>
+                  <s-shop-billing-address-form v-model="billing" :receiver-info="receiver_info" class="pr-billform" force-show-form @change="setBasketConfig"></s-shop-billing-address-form>
                 </div>
               </div>
             </section>
 
             <!-- 5. A note for the bakery (the receiver's note) -->
             <section v-if="has_delivery && !isService" id="co-note" aria-labelledby="co5" class="co-c">
-              <dm-numeral :n="(has_delivery && !isService && bill ? 4 : 3) + (has_delivery ? 1 : 0)" />
+              <pr-numeral :n="(has_delivery && !isService && bill ? 4 : 3) + (has_delivery ? 1 : 0)" />
               <div class="co-b">
                 <h2 id="co5" class="co-h">
-                  {{ t("domino.co.noteFor", "A note for {shop}", { shop: dmShopName }) }} <span class="opt-k">{{ t("domino.co.optional", "(optional)") }}</span>
+                  {{ t("pralino.co.noteFor", "A note for {shop}", { shop: dmShopName }) }} <span class="opt-k">{{ t("pralino.co.optional", "(optional)") }}</span>
                 </h2>
-                <label class="sr" for="co-n">{{ t("domino.co.note", "Note") }}</label>
+                <label class="sr" for="co-n">{{ t("pralino.co.note", "Note") }}</label>
                 <textarea
                   id="co-n"
-                  :placeholder="t('domino.co.notePh', 'Ring twice, leave it with the concierge, a message for a gift…')"
+                  :placeholder="t('pralino.co.notePh', 'Ring twice, leave it with the concierge, a message for a gift…')"
                   :value="nx_note_value"
                   class="inp"
                   name="note"
@@ -355,7 +355,7 @@
               :key="'socf-' + basket?.id"
               v-model="form"
               :country="receiver_info?.country ? receiver_info.country : billing?.country"
-              class="dm-coform"
+              class="pr-coform"
               @changed="setBasketConfig"
             ></s-order-checkout-form>
 
@@ -364,7 +364,7 @@
               v-if="!isSubscription"
               v-model="basket.coupon"
               :basket="basket"
-              class="dm-offers"
+              class="pr-offers"
               return-object
               selectable
               @loading="(val) => (refreshing_price = val)"
@@ -374,7 +374,7 @@
               v-if="!isSubscription"
               v-model="basket.lottery"
               :basket="basket"
-              class="dm-offers"
+              class="pr-offers"
               return-object
               selectable
               @loading="(val) => (refreshing_price = val)"
@@ -383,9 +383,9 @@
           </div>
 
           <!-- The receipt -->
-          <aside id="co-pay" :aria-label="t('domino.co.yourOrder', 'Your order')" class="co-sum">
+          <aside id="co-pay" :aria-label="t('pralino.co.yourOrder', 'Your order')" class="co-sum">
             <div :class="['rc', { '-busy': busy_bill || refreshing_price || busy_save }]">
-              <h2 class="rc-h">{{ t("domino.co.yourOrder", "Your order") }}</h2>
+              <h2 class="rc-h">{{ t("pralino.co.yourOrder", "Your order") }}</h2>
               <ul class="rc-l">
                 <li v-for="it in nx_lines" :key="it.id">
                   <span class="rc-th"><img :src="nx_img(it)" alt="" /></span>
@@ -397,7 +397,7 @@
               </ul>
               <dl v-if="bill" class="rc-s">
                 <div>
-                  <dt>{{ t("domino.co.full", "Items at full price") }}</dt>
+                  <dt>{{ t("pralino.co.full", "Items at full price") }}</dt>
                   <dd class="money">{{ nx_money(nx_rc.full) }}</dd>
                 </div>
                 <div v-if="nx_rc.save > 0" class="sv">
@@ -405,11 +405,11 @@
                   <dd class="money">−{{ nx_money(nx_rc.save) }}</dd>
                 </div>
                 <div v-if="nx_rc.offer > 0" class="sv">
-                  <dt>{{ t("domino.co.offers", "Offers") }}</dt>
+                  <dt>{{ t("pralino.co.offers", "Offers") }}</dt>
                   <dd class="money">−{{ nx_money(nx_rc.offer) }}</dd>
                 </div>
                 <div v-if="discount_code_amount > 0" class="sv">
-                  <dt>{{ discount_code?.code ? t("domino.co.codeNamed", "Code {code}", { code: discount_code.code }) : t("domino.co.code", "Code") }}</dt>
+                  <dt>{{ discount_code?.code ? t("pralino.co.codeNamed", "Code {code}", { code: discount_code.code }) : t("pralino.co.code", "Code") }}</dt>
                   <dd class="money">−{{ nx_money(discount_code_amount) }}</dd>
                 </div>
                 <div v-if="coupon && coupon_discount > 0" class="sv">
@@ -417,7 +417,7 @@
                   <dd class="money">−{{ nx_money(coupon_discount) }}</dd>
                 </div>
                 <div v-if="customer_club_discount > 0" class="sv">
-                  <dt>{{ t("domino.co.club", "Club") }}</dt>
+                  <dt>{{ t("pralino.co.club", "Club") }}</dt>
                   <dd class="money">−{{ nx_money(customer_club_discount) }}</dd>
                 </div>
                 <div v-if="wallet" class="sv">
@@ -426,7 +426,7 @@
                 </div>
                 <div v-if="!isService">
                   <dt>
-                    {{ t("domino.co.delivery", "Delivery") }}<small v-if="nx_way_line">{{ nx_way_line }}</small>
+                    {{ t("pralino.co.delivery", "Delivery") }}<small v-if="nx_way_line">{{ nx_way_line }}</small>
                   </dt>
                   <dd>{{ nx_delivery_value }}</dd>
                 </div>
@@ -435,11 +435,11 @@
                   <dd class="money">{{ nx_money(bill.tax) }}</dd>
                 </div>
                 <div class="tot">
-                  <dt>{{ t("domino.co.total", "Total") }}</dt>
+                  <dt>{{ t("pralino.co.total", "Total") }}</dt>
                   <dd class="money">{{ nx_money(nx_rc.total) }}</dd>
                 </div>
               </dl>
-              <div v-if="!isSubscription" class="dm-code">
+              <div v-if="!isSubscription" class="pr-code">
                 <s-discount-code-input
                   v-model="basket.discount_code"
                   :basket="basket"
@@ -448,19 +448,19 @@
                   @update:model-value="selectDiscountCode"
                 />
               </div>
-              <div v-if="nx_no_gateway" class="nogw-b dm-nogw">
-                <span class="em-ic sm"><dm-icon name="lock" /></span>
+              <div v-if="nx_no_gateway" class="nogw-b pr-nogw">
+                <span class="em-ic sm"><pr-icon name="lock" /></span>
                 <div>
-                  <b>{{ t("domino.co.noPayT", "This shop is not taking payment right now") }}</b>
-                  <p>{{ t("domino.co.noPayP", "The order cannot be placed until the shop adds a payment method. Your bag is kept.") }}</p>
-                  <router-link :to="dmContactTo" class="qlink">{{ t("domino.co.contactShop", "Contact the shop") }}</router-link>
+                  <b>{{ t("pralino.co.noPayT", "This shop is not taking payment right now") }}</b>
+                  <p>{{ t("pralino.co.noPayP", "The order cannot be placed until the shop adds a payment method. Your bag is kept.") }}</p>
+                  <router-link :to="dmContactTo" class="qlink">{{ t("pralino.co.contactShop", "Contact the shop") }}</router-link>
                 </div>
               </div>
-              <p v-else-if="pay_blocker && !nx_missing.length" class="rc-note"><dm-icon name="info" />{{ pay_blocker }}</p>
+              <p v-else-if="pay_blocker && !nx_missing.length" class="rc-note"><pr-icon name="info" />{{ pay_blocker }}</p>
               <button v-if="!nx_no_gateway" :disabled="busy_submit" class="btn block place" type="button" @click="nx_place">
-                <span v-if="busy_save || busy_bill || busy_submit" aria-hidden="true" class="spin"></span>{{ dm_place_label }}
+                <span v-if="busy_save || busy_bill || busy_submit" aria-hidden="true" class="spin"></span>{{ pr_place_label }}
               </button>
-              <p class="rc-note"><dm-icon name="lock" />{{ nx_cod_only ? t("domino.co.nothingOnline", "Nothing is charged online.") : t("domino.co.payNext", "You choose how to pay in the next step.") }}</p>
+              <p class="rc-note"><pr-icon name="lock" />{{ nx_cod_only ? t("pralino.co.nothingOnline", "Nothing is charged online.") : t("pralino.co.payNext", "You choose how to pay in the next step.") }}</p>
             </div>
           </aside>
         </div>
@@ -468,23 +468,23 @@
     </template>
 
     <!-- ▆▆▆▆ The delivery sheet (delivery-b): every way, its windows, the counter ▆▆▆▆ -->
-    <dm-modal id="dlvm" :title="t('domino.co.deliveryH', 'Delivery')">
+    <pr-modal id="dlvm" :title="t('pralino.co.deliveryH', 'Delivery')">
       <template v-if="delivery_sheet && basket && bill">
-        <p class="md-lead">{{ nx_cod_only ? t("domino.co.dlvLeadCod", "Every method is paid in cash on delivery. Pick one, then a time window.") : t("domino.co.dlvLead", "Pick a method, then a time window.") }}</p>
-        <dm-ship-sheet>
+        <p class="md-lead">{{ nx_cod_only ? t("pralino.co.dlvLeadCod", "Every method is paid in cash on delivery. Pick one, then a time window.") : t("pralino.co.dlvLead", "Pick a method, then a time window.") }}</p>
+        <pr-ship-sheet>
           <s-order-shipping-stores-options
             :basket="basket"
             :delivery-info="delivery_info"
             :start-package-index="bill?.connect_shipping_options?.length + bill?.vendor_shipping_options?.length"
-            class="dm-dlsheet"
+            class="pr-dlsheet"
             @set-basket-config="setBasketConfig"
           ></s-order-shipping-stores-options>
-        </dm-ship-sheet>
+        </pr-ship-sheet>
       </template>
       <template #foot>
-        <button class="btn" type="button" @click="delivery_sheet = false">{{ t("domino.co.done", "Done") }}</button>
+        <button class="btn" type="button" @click="delivery_sheet = false">{{ t("pralino.co.done", "Done") }}</button>
       </template>
-    </dm-modal>
+    </pr-modal>
 
     <!-- ▆▆▆▆ The address sheet (map-b; map on or off) ▆▆▆▆ -->
     <kalio-address-sheet
@@ -492,8 +492,8 @@
       v-model="address_sheet"
       :center="center"
       :countries="$shop.countries?.length ? $shop.countries : null"
-      :heading="isService ? t('domino.co.whereService', 'Where should we come?') : t('domino.co.addressH', 'Delivery address')"
-      :lede="no_map ? t('domino.co.addressLede0', 'The receiver and the street') : t('domino.co.addressLede', 'Search a street or drop the pin at your door')"
+      :heading="isService ? t('pralino.co.whereService', 'Where should we come?') : t('pralino.co.addressH', 'Delivery address')"
+      :lede="no_map ? t('pralino.co.addressLede0', 'The receiver and the street') : t('pralino.co.addressLede', 'Search a street or drop the pin at your door')"
       :no-map="no_map"
       :receiver-info="nx_receiver_is_pickup ? {} : receiver_info"
       @save="onClickSetLocation"
@@ -545,15 +545,15 @@ import KalioCartLines from "../../../components/kalio/checkout/KalioCartLines.vu
 import KalioOftenAdded from "../../../components/kalio/KalioOftenAdded.vue";
 import KalioAddressSheet from "../../../components/kalio/checkout/KalioAddressSheet.vue";
 import { formatDate, t } from "../../../components/kalio/i18n/kalio-i18n";
-import DmCart from "../../../components/domino/buy/dm-cart";
-import DmIcon from "../../../components/domino/DmIcon.vue";
-import DmLineQb from "../../../components/domino/buy/DmLineQb.vue";
-import DmPt from "../../../components/domino/ui/DmPt.vue";
-import DmEmpty from "../../../components/domino/ui/DmEmpty.vue";
-import DmCard from "../../../components/domino/ui/DmCard.vue";
-import DmModal from "../../../components/domino/ui/DmModal.vue";
-import DmShipSheet from "../../../components/domino/buy/DmShipSheet.vue";
-import DmNumeral from "../../../components/domino/ui/DmNumeral.vue";
+import PrCart from "../../../components/pralino/buy/pr-cart";
+import PrIcon from "../../../components/pralino/PrIcon.vue";
+import PrLineQb from "../../../components/pralino/buy/PrLineQb.vue";
+import PrPt from "../../../components/pralino/ui/PrPt.vue";
+import PrEmpty from "../../../components/pralino/ui/PrEmpty.vue";
+import PrCard from "../../../components/pralino/ui/PrCard.vue";
+import PrModal from "../../../components/pralino/ui/PrModal.vue";
+import PrShipSheet from "../../../components/pralino/buy/PrShipSheet.vue";
+import PrNumeral from "../../../components/pralino/ui/PrNumeral.vue";
 
 export default {
   name: "StorefrontPageBasketCart",
@@ -565,18 +565,18 @@ export default {
     AuthMixin,
     ClubMixin,
     DateMixin,
-    DmCart,
+    PrCart,
   ],
 
   components: {
-    DmIcon,
-    DmLineQb,
-    DmPt,
-    DmEmpty,
-    DmCard,
-    DmModal,
-    DmShipSheet,
-    DmNumeral,
+    PrIcon,
+    PrLineQb,
+    PrPt,
+    PrEmpty,
+    PrCard,
+    PrModal,
+    PrShipSheet,
+    PrNumeral,
     KalioCartLines,
     KalioOftenAdded,
     KalioAddressSheet,

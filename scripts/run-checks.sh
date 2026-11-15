@@ -4,17 +4,17 @@
 #
 # usage: bash scripts/run-checks.sh <base-url> <log-folder> [checks]
 #   checks: comma list of names below (default: all)
-# Needs MSYS_NO_PATHCONV=1 on Git Bash (set here). Dev: http://localhost:9140 · live: https://domino.selldone.shop
+# Needs MSYS_NO_PATHCONV=1 on Git Bash (set here). Dev: http://localhost:9150 · live: https://pralino.selldone.shop
 set -u
 export MSYS_NO_PATHCONV=1
-BASE="${1:-http://localhost:9140}"
+BASE="${1:-http://localhost:9150}"
 OUT="${2:-check-logs}"
 ONLY="${3:-}"
 KIT="$(cd "$(dirname "$0")/../.." && (pwd -W 2>/dev/null || pwd))/new-shop-kits"
 ROOT="$(cd "$(dirname "$0")/.." && (pwd -W 2>/dev/null || pwd))"
 mkdir -p "$OUT"
 WAIT=".ftr"
-SK='domino-theme'
+SK='pralino-theme'
 DARK="{\"$SK\":\"{\\\"palette\\\":\\\"pistachio\\\",\\\"mode\\\":\\\"dark\\\"}\"}"
 LIGHT="{\"$SK\":\"{\\\"palette\\\":\\\"pistachio\\\",\\\"mode\\\":\\\"light\\\"}\"}"
 YELLOW="{\"$SK\":\"{\\\"palette\\\":\\\"custom\\\",\\\"custom\\\":\\\"#ffff00\\\",\\\"mode\\\":\\\"dark\\\"}\"}"
@@ -35,8 +35,8 @@ run() { # name, command...
 run ring-dark   env PAGES="$PAGES_ALL" STORAGE="$DARK"  node "$KIT/single-vendor-shop/ring-sweep.cjs" "$BASE" "$WAIT"
 run ring-light  env PAGES="$PAGES_ALL" STORAGE="$LIGHT" node "$KIT/single-vendor-shop/ring-sweep.cjs" "$BASE" "$WAIT"
 run card-edge   node "$KIT/single-vendor-shop/card-edge-check.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D"
-run card-edge-dm-dark  env STORAGE="$DARK"  node "$ROOT/scripts/card-edge-dm.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D" "$BASE/blog" "$BASE/about-us" "$BASE/faq" "$BASE/contact-us" "$BASE/user"
-run card-edge-dm-light env STORAGE="$LIGHT" node "$ROOT/scripts/card-edge-dm.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/blog" "$BASE/terms"
+run card-edge-pr-dark  env STORAGE="$DARK"  node "$ROOT/scripts/card-edge-pr.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D" "$BASE/blog" "$BASE/about-us" "$BASE/faq" "$BASE/contact-us" "$BASE/user"
+run card-edge-pr-light env STORAGE="$LIGHT" node "$ROOT/scripts/card-edge-pr.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/blog" "$BASE/terms"
 run corner      env PAGES="$PAGES_MAIN" STORAGE="$DARK" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
 # CIRCLE_CURRENCIES="USD,AED,DKK,SAR": the circle checks try each currency (set the way the shop's picker
 # does). LONG=1 reloads after each page, so a product page (a cold /product/ load gets Selldone's SEO page

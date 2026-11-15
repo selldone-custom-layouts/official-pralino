@@ -1,16 +1,16 @@
 <!--
-  Domino: the shop's terms page (DmLegal: the shop's own text when it has
+  Pralino: the shop's terms page (PrLegal: the shop's own text when it has
   written one, else sample copy from its facts, labelled as sample).
 -->
 <template>
-  <dm-legal kind="terms" />
+  <pr-legal kind="terms" />
 </template>
 
 <script lang="ts">
-import DmLegal from "@app-storefront/components/domino/read/DmLegal.vue";
+import PrLegal from "@app-storefront/components/pralino/read/PrLegal.vue";
 
 export default {
   name: "StorefrontPageOfficialTerms",
-  components: { DmLegal },
+  components: { PrLegal },
 };
 </script>

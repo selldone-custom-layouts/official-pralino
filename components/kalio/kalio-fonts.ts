@@ -1,5 +1,5 @@
 /*
- * Domino Cocoa Patisserie — typefaces (domino-design/home-b.html, set B
+ * Pralino Cocoa Patisserie — typefaces (pralino-design/home-b.html, set B
  * "Cocoa & Pistachio").
  *
  * Cormorant (display: headings, the wordmark, numbers set large, italic

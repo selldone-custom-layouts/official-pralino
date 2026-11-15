@@ -1,9 +1,9 @@
 {
-  "name": "Domino Cocoa Patisserie",
+  "name": "Pralino Classic Patisserie",
   "shop": "Bakio",
   "kind": "Pâtisserie · single bakery",
-  "summary": "A single bakery in cocoa and pistachio: a cream ground, cocoa ink and header, a pistachio accent, rounded photos and pill buttons, Cormorant over Jost; a top bar with the shop’s hours and contact, a centred italic wordmark drawn from the shop’s live title, the collections, search, a language and currency pill and the bag; a hero of collection names over photos, counters on a scalloped cocoa band, the best-selling collections, how ordering works, today’s selection, a marquee of the collections and the journal. Light by default, with a dark mode and the palettes in the footer’s Theme row.",
-  "live": "https://domino.selldone.shop",
+  "summary": "A classic, editorial pâtisserie: white and soft-tint bands, near-black ink, a tan accent, Cormorant Garamond over Mulish and large photography. A white header with a centred serif wordmark drawn from the shop's live title; a hero where the counter photo bleeds to the edge with a framed inset across the seam and the most-ordered collections on its dark corner; the shop in numbers and its story; the four best-selling collections as photo rows; how ordering works; an offer card with the ways to receive an order; a gallery of the collections; today's selection as numbered rows; a full-width photo band; a marquee of the collections and the journal. One colour family follows the chosen palette (Tan, Rose, Sage, Slate, Ink or a custom colour) and one small-radius shape language runs through every page; light by default, with a dark mode, from the footer's Theme row.",
+  "live": "https://pralino.selldone.shop",
   "cover": "docs/screenshots/cover.jpg",
   "screenshots": [
     "docs/screenshots/desktop-home.jpg",
@@ -15,16 +15,8 @@
     "docs/screenshots/phone-product.jpg",
     "docs/screenshots/phone-cart.jpg"
   ],
-  "tags": [
-    "bakery",
-    "patisserie",
-    "single-vendor",
-    "light",
-    "cocoa",
-    "pistachio",
-    "rtl"
-  ],
-  "package": "domino-cocoa-patisserie",
+  "tags": ["bakery", "patisserie", "single-vendor", "light", "classic", "editorial", "photography", "rtl"],
+  "package": "pralino-classic-patisserie",
   "base": "selldone/storefront",
   "status": "live"
 }

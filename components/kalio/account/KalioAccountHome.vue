@@ -1,5 +1,5 @@
 <!--
-  Domino — the account's Overview (domino-design/account-b.html): "Hello,
+  Pralino — the account's Overview (pralino-design/account-b.html): "Hello,
   <first name>" and one line, the last order as the mockup's card (its
   label, the way · window, how it is paid and the total; its pastries with
   how many; the four steps; "View the order", and "Buy again" once it is
@@ -8,14 +8,14 @@
   mockup's empty card. Nothing shows as an empty box.
 -->
 <template>
-  <div class="acc-p dm-ahome">
-    <h2 class="h3x">{{ t("domino.acc.hello", "Hello, {name}", { name: firstName }) }}</h2>
-    <p class="co-p">{{ t("domino.acc.helloP", "Your orders, addresses and details in one place.") }}</p>
+  <div class="acc-p pr-ahome">
+    <h2 class="h3x">{{ t("pralino.acc.hello", "Hello, {name}", { name: firstName }) }}</h2>
+    <p class="co-p">{{ t("pralino.acc.helloP", "Your orders, addresses and details in one place.") }}</p>
 
     <article v-if="latest" class="oc">
       <div class="oc-hd">
         <div>
-          <p class="eyebrow">{{ t("domino.acc.lastOrder", "Last order · {code}", { code: code(latest) }) }}</p>
+          <p class="eyebrow">{{ t("pralino.acc.lastOrder", "Last order · {code}", { code: code(latest) }) }}</p>
           <h3 class="oc-t">{{ wayLine || longDate(latest.reserved_at || latest.created_at) }}</h3>
         </div>
         <p class="oc-tot">
@@ -26,54 +26,54 @@
         <li v-for="l in lines" :key="l.key">
           <span class="rc-th"><img v-if="l.src" :src="l.src" alt="" loading="lazy" /></span
           ><span
-            ><b>{{ l.title || t("domino.acc.anItem", "An item") }}</b><small>× {{ l.count }}</small></span
+            ><b>{{ l.title || t("pralino.acc.anItem", "An item") }}</b><small>× {{ l.count }}</small></span
           >
         </li>
-        <li v-if="moreLines" class="dm-oc-more">
-          <small>{{ t("domino.acc.moreItems", { one: "and {n} more", other: "and {n} more" }, { n: moreLines }) }}</small>
+        <li v-if="moreLines" class="pr-oc-more">
+          <small>{{ t("pralino.acc.moreItems", { one: "and {n} more", other: "and {n} more" }, { n: moreLines }) }}</small>
         </li>
       </ul>
-      <ol v-if="tone.tone !== 'off'" :aria-label="t('domino.od.progress', 'Order progress')" class="tl4 sm">
+      <ol v-if="tone.tone !== 'off'" :aria-label="t('pralino.od.progress', 'Order progress')" class="tl4 sm">
         <li v-for="(s, i) in steps" :key="s.key" :aria-current="stateOf(i) === 'cur' ? 'step' : undefined" :class="['t', stateOf(i)]">
-          <span class="t-ic"><dm-icon :name="stateOf(i) === 'done' ? 'check' : s.icon" /></span><span class="t-l">{{ s.label }}</span>
+          <span class="t-ic"><pr-icon :name="stateOf(i) === 'done' ? 'check' : s.icon" /></span><span class="t-l">{{ s.label }}</span>
         </li>
       </ol>
-      <p v-else class="dm-oc-off"><dm-icon name="close" />{{ tone.word }}</p>
-      <div class="dm-od-acts">
+      <p v-else class="pr-oc-off"><pr-icon name="close" />{{ tone.word }}</p>
+      <div class="pr-od-acts">
         <router-link :to="orderRoute(latest)" class="btn sm"
-          ><template v-if="tone.tone === 'pay'"><dm-icon name="lock" />{{ t("domino.acc.payNow", "Pay now") }}</template
-          ><template v-else>{{ t("domino.acc.viewOrder", "View the order") }}<dm-icon cls="flip-rtl" name="arrow" /></template
+          ><template v-if="tone.tone === 'pay'"><pr-icon name="lock" />{{ t("pralino.acc.payNow", "Pay now") }}</template
+          ><template v-else>{{ t("pralino.acc.viewOrder", "View the order") }}<pr-icon cls="flip-rtl" name="arrow" /></template
         ></router-link>
         <button v-if="['ok', 'off'].includes(tone.tone)" :aria-disabled="busy_again ? 'true' : undefined" class="qlink" type="button" @click="busy_again || buyAgain()">
-          <dm-icon :name="again_done ? 'check' : 'bag'" />{{ again_done ? t("domino.acc.inBag", "In your bag") : t("domino.acc.buyAgain", "Buy again") }}
+          <pr-icon :name="again_done ? 'check' : 'bag'" />{{ again_done ? t("pralino.acc.inBag", "In your bag") : t("pralino.acc.buyAgain", "Buy again") }}
         </button>
       </div>
     </article>
 
-    <dm-empty
+    <pr-empty
       v-else-if="account.loaded"
-      :text="t('domino.acc.noOrdersP', 'When you place an order, it appears here with its delivery window and progress.')"
-      :title="t('domino.acc.noOrders', 'No orders yet')"
+      :text="t('pralino.acc.noOrdersP', 'When you place an order, it appears here with its delivery window and progress.')"
+      :title="t('pralino.acc.noOrders', 'No orders yet')"
       cls="boxed"
       icon="box"
     >
       <template #acts
-        ><router-link :to="{ path: '/' }" class="btn">{{ t("domino.acc.startShopping", "Start shopping") }}</router-link></template
+        ><router-link :to="{ path: '/' }" class="btn">{{ t("pralino.acc.startShopping", "Start shopping") }}</router-link></template
       >
-    </dm-empty>
-    <div v-else :aria-label="t('domino.acc.loading', 'Loading your orders')" class="dm-od-load" role="status"><span class="dm-od-sk"></span></div>
+    </pr-empty>
+    <div v-else :aria-label="t('pralino.acc.loading', 'Loading your orders')" class="pr-od-load" role="status"><span class="pr-od-sk"></span></div>
 
     <div class="tiles">
       <router-link :to="sectionRoute('USER_ADDRESSES_PAGE')" class="tile"
-        ><span class="il-ic"><dm-icon name="pin" /></span><b>{{ t("domino.acc.book", "Address book") }}</b
-        ><span>{{ address ? addressLine(address) : account.addresses ? t("domino.acc.noAddress", "No saved address yet") : t("domino.acc.moment", "One moment…") }}</span></router-link
+        ><span class="il-ic"><pr-icon name="pin" /></span><b>{{ t("pralino.acc.book", "Address book") }}</b
+        ><span>{{ address ? addressLine(address) : account.addresses ? t("pralino.acc.noAddress", "No saved address yet") : t("pralino.acc.moment", "One moment…") }}</span></router-link
       >
       <router-link :to="sectionRoute('USER_PROFILE_PAGE')" class="tile"
-        ><span class="il-ic"><dm-icon name="user" /></span><b>{{ t("domino.acc.profile", "Profile") }}</b><span>{{ user?.email || user?.phone || user?.name }}</span></router-link
+        ><span class="il-ic"><pr-icon name="user" /></span><b>{{ t("pralino.acc.profile", "Profile") }}</b><span>{{ user?.email || user?.phone || user?.name }}</span></router-link
       >
       <router-link :to="helpRoute" class="tile"
-        ><span class="il-ic"><dm-icon name="chat" /></span><b>{{ t("domino.acc.help", "Help") }}</b
-        ><span>{{ t("domino.acc.helpP", "Delivery, pickup and payment answers") }}</span></router-link
+        ><span class="il-ic"><pr-icon name="chat" /></span><b>{{ t("pralino.acc.help", "Help") }}</b
+        ><span>{{ t("pralino.acc.helpP", "Delivery, pickup and payment answers") }}</span></router-link
       >
     </div>
   </div>
@@ -85,10 +85,10 @@ import CurrencyMixin from "@selldone/components-vue/mixin/currency/CurrencyMixin
 import { reorder } from "../kalio-basket";
 import { t } from "../i18n/kalio-i18n";
 import { productImage, productsById, vendors } from "../kalio-catalog";
-import DmIcon from "../../domino/DmIcon.vue";
-import DmEmpty from "../../domino/ui/DmEmpty.vue";
-import { isPickupWay, wayWindowLine } from "../../domino/buy/dm-cart";
-import { longDate, orderStep, orderSteps } from "../../domino/order/od";
+import PrIcon from "../../pralino/PrIcon.vue";
+import PrEmpty from "../../pralino/ui/PrEmpty.vue";
+import { isPickupWay, wayWindowLine } from "../../pralino/buy/pr-cart";
+import { longDate, orderStep, orderSteps } from "../../pralino/order/od";
 import { money } from "../../region-switcher/region";
 import {
   STATES,
@@ -110,7 +110,7 @@ const LINES = 4;
 
 export default {
   name: "KalioAccountHome",
-  components: { DmIcon, DmEmpty },
+  components: { PrIcon, PrEmpty },
   mixins: [CurrencyMixin],
   inject: ["$shop"],
 
@@ -126,12 +126,12 @@ export default {
   },
 
   computed: {
-    // ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅ Domino ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅
+    // ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅ Pralino ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅
     user() {
       return this.USER();
     },
     firstName() {
-      return (this.user?.name || "").trim().split(/\s+/)[0] || t("domino.acc.there", "there");
+      return (this.user?.name || "").trim().split(/\s+/)[0] || t("pralino.acc.there", "there");
     },
     pickup() {
       return isPickupWay((this.detail || this.latest)?.delivery_info);
@@ -148,10 +148,10 @@ export default {
     },
     payWord() {
       const status = this.latest?.status;
-      if (status === "COD") return this.pickup ? t("domino.od.payAtPickup", "Pay at pickup") : t("domino.od.payOnDelivery", "Pay on delivery");
-      if (status === "Payed") return t("domino.od.paid", "Paid");
-      if (status === "Canceled") return t("domino.acc.cancelled", "Cancelled");
-      return t("domino.od.toPay", "To pay");
+      if (status === "COD") return this.pickup ? t("pralino.od.payAtPickup", "Pay at pickup") : t("pralino.od.payOnDelivery", "Pay on delivery");
+      if (status === "Payed") return t("pralino.od.paid", "Paid");
+      if (status === "Canceled") return t("pralino.acc.cancelled", "Cancelled");
+      return t("pralino.od.toPay", "To pay");
     },
     helpRoute() {
       return this.$router.hasRoute("ShopFAQ") ? { name: "ShopFAQ" } : { name: window.$storefront.routes.SHOP_CONTACT_US };

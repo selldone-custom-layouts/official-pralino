@@ -13,63 +13,63 @@
   -->
 
 <!--
-  Domino — the profile (domino-design/account-b.html, the Profile panel):
+  Pralino — the profile (pralino-design/account-b.html, the Profile panel):
   the mockup's form — name, email, phone (optional) — and "Save changes",
   writing Selldone's customer profile for this shop; then three quiet lines:
   the shop's news by email (subscribe or not), the members' club when the
   shop has one, and leaving the shop (Selldone asks first).
 -->
 <template>
-  <div v-if="USER()" class="acc-p dm-prof">
-    <h2 class="h3x">{{ t("domino.acc.profile", "Profile") }}</h2>
+  <div v-if="USER()" class="acc-p pr-prof">
+    <h2 class="h3x">{{ t("pralino.acc.profile", "Profile") }}</h2>
     <form class="prof" novalidate @submit.prevent="save">
       <div class="g2">
         <div :class="['fld', { bad: bad.name }]">
-          <label class="fl" for="pf-n">{{ t("domino.acc.name", "Name") }}</label>
+          <label class="fl" for="pf-n">{{ t("pralino.acc.name", "Name") }}</label>
           <input id="pf-n" v-model="form.name" autocomplete="name" class="inp" />
-          <span class="err">{{ t("domino.acc.nameErr", "Add your name") }}</span>
+          <span class="err">{{ t("pralino.acc.nameErr", "Add your name") }}</span>
         </div>
         <div :class="['fld', { bad: bad.email }]">
-          <label class="fl" for="pf-e">{{ t("domino.acc.email", "Email") }}</label>
+          <label class="fl" for="pf-e">{{ t("pralino.acc.email", "Email") }}</label>
           <input id="pf-e" v-model="form.email" autocomplete="email" class="inp" type="email" />
-          <span class="err">{{ t("domino.acc.emailErr", "Add a valid email") }}</span>
+          <span class="err">{{ t("pralino.acc.emailErr", "Add a valid email") }}</span>
         </div>
         <div class="fld">
           <label class="fl" for="pf-p"
-            >{{ t("domino.acc.phone", "Phone") }} <span class="opt-k">{{ t("domino.acc.optional", "(optional)") }}</span></label
+            >{{ t("pralino.acc.phone", "Phone") }} <span class="opt-k">{{ t("pralino.acc.optional", "(optional)") }}</span></label
           >
           <input id="pf-p" v-model="form.phone" autocomplete="tel" class="inp" type="tel" />
         </div>
       </div>
-      <button :aria-disabled="busy_save ? 'true' : undefined" class="btn" type="submit">{{ saved ? t("domino.acc.savedOk", "Saved") : t("domino.acc.save", "Save changes") }}</button>
+      <button :aria-disabled="busy_save ? 'true' : undefined" class="btn" type="submit">{{ saved ? t("pralino.acc.savedOk", "Saved") : t("pralino.acc.save", "Save changes") }}</button>
     </form>
-    <div class="prof dm-prof-more">
+    <div class="prof pr-prof-more">
       <ul class="ils sm">
         <li class="il">
-          <span class="il-ic"><dm-icon name="mail" /></span>
+          <span class="il-ic"><pr-icon name="mail" /></span>
           <div class="il-tx">
-            <b>{{ isSubscribed ? t("domino.acc.newsOn", "You get the shop’s news by email") : t("domino.acc.newsOff", "No news by email") }}</b>
-            <span class="dm-il-acts"
+            <b>{{ isSubscribed ? t("pralino.acc.newsOn", "You get the shop’s news by email") : t("pralino.acc.newsOff", "No news by email") }}</b>
+            <span class="pr-il-acts"
               ><button :aria-disabled="busy_subscribe ? 'true' : undefined" class="qlink" type="button" @click="busy_subscribe || toggleSubscribe()">
-                {{ isSubscribed ? t("domino.acc.newsStop", "Stop the emails") : t("domino.acc.newsStart", "Get the news by email") }}
+                {{ isSubscribed ? t("pralino.acc.newsStop", "Stop the emails") : t("pralino.acc.newsStart", "Get the news by email") }}
               </button></span
             >
           </div>
         </li>
         <li v-if="club" class="il">
-          <span class="il-ic"><dm-icon name="gift" /></span>
+          <span class="il-ic"><pr-icon name="gift" /></span>
           <div class="il-tx">
             <b>{{ $t(getCustomerClubLevel(club.level).name) }}</b>
-            <span>{{ t("domino.acc.clubOff", "{n}% off as a member", { n: club.percent }) }}<template v-if="club.free_shipping">{{ " · " + t("domino.acc.clubFree", "free delivery") }}</template></span>
+            <span>{{ t("pralino.acc.clubOff", "{n}% off as a member", { n: club.percent }) }}<template v-if="club.free_shipping">{{ " · " + t("pralino.acc.clubFree", "free delivery") }}</template></span>
           </div>
         </li>
         <li class="il">
-          <span class="il-ic"><dm-icon name="out" /></span>
+          <span class="il-ic"><pr-icon name="out" /></span>
           <div class="il-tx">
-            <b>{{ t("domino.acc.leave", "Leave this shop") }}</b>
-            <span>{{ t("domino.acc.leaveP", "Your account here and its details are removed. Your orders stay with the shop.") }}</span>
-            <span class="dm-il-acts"
-              ><button class="qlink dm-danger" type="button" @click="LeaveShop">{{ t("domino.acc.leaveGo", "Leave the shop") }}</button></span
+            <b>{{ t("pralino.acc.leave", "Leave this shop") }}</b>
+            <span>{{ t("pralino.acc.leaveP", "Your account here and its details are removed. Your orders stay with the shop.") }}</span>
+            <span class="pr-il-acts"
+              ><button class="qlink pr-danger" type="button" @click="LeaveShop">{{ t("pralino.acc.leaveGo", "Leave the shop") }}</button></span
             >
           </div>
         </li>
@@ -84,7 +84,7 @@ import NotificationService from "@selldone/components-vue/plugins/notification/N
 
 import { SetupService } from "@selldone/core-js/server/SetupService";
 import { MapHelper } from "@selldone/core-js";
-import DmIcon from "../../../components/domino/DmIcon.vue";
+import PrIcon from "../../../components/pralino/PrIcon.vue";
 import DateMixin from "@selldone/components-vue/mixin/date/DateMixin.ts";
 import MapMixin from "@selldone/components-vue/mixin/map/MapMixin.ts";
 import ClubMixin from "@selldone/components-vue/mixin/club/ClubMixin.ts";
@@ -93,7 +93,7 @@ export default {
   name: "StorefrontPageUserProfile",
   mixins: [DateMixin, MapMixin,ClubMixin],
 
-  components: { DmIcon },
+  components: { PrIcon },
   inject: ["$shop"],
   props: {
     shop: {

@@ -13,43 +13,43 @@
   -->
 
 <!--
-  Domino — a physical order's page (domino-design/order-b.html, pages-buy.js
+  Pralino — a physical order's page (pralino-design/order-b.html, pages-buy.js
   order): the title band is the parent page's (StorefrontPageBasketOrder);
   here the progress card (Placed · Baking · On the way · Delivered over
   Selldone's delivery states, a pickup's "Ready to collect · Collected", and
   the way · window · fee under it), the pastries with Selldone's sums, how
-  it is paid (DmOrderPay), who receives it (DmOrderReceiver), and the
-  messages beside them (DmOrderChat). The invoice and a share link sit by
+  it is paid (PrOrderPay), who receives it (PrOrderReceiver), and the
+  messages beside them (PrOrderChat). The invoice and a share link sit by
   the pastries. A bank transfer's details, the sellers' own orders, returns
   and refunds stay Selldone's own, under the cards.
 -->
 <template>
-  <section :aria-label="t('domino.od.aria', 'Order')" class="sec-s">
+  <section :aria-label="t('pralino.od.aria', 'Order')" class="sec-s">
     <div class="wrap od">
       <div v-if="tone !== 'off'" class="od-tl">
-        <ol :aria-label="t('domino.od.progress', 'Order progress')" class="tl4">
+        <ol :aria-label="t('pralino.od.progress', 'Order progress')" class="tl4">
           <li v-for="(s, i) in steps" :key="s.key" :aria-current="stateOf(i) === 'cur' ? 'step' : undefined" :class="['t', stateOf(i)]">
-            <span class="t-ic"><dm-icon :name="stateOf(i) === 'done' ? 'check' : s.icon" /></span><span class="t-l">{{ s.label }}</span>
+            <span class="t-ic"><pr-icon :name="stateOf(i) === 'done' ? 'check' : s.icon" /></span><span class="t-l">{{ s.label }}</span>
           </li>
         </ol>
         <p v-if="wayLine" class="od-line">
-          <dm-icon :name="wayIcon(basket.delivery_info?.type)" /><span
-            ><b>{{ wayLine }}</b>{{ " · " }}{{ basket.delivery_price > 0 ? amount(basket.delivery_price) : t("domino.od.free", "Free") }}</span
+          <pr-icon :name="wayIcon(basket.delivery_info?.type)" /><span
+            ><b>{{ wayLine }}</b>{{ " · " }}{{ basket.delivery_price > 0 ? amount(basket.delivery_price) : t("pralino.od.free", "Free") }}</span
           >
         </p>
       </div>
-      <div v-else class="od-tl dm-od-off">
-        <dm-empty :text="t('domino.od.offP', 'Nothing more will happen with it. Write to the bakery if you have a question.')" :title="t('domino.od.offT', 'This order was cancelled')" icon="close" tag="h2" />
+      <div v-else class="od-tl pr-od-off">
+        <pr-empty :text="t('pralino.od.offP', 'Nothing more will happen with it. Write to the bakery if you have a question.')" :title="t('pralino.od.offT', 'This order was cancelled')" icon="close" tag="h2" />
       </div>
 
       <div class="od-g">
         <div class="od-main">
           <div class="od-c">
-            <div class="dm-od-hd">
-              <h2 class="co-h">{{ t("domino.od.pastries", "Pastries") }}</h2>
-              <div class="dm-od-tools">
-                <button :aria-disabled="busy_invoice ? 'true' : undefined" class="qlink" type="button" @click="busy_invoice || downloadInvoice()"><dm-icon name="doc" />{{ t("domino.od.invoice", "Invoice") }}</button>
-                <s-shop-share-order-button :basket="basket" class="dm-od-share"></s-shop-share-order-button>
+            <div class="pr-od-hd">
+              <h2 class="co-h">{{ t("pralino.od.pastries", "Pastries") }}</h2>
+              <div class="pr-od-tools">
+                <button :aria-disabled="busy_invoice ? 'true' : undefined" class="qlink" type="button" @click="busy_invoice || downloadInvoice()"><pr-icon name="doc" />{{ t("pralino.od.invoice", "Invoice") }}</button>
+                <s-shop-share-order-button :basket="basket" class="pr-od-share"></s-shop-share-order-button>
               </div>
             </div>
             <ul class="rc-l">
@@ -64,53 +64,53 @@
             </ul>
             <dl class="rc-s">
               <div>
-                <dt>{{ t("domino.od.full", "Items at full price") }}</dt>
+                <dt>{{ t("pralino.od.full", "Items at full price") }}</dt>
                 <dd class="money">{{ amount(sums.full) }}</dd>
               </div>
               <div v-if="sums.save > 0" class="sv">
-                <dt>{{ t("domino.od.savings", "Savings") }}</dt>
+                <dt>{{ t("pralino.od.savings", "Savings") }}</dt>
                 <dd class="money">−{{ amount(sums.save) }}</dd>
               </div>
               <div v-if="sums.other > 0.004" class="sv">
-                <dt>{{ t("domino.od.offers", "Offers and codes") }}</dt>
+                <dt>{{ t("pralino.od.offers", "Offers and codes") }}</dt>
                 <dd class="money">−{{ amount(sums.other) }}</dd>
               </div>
               <div>
                 <dt>
-                  {{ t("domino.od.delivery", "Delivery") }}<small v-if="wayName">{{ wayName }}</small>
+                  {{ t("pralino.od.delivery", "Delivery") }}<small v-if="wayName">{{ wayName }}</small>
                 </dt>
-                <dd>{{ basket.delivery_price > 0 ? amount(basket.delivery_price) : t("domino.od.free", "Free") }}</dd>
+                <dd>{{ basket.delivery_price > 0 ? amount(basket.delivery_price) : t("pralino.od.free", "Free") }}</dd>
               </div>
               <div v-if="basket.tax > 0">
-                <dt>{{ basket.tax_included ? t("domino.od.taxIn", "Tax (included)") : t("domino.od.tax", "Tax") }}</dt>
+                <dt>{{ basket.tax_included ? t("pralino.od.taxIn", "Tax (included)") : t("pralino.od.tax", "Tax") }}</dt>
                 <dd class="money">{{ amount(basket.tax) }}</dd>
               </div>
               <div class="tot">
-                <dt>{{ t("domino.od.total", "Total") }}</dt>
+                <dt>{{ t("pralino.od.total", "Total") }}</dt>
                 <dd class="money">{{ amount(basket.price) }}</dd>
               </div>
             </dl>
           </div>
 
           <div class="od-two">
-            <dm-order-pay :basket="basket" />
-            <dm-order-receiver :basket="basket" />
+            <pr-order-pay :basket="basket" />
+            <pr-order-receiver :basket="basket" />
           </div>
 
-          <div v-if="transfers.length" class="od-c dm-od-sd">
-            <h2 class="co-h">{{ t("domino.od.transfer", "Pay by bank transfer") }}</h2>
+          <div v-if="transfers.length" class="od-c pr-od-sd">
+            <h2 class="co-h">{{ t("pralino.od.transfer", "Pay by bank transfer") }}</h2>
             <table>
               <tbody>
                 <s-shop-row-customer-pending-payment v-for="tr in transfers" :key="tr.id" :order="basket" :transaction="tr" />
               </tbody>
             </table>
           </div>
-          <s-basket-vendor-orders v-if="basket.vendor_orders?.length" :basket="basket" class="od-c dm-od-sd"></s-basket-vendor-orders>
-          <s-order-basket-return :basket="basket" class="dm-od-sd" />
-          <s-shop-customer-order-withdraw :order="basket" :payment="basket.payment" class="dm-od-sd" @request:refresh="$emit('request:refresh')" />
+          <s-basket-vendor-orders v-if="basket.vendor_orders?.length" :basket="basket" class="od-c pr-od-sd"></s-basket-vendor-orders>
+          <s-order-basket-return :basket="basket" class="pr-od-sd" />
+          <s-shop-customer-order-withdraw :order="basket" :payment="basket.payment" class="pr-od-sd" @request:refresh="$emit('request:refresh')" />
         </div>
 
-        <dm-order-chat :basket="basket" />
+        <pr-order-chat :basket="basket" />
       </div>
     </div>
   </section>
@@ -120,11 +120,11 @@
 import SOrderBasketReturn from "@selldone/components-vue/storefront/order/basket/return/SOrderBasketReturn.vue";
 import SShopRowCustomerPendingPayment from "@selldone/components-vue/storefront/order/payment/rows/SShopRowCustomerPendingPayment.vue";
 import SShopCustomerOrderWithdraw from "@selldone/components-vue/storefront/order/payment/withdraw/SShopCustomerOrderWithdraw.vue";
-import DmOrderReceiver from "../../../../../components/domino/order/DmOrderReceiver.vue";
-import DmOrderChat from "../../../../../components/domino/order/DmOrderChat.vue";
-import DmOrderPay from "../../../../../components/domino/order/DmOrderPay.vue";
-import DmIcon from "../../../../../components/domino/DmIcon.vue";
-import DmEmpty from "../../../../../components/domino/ui/DmEmpty.vue";
+import PrOrderReceiver from "../../../../../components/pralino/order/PrOrderReceiver.vue";
+import PrOrderChat from "../../../../../components/pralino/order/PrOrderChat.vue";
+import PrOrderPay from "../../../../../components/pralino/order/PrOrderPay.vue";
+import PrIcon from "../../../../../components/pralino/PrIcon.vue";
+import PrEmpty from "../../../../../components/pralino/ui/PrEmpty.vue";
 
 import SShopShareOrderButton from "@selldone/components-vue/storefront/order/share-order/SShopShareOrderButton.vue";
 import { ProductType } from "@selldone/core-js/enums/product/ProductType";
@@ -133,10 +133,10 @@ import NotificationService from "@selldone/components-vue/plugins/notification/N
 import { Basket } from "@selldone/core-js";
 import { productImage } from "../../../../../components/kalio/kalio-catalog";
 import { t } from "../../../../../components/kalio/i18n/kalio-i18n";
-import { loadDm, wayTitle } from "../../../../../components/domino/dm";
+import { loadDm, wayTitle } from "../../../../../components/pralino/pr";
 import { money } from "../../../../../components/region-switcher/region";
-import { isPickupWay, shopWay, wayIcon, wayWindowLine } from "../../../../../components/domino/buy/dm-cart";
-import { orderStep, orderSteps, orderTone } from "../../../../../components/domino/order/od";
+import { isPickupWay, shopWay, wayIcon, wayWindowLine } from "../../../../../components/pralino/buy/pr-cart";
+import { orderStep, orderSteps, orderTone } from "../../../../../components/pralino/order/od";
 
 /* The size of a variant in words: its volume, weight, pack, colour or style. */
 function sizeOf(variant) {
@@ -152,11 +152,11 @@ export default {
     SShopRowCustomerPendingPayment,
     SShopCustomerOrderWithdraw,
     SOrderBasketReturn,
-    DmOrderReceiver,
-    DmOrderChat,
-    DmOrderPay,
-    DmIcon,
-    DmEmpty,
+    PrOrderReceiver,
+    PrOrderChat,
+    PrOrderPay,
+    PrIcon,
+    PrEmpty,
   },
 
   emits: ["request:refresh"],
@@ -181,7 +181,7 @@ export default {
       return this.getShop();
     },
 
-    // ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅ Domino ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅
+    // ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅ Pralino ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅
     steps() {
       return orderSteps(isPickupWay(this.basket?.delivery_info));
     },

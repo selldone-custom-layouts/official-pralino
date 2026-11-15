@@ -1,9 +1,9 @@
-/* ▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Bakini Noir's token names, on Domino's colours ▆▆▆▆▆▆▆▆▆▆▆▆▆▆
+/* ▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Bakini Noir's token names, on Pralino's colours ▆▆▆▆▆▆▆▆▆▆▆▆▆▆
 
-   Domino (13 November 2026): until every page is ported to its Domino
+   Pralino (13 November 2026): until every page is ported to its Pralino
    mockup, the Noir pages still read these --bk-* names. Their values are
-   now Domino's (style/domino-theme.scss: the cream ground, cocoa ink,
-   pistachio; the cocoa night under html.dm-dark), and the faces are
+   now Pralino's (style/pralino-theme.scss: the cream ground, cocoa ink,
+   pistachio; the cocoa night under html.pr-dark), and the faces are
    Cormorant and Jost, so no Noir colour or face shows. The notes below are
    Noir's own and are removed with this file in phase 2.
 
@@ -17,17 +17,17 @@
    - Light is the refined ivory version: #f8f5f2 page, white cards, ink
      #1d1418, a darker gold #8a5e2e for small type.
 
-   :root holds Light, html.dm-dark holds Dark. The shared theme switcher
+   :root holds Light, html.pr-dark holds Dark. The shared theme switcher
    (components/theme-switcher/, config components/bakini/bakini-theme.ts) puts
-   the class "dm-dark" on <html> before the app mounts (dark by default, on
+   the class "pr-dark" on <html> before the app mounts (dark by default, on
    every shop: bakini-theme.settings.ts says mode "dark"), and writes the
    chosen palette's action colours (--bk-act*) inline on <html>.
 
    This file holds both modes itself. The build step (postcss-dark-tokens,
-   vite.config.ts) skips rules under html.dm-dark, and the few :root values
-   it rewrites are all redefined under html.dm-dark, so the step changes
+   vite.config.ts) skips rules under html.pr-dark, and the few :root values
+   it rewrites are all redefined under html.pr-dark, so the step changes
    nothing here. Every other fixed colour in the Layout's and Selldone's
-   styles gets a dark value from that step under html.dm-dark.
+   styles gets a dark value from that step under html.pr-dark.
 
    The second block maps the names the inherited pieces read (--bk-buy,
    --bk-surface, --bk-photo … from Medio, and through kalio-tokens.scss the
@@ -36,8 +36,8 @@
 
 :root {
   /* ── Type ── */
-  --bk-fd: var(--dm-serif); /* display */
-  --bk-ft: var(--dm-sans); /* text and UI */
+  --bk-fd: var(--pr-serif); /* display */
+  --bk-ft: var(--pr-sans); /* text and UI */
 
   /* ── Ivory (Light) ── */
   --bk-bg: #f7f1ea; /* the page */
@@ -88,7 +88,7 @@
   color-scheme: light;
 }
 
-html.dm-dark {
+html.pr-dark {
   --bk-bg: #1a1310;
   --bk-bg-2: #120d0b;
   --bk-s1: #2d221b;
@@ -197,7 +197,7 @@ html.dm-dark {
   /* The inherited dark bands keep white words in both modes: the stage. */
   --bk-navy: #1c1419;
   --bk-navy-2: #261b22;
-  --dm-dark-card: #1c1419;
+  --pr-dark-card: #1c1419;
   --bk-promo: #261b22;
   --bk-strip: #0d080b;
   --bk-slate: #120c10;
@@ -214,7 +214,7 @@ html.dm-dark {
   --bk-p-sky: var(--bk-s2);
 }
 
-html.dm-dark {
+html.pr-dark {
   --bk-sw-edge: rgba(244, 237, 230, 0.5);
   --bk-shine: rgba(255, 255, 255, 0.07);
   --bk-pop-shadow: rgba(0, 0, 0, 0.6);
@@ -228,8 +228,8 @@ html.dm-dark {
 
 /* Vuetify's own dark surfaces on Noir's stage (Selldone's fields, menus,
    dialogs and sheets are dark too, not white islands on a black page). */
-html.dm-dark,
-html.dm-dark .v-theme--dark {
+html.pr-dark,
+html.pr-dark .v-theme--dark {
   --v-theme-background: 26, 19, 16 !important;
   --v-theme-on-background: 243, 233, 222 !important;
   --v-theme-surface: 45, 34, 27 !important;
@@ -246,13 +246,13 @@ html {
 }
 
 /* Dark: brand marks drawn in black (Apple's sign-in mark) turn white. */
-html.dm-dark img[src*="apple-b"] {
+html.pr-dark img[src*="apple-b"] {
   filter: invert(1);
 }
 
 /* Dark: Selldone's own white rows (Vuetify's .bg-white, e.g. the billing
    Business / Personal choice) take the card's ground. */
-html.dm-dark .bg-white:not(:has(> img, > .v-img)) {
+html.pr-dark .bg-white:not(:has(> img, > .v-img)) {
   background-color: var(--bk-s1) !important;
   color: var(--bk-ink) !important;
 }

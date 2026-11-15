@@ -50,21 +50,21 @@
            who receives it, the address (or the counter for a pickup). -->
       <div class="ilines k-odel__lines">
         <div v-if="methodLine" class="iline">
-          <dm-icon :name="wayIcon(delivery_info.type)" />
+          <pr-icon :name="wayIcon(delivery_info.type)" />
           <div>
             <b>{{ methodLine }}</b>
             <span v-if="reach">{{ reach }}</span>
           </div>
         </div>
         <div v-if="!is_pickup && (receiver.name || receiver.phone)" class="iline">
-          <dm-icon name="user" />
+          <pr-icon name="user" />
           <div>
             <b>{{ receiver.name || receiver.phone }}</b>
             <span v-if="receiver.name && receiver.phone">{{ receiver.phone }}</span>
           </div>
         </div>
         <div class="iline">
-          <dm-icon :name="is_pickup ? 'store' : 'pin'" />
+          <pr-icon :name="is_pickup ? 'store' : 'pin'" />
           <div>
             <b>{{ is_pickup ? t("bakini.n.ord.pickAt", "Pick it up at") : t("bakini.n.ord.address", "Delivery address") }}</b>
             <span v-if="addressLines.length">{{ addressLines.join(", ") }}</span>
@@ -200,8 +200,8 @@ import NotificationService from "@selldone/components-vue/plugins/notification/N
 import SOrderDeliveryAutoComplete from "@selldone/components-vue/storefront/order/auto-complete/SOrderDeliveryAutoComplete.vue";
 import { ShopTransportations } from "@selldone/core-js/enums/logistic/ShopTransportations";
 import { TimeSpans } from "@selldone/core-js/enums/logistic/TimeSpans";
-import DmIcon from "../../domino/DmIcon.vue";
-import { wayIcon, wayReach, wayWindowLine } from "../../domino/buy/dm-cart";
+import PrIcon from "../../pralino/PrIcon.vue";
+import { wayIcon, wayReach, wayWindowLine } from "../../pralino/buy/pr-cart";
 import { MapHelper } from "@selldone/core-js/helper/map/MapHelper";
 import { Basket, ShopOptionsHelper } from "@selldone/core-js";
 import KalioAddressSheet from "../checkout/KalioAddressSheet.vue";
@@ -242,7 +242,7 @@ function hour(h) {
 
 export default {
   name: "KalioOrderDelivery",
-  components: { KalioAddressSheet, SOrderDeliveryAutoComplete, DmIcon },
+  components: { KalioAddressSheet, SOrderDeliveryAutoComplete, PrIcon },
   inject: ["$shop"],
 
   props: {

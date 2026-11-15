@@ -100,22 +100,22 @@ export default ({mode}: any) => {
           : []),
     ],
     /* The theme switcher's build step: every fixed colour gets a dark value
-       under html.dm-dark (components/theme-switcher/tools, PORTING.md), the
-       cocoa night of Domino's dark mode. Domino is light first: these dark
+       under html.pr-dark (components/theme-switcher/tools, PORTING.md), the
+       cocoa night of Pralino's dark mode. Pralino is light first: these dark
        values show only when a visitor picks Dark in the footer's Theme row.
-       Domino's own tokens and stylesheets (style/domino-theme.scss,
-       style/domino/, style/domino-layout.scss, components/domino/) hold both
+       Pralino's own tokens and stylesheets (style/pralino-theme.scss,
+       style/pralino/, style/pralino-layout.scss, components/pralino/) hold both
        modes themselves and are skipped, as are the Noir pages still waiting
-       for their Domino port (their tokens hold both modes too). The pastry
+       for their Pralino port (their tokens hold both modes too). The pastry
        photos are transparent cut-outs, so their plates are tokens that turn
        dark too (no light-tile exceptions beyond the build step's own). */
     css: {
       postcss: {
         plugins: [
           darkTokens({
-            darkSelector: "html.dm-dark",
+            darkSelector: "html.pr-dark",
             include: [/\/style\//, /\/StorefrontApp\.vue/, /\/components\//, /\/pages\//, /\/layouts\//],
-            exclude: [/\/node_modules\//, /\/modules\/pagebuilder\//, /\/theme-switcher\//, /\/style\/domino\//, /\/style\/domino-[\w-]*\.scss/, /\/components\/domino\//],
+            exclude: [/\/node_modules\//, /\/modules\/pagebuilder\//, /\/theme-switcher\//, /\/style\/pralino\//, /\/style\/pralino-[\w-]*\.scss/, /\/components\/pralino\//],
             lightVars: [],
             card: "#2d221b",
             raise: "#352920",
@@ -284,9 +284,9 @@ function coreChunk(id: string, { getModuleInfo, getModuleIds }: any) {
 }
 
 /**
- * Domino (14 November 2026): fewer files for the upload limit (~360 per
+ * Pralino (14 November 2026): fewer files for the upload limit (~360 per
  * archive). Code only lazy routes use is grouped instead of one file per
- * component: Domino's own shared pieces in one chunk; the pages a bakery
+ * component: Pralino's own shared pieces in one chunk; the pages a bakery
  * rarely opens (Selldone's community, Avocado, POS, hyper, Instagram, maps,
  * vendor listings, the info page, other kinds of order) in one; Selldone's
  * language packs four to a file (a visitor who picks a language loads three
@@ -307,7 +307,7 @@ const LANG_PACKS = fs
 /* The group a module starts in by its path. */
 function seedGroup(id: string): string | undefined {
   const file = id.split("?")[0].split("\\").join("/");
-  if (/\/components\/domino\//.test(file) && !file.includes("/node_modules/")) return "domino";
+  if (/\/components\/pralino\//.test(file) && !file.includes("/node_modules/")) return "pralino";
   if (RARE_PAGES.some((re) => re.test(file))) return "selldone-rare";
   if (file.startsWith(LANG_DIR + "/")) {
     const at = LANG_PACKS.indexOf(file.slice(LANG_DIR.length + 1));

@@ -14,22 +14,22 @@
 
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <!--
-    Domino — the product page (domino-design/product-b.html,
+    Pralino — the product page (pralino-design/product-b.html,
     src/pages-product.js): the slim title band with the breadcrumb (Home ›
     collection › product); the gallery and the sticky buy column
-    (DmProductOverview); the tabs — Description, Additional information,
-    Reviews (DmProductTabs); "Buy together" (this and the best seller of two
-    other collections, DmTogether); "More <collection>" (never this product,
+    (PrProductOverview); the tabs — Description, Additional information,
+    Reviews (PrProductTabs); "Buy together" (this and the best seller of two
+    other collections, PrTogether); "More <collection>" (never this product,
     a full row of six, three or two). Selldone's own sections for other kinds
     of product (offers, includes, files, membership, a product landing page)
     follow when the product has them.
   -->
-  <div class="dm dm-pdp s--product">
+  <div class="pr pr-pdp s--product">
     <slot name="header" :center="true"></slot>
-    <dm-pt :crumbs="crumbs" :label="t('domino.pt.crumbs', 'Breadcrumb')" cls="slim" />
+    <pr-pt :crumbs="crumbs" :label="t('pralino.pt.crumbs', 'Breadcrumb')" cls="slim" />
 
-    <dm-product-overview v-if="product" :key="product.id" can-buy show-cover @reviews="$refs.tabs?.open('rev')" />
-    <section v-else aria-hidden="true" class="pd dm-pd-skel">
+    <pr-product-overview v-if="product" :key="product.id" can-buy show-cover @reviews="$refs.tabs?.open('rev')" />
+    <section v-else aria-hidden="true" class="pd pr-pd-skel">
       <div class="wrap pd-in">
         <div class="pd-gal"><div class="pd-main"></div></div>
         <div class="pd-buy"><i class="-a"></i><i class="-b"></i><i class="-c"></i><i class="-d"></i><i class="-e"></i></div>
@@ -37,10 +37,10 @@
     </section>
 
     <template v-if="product">
-      <dm-product-tabs ref="tabs" :product="product" />
-      <dm-together :product="product" :variant="current_variant" />
+      <pr-product-tabs ref="tabs" :product="product" />
+      <pr-together :product="product" :variant="current_variant" />
 
-      <div class="wrap dm-pd-sd">
+      <div class="wrap pr-pd-sd">
         <s-product-offers class="s--product-section"></s-product-offers>
         <s-product-includes></s-product-includes>
         <s-product-files-list></s-product-files-list>
@@ -51,11 +51,11 @@
       <section v-if="more.length" aria-labelledby="more-h" class="sec-s more">
         <div class="wrap">
           <header class="sec-hd sm">
-            <p class="eyebrow">{{ t("domino.pd.moreEyebrow", "From the same counter") }}</p>
-            <h2 id="more-h" class="h2">{{ t("domino.pd.moreH", "More {name}", { name: catTitle(cat) }) }}</h2>
+            <p class="eyebrow">{{ t("pralino.pd.moreEyebrow", "From the same counter") }}</p>
+            <h2 id="more-h" class="h2">{{ t("pralino.pd.moreH", "More {name}", { name: catTitle(cat) }) }}</h2>
           </header>
           <div class="grid six">
-            <dm-card v-for="p in more" :key="p.id" :product="p" no-cat />
+            <pr-card v-for="p in more" :key="p.id" :product="p" no-cat />
           </div>
         </div>
       </section>
@@ -65,12 +65,12 @@
 
 <script lang="ts">
 import NotificationService from "@selldone/components-vue/plugins/notification/NotificationService.ts";
-import DmPt from "../../components/domino/ui/DmPt.vue";
-import DmCard from "../../components/domino/ui/DmCard.vue";
-import DmProductOverview from "../../components/domino/product/DmProductOverview.vue";
-import DmProductTabs from "../../components/domino/product/DmProductTabs.vue";
-import DmTogether from "../../components/domino/product/DmTogether.vue";
-import { bySells, catOf, catTitle, catTo, dm, loadDm } from "../../components/domino/dm";
+import PrPt from "../../components/pralino/ui/PrPt.vue";
+import PrCard from "../../components/pralino/ui/PrCard.vue";
+import PrProductOverview from "../../components/pralino/product/PrProductOverview.vue";
+import PrProductTabs from "../../components/pralino/product/PrProductTabs.vue";
+import PrTogether from "../../components/pralino/product/PrTogether.vue";
+import { bySells, catOf, catTitle, catTo, pr, loadDm } from "../../components/pralino/pr";
 import { rememberViewed } from "../../components/bakini/bakini";
 import { t } from "../../components/kalio/i18n/kalio-i18n";
 import { GtagEcommerce } from "@selldone/components-vue/plugins/gtag/GtagEcommerce";
@@ -92,11 +92,11 @@ export default {
   inject: ["$shop"],
   props: {},
   components: {
-    DmPt,
-    DmCard,
-    DmProductOverview,
-    DmProductTabs,
-    DmTogether,
+    PrPt,
+    PrCard,
+    PrProductOverview,
+    PrProductTabs,
+    PrTogether,
     SProductLanding,
     SProductAdminButton,
     SProductOffers,
@@ -117,7 +117,7 @@ export default {
     return {
       product: null,
       busy: false,
-      dm,
+      pr,
     };
   },
 
@@ -138,7 +138,7 @@ export default {
        three or two, so the row is always full. */
     more() {
       if (!this.product) return [];
-      const l = bySells(this.dm.products.filter((p) => p.category_id === this.product.category_id && p.id !== this.product.id));
+      const l = bySells(this.pr.products.filter((p) => p.category_id === this.product.category_id && p.id !== this.product.id));
       const n = l.length >= 6 ? 6 : l.length >= 3 ? 3 : l.length >= 2 ? 2 : 0;
       return l.slice(0, n);
     },

@@ -22,7 +22,7 @@ the owner's controlled clone, fork, or release branch.
 
 ## Theme (palette, brand colour, light or dark, the visitor switcher)
 
-When a merchant asks for a theme ("use the cherry theme", "my brand colour is #F5C400", "make it dark"), edit **one file only**: `components/domino/domino-theme.settings.ts`. Nothing else needs to change, and the colours are made readable automatically (buttons, links, chosen states, dark mode). Domino Cocoa Patisserie paints every action with one colour (pistachio by default) on a cream ground with cocoa ink; the header and footer stay cocoa in every palette.
+When a merchant asks for a theme ("use the cherry theme", "my brand colour is #F5C400", "make it dark"), edit **one file only**: `components/pralino/pralino-theme.settings.ts`. Nothing else needs to change, and the colours are made readable automatically (buttons, links, chosen states, dark mode). Pralino Cocoa Patisserie paints every action with one colour (pistachio by default) on a cream ground with cocoa ink; the header and footer stay cocoa in every palette.
 
 | Setting | Allowed values |
 | --- | --- |
@@ -41,7 +41,7 @@ Worked examples (change only these lines; leave the rest of the file as it is):
 - **"Remove the switcher"**: `themeSwitcher: "off"`. On a merchant's own shop it is already hidden with `"showcase"`.
 - **"Go back to the original colours"**: remove `brandColor` and set `palette: "pistachio", mode: "light"`.
 
-The switcher itself is the shared package in `components/theme-switcher/` (the same code as every other Layout; see its PORTING.md in the kit). Domino's palettes are in `components/domino/domino-theme.ts` and its grounds, lines and words for both modes in `style/domino-theme.scss`; do not edit them for a merchant's theme.
+The switcher itself is the shared package in `components/theme-switcher/` (the same code as every other Layout; see its PORTING.md in the kit). Pralino's palettes are in `components/pralino/pralino-theme.ts` and its grounds, lines and words for both modes in `style/pralino-theme.scss`; do not edit them for a merchant's theme.
 
 Then release and check:
 
@@ -50,8 +50,8 @@ Then release and check:
    ```sh
    PAGES="home=/,category=/<a category>,product=/product/<id>" node components/theme-switcher/tools/contrast-audit.cjs https://<your shop> ".ftr"
    ```
-3. If the visitor switcher is on, also run the kit's `ring-sweep.cjs` in light and dark (`STORAGE='{"domino-theme":"{\\"palette\\":\\"pistachio\\",\\"mode\\":\\"dark\\"}"}'`). The switcher is the Theme row in the footer.
+3. If the visitor switcher is on, also run the kit's `ring-sweep.cjs` in light and dark (`STORAGE='{"pralino-theme":"{\\"palette\\":\\"pistachio\\",\\"mode\\":\\"dark\\"}"}'`). The switcher is the Theme row in the footer.
 
 ## Words and languages
 
-Domino's own words go through `t("domino.<area>.<name>", "English")` (`components/kalio/i18n/kalio-i18n.ts`, the shared i18n runtime). The English is `components/kalio/i18n/base/en.ts` (the shared Kalio words), `bakini.en.ts` (the `bakini.*` words still used by the shared Kalio/Bakini code) and `domino.en.ts` (Domino's own), generated from the code by the kit's `i18n-extract.cjs` (run it once with the prefix `domino.` and once with `bakini.`); Arabic is `base/ar.ts` + `bakini.ar.ts` + `domino.ar.ts`, merged by `lang-ar.ts` and listed in `index.ts` (`LOADERS`), fetched only when a visitor picks it. The basket is a **bag** everywhere ("Add to bag", "Your bag"), in the Layout's words and in Selldone's own English strings (`components/kalio/kalio-brand.ts`, `bagWords()`). To add a language the shop enables: translate `domino.en.ts` and `bakini.en.ts` to `<code>` files (same keys, keep every `{…}`, add the language's plural forms), copy `base/<code>.ts` from the shared set, add `lang-<code>.ts` and one `LOADERS` line. A new visible word always gets a `t()` key; a word still in English after a language pick is an unwrapped string. Use logical CSS (`margin-inline`, `inset-inline`, `text-align: start`) so a right-to-left language mirrors.
+Pralino's own words go through `t("pralino.<area>.<name>", "English")` (`components/kalio/i18n/kalio-i18n.ts`, the shared i18n runtime). The English is `components/kalio/i18n/base/en.ts` (the shared Kalio words), `bakini.en.ts` (the `bakini.*` words still used by the shared Kalio/Bakini code) and `pralino.en.ts` (Pralino's own), generated from the code by the kit's `i18n-extract.cjs` (run it once with the prefix `pralino.` and once with `bakini.`); Arabic is `base/ar.ts` + `bakini.ar.ts` + `pralino.ar.ts`, merged by `lang-ar.ts` and listed in `index.ts` (`LOADERS`), fetched only when a visitor picks it. The basket is a **bag** everywhere ("Add to bag", "Your bag"), in the Layout's words and in Selldone's own English strings (`components/kalio/kalio-brand.ts`, `bagWords()`). To add a language the shop enables: translate `pralino.en.ts` and `bakini.en.ts` to `<code>` files (same keys, keep every `{…}`, add the language's plural forms), copy `base/<code>.ts` from the shared set, add `lang-<code>.ts` and one `LOADERS` line. A new visible word always gets a `t()` key; a word still in English after a language pick is an unwrapped string. Use logical CSS (`margin-inline`, `inset-inline`, `text-align: start`) so a right-to-left language mirrors.

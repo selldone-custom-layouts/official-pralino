@@ -13,7 +13,7 @@
   -->
 
 <!--
-  Domino — the address book (domino-design/addresses-b.html): "Address
+  Pralino — the address book (pralino-design/addresses-b.html): "Address
   book" with "Add an address", then each saved address as the mockup's row
   (the pin, its name — or who receives it — the address on one line, the
   phone; Edit and Remove, Remove asks once in the row). No address yet: the
@@ -23,47 +23,47 @@
   in one step. Selldone keeps no "default" address, so none is marked.
 -->
 <template>
-  <div class="acc-p dm-abook">
+  <div class="acc-p pr-abook">
     <div class="ab-hd">
-      <h2 class="h3x">{{ t("domino.acc.book", "Address book") }}</h2>
-      <button class="btn sm soft" type="button" @click="showAdd"><dm-icon name="plus" />{{ t("domino.acc.addAddress", "Add an address") }}</button>
+      <h2 class="h3x">{{ t("pralino.acc.book", "Address book") }}</h2>
+      <button class="btn sm soft" type="button" @click="showAdd"><pr-icon name="plus" />{{ t("pralino.acc.addAddress", "Add an address") }}</button>
     </div>
-    <div v-if="busy && !loaded" :aria-label="t('domino.acc.loadingBook', 'Loading your addresses')" class="dm-od-load" role="status"><span class="dm-od-sk -row"></span></div>
+    <div v-if="busy && !loaded" :aria-label="t('pralino.acc.loadingBook', 'Loading your addresses')" class="pr-od-load" role="status"><span class="pr-od-sk -row"></span></div>
     <ul v-else class="abl">
       <li v-for="address in addresses" :key="address.id" class="ab">
-        <span class="mc-ic"><dm-icon :name="iconOf(address)" /></span>
+        <span class="mc-ic"><pr-icon :name="iconOf(address)" /></span>
         <div class="ab-tx">
-          <b>{{ address.title || address.name || t("domino.acc.address", "Address") }}</b>
+          <b>{{ address.title || address.name || t("pralino.acc.address", "Address") }}</b>
           <p v-if="address.title && address.name">{{ address.name }}</p>
           <p>{{ linesOf(address).join(", ") }}</p>
           <p v-if="address.phone">{{ address.phone }}</p>
-          <p v-if="address.message" class="dm-od-note">“{{ address.message }}”</p>
+          <p v-if="address.message" class="pr-od-note">“{{ address.message }}”</p>
         </div>
         <div class="ab-a">
           <template v-if="confirming === address.id">
-            <span class="dm-ab-ask">{{ t("domino.acc.deleteAsk", "Remove this address?") }}</span>
-            <button :aria-disabled="busy_delete ? 'true' : undefined" class="qlink dm-danger" type="button" @click="busy_delete || remove(address)">{{ t("domino.acc.remove", "Remove") }}</button>
-            <button class="qlink" type="button" @click="confirming = null">{{ t("domino.acc.keep", "Keep") }}</button>
+            <span class="pr-ab-ask">{{ t("pralino.acc.deleteAsk", "Remove this address?") }}</span>
+            <button :aria-disabled="busy_delete ? 'true' : undefined" class="qlink pr-danger" type="button" @click="busy_delete || remove(address)">{{ t("pralino.acc.remove", "Remove") }}</button>
+            <button class="qlink" type="button" @click="confirming = null">{{ t("pralino.acc.keep", "Keep") }}</button>
           </template>
           <template v-else>
-            <button class="qlink" type="button" @click="showEdit(address)"><dm-icon name="edit" />{{ t("domino.acc.edit", "Edit") }}</button>
+            <button class="qlink" type="button" @click="showEdit(address)"><pr-icon name="edit" />{{ t("pralino.acc.edit", "Edit") }}</button>
             <button
-              :aria-label="address.title ? t('domino.acc.removeNamed', 'Remove {name}', { name: address.title }) : t('domino.acc.removeThis', 'Remove this address')"
+              :aria-label="address.title ? t('pralino.acc.removeNamed', 'Remove {name}', { name: address.title }) : t('pralino.acc.removeThis', 'Remove this address')"
               class="qlink"
               type="button"
               @click="confirming = address.id"
             >
-              <dm-icon name="trash" />{{ t("domino.acc.remove", "Remove") }}
+              <pr-icon name="trash" />{{ t("pralino.acc.remove", "Remove") }}
             </button>
           </template>
         </div>
       </li>
       <li v-if="!addresses.length" class="ab-empty">
-        <dm-empty :text="t('domino.acc.noAddressP', 'Add an address once and choose it at checkout next time.')" :title="t('domino.acc.noAddressT', 'No saved addresses')" icon="pin">
+        <pr-empty :text="t('pralino.acc.noAddressP', 'Add an address once and choose it at checkout next time.')" :title="t('pralino.acc.noAddressT', 'No saved addresses')" icon="pin">
           <template #acts
-            ><button class="btn" type="button" @click="showAdd"><dm-icon name="plus" />{{ t("domino.acc.addAddress", "Add an address") }}</button></template
+            ><button class="btn" type="button" @click="showAdd"><pr-icon name="plus" />{{ t("pralino.acc.addAddress", "Add an address") }}</button></template
           >
-        </dm-empty>
+        </pr-empty>
       </li>
     </ul>
 
@@ -72,8 +72,8 @@
       :busy="busy_save"
       :center="center"
       :countries="$shop?.countries?.length ? $shop.countries : null"
-      :heading="editing ? t('domino.acc.editAddress', 'Edit the address') : t('domino.acc.addAddress', 'Add an address')"
-      :lede="noMap ? t('domino.acc.sameFieldsTyped', 'The same fields as checkout.') : t('domino.acc.sameFields', 'Find it on the map or type it in, as at checkout.')"
+      :heading="editing ? t('pralino.acc.editAddress', 'Edit the address') : t('pralino.acc.addAddress', 'Add an address')"
+      :lede="noMap ? t('pralino.acc.sameFieldsTyped', 'The same fields as checkout.') : t('pralino.acc.sameFields', 'Find it on the map or type it in, as at checkout.')"
       :no-map="noMap"
       :phone-required="false"
       :receiver-info="editing"
@@ -92,15 +92,15 @@ import { MapHelper } from "@selldone/core-js/helper";
 import { ShopOptionsHelper } from "@selldone/core-js/helper/shop/ShopOptionsHelper";
 import KalioAddressSheet from "@app-storefront/components/kalio/checkout/KalioAddressSheet.vue";
 import { t } from "../../../components/kalio/i18n/kalio-i18n";
-import DmIcon from "../../../components/domino/DmIcon.vue";
-import DmEmpty from "../../../components/domino/ui/DmEmpty.vue";
+import PrIcon from "../../../components/pralino/PrIcon.vue";
+import PrEmpty from "../../../components/pralino/ui/PrEmpty.vue";
 
 /* The fields an address keeps (Selldone's address book). */
 const FIELDS = ["country", "state", "state_code", "city", "address", "location", "no", "unit", "name", "phone", "message", "postal"];
 
 export default {
   name: "StorefrontUserAddresses",
-  components: { KalioAddressSheet, DmIcon, DmEmpty },
+  components: { KalioAddressSheet, PrIcon, PrEmpty },
   inject: ["$shop"],
 
   data() {

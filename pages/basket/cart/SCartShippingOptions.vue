@@ -13,7 +13,7 @@
   -->
 
 <!--
-  Domino — one package's way to the shopper (checkout-b.html "Delivery",
+  Pralino — one package's way to the shopper (checkout-b.html "Delivery",
   delivery-b.html): the shop's ways as method cards (the mockup's .mc: a
   radio, the icon, the name, the fee, a line about it), its pickup points as
   cards too, then the way's time windows as chips (one chosen, a ring
@@ -23,14 +23,14 @@
   .time_spans, as Selldone's own "choose a time" does.
 -->
 <template>
-  <section class="dm-ship">
+  <section class="pr-ship">
     <!-- The delivery sheet (delivery-b): every way as a row with its days,
          its fee and its own windows; a window of another way picks that way. -->
-    <div v-if="dmShipSheet && (transportation_exclude_pickup?.length || pickups?.length)" :aria-label="t('domino.co.method', 'Delivery method')" class="dls" role="radiogroup">
+    <div v-if="dmShipSheet && (transportation_exclude_pickup?.length || pickups?.length)" :aria-label="t('pralino.co.method', 'Delivery method')" class="dls" role="radiogroup">
       <div v-for="item in transportation_exclude_pickup" :key="item.type" :class="['dl', { on: isWayOn(item) }]">
         <label class="dl-hd">
           <input :aria-label="wayTitleOf(item)" :checked="isWayOn(item)" :name="radioName" class="rdo" type="radio" :value="item.type" @change="pickWay(item)" />
-          <span class="mc-ic"><dm-icon :name="wayIcon(item.type)" /></span>
+          <span class="mc-ic"><pr-icon :name="wayIcon(item.type)" /></span>
           <span class="dl-t"
             ><b>{{ wayTitleOf(item) }}</b><small v-if="noteOf(item)">{{ noteOf(item) }}</small></span
           >
@@ -39,13 +39,13 @@
         <div class="dl-b">
           <ul class="ils sm">
             <li class="il">
-              <span class="il-ic"><dm-icon name="cal" /></span>
+              <span class="il-ic"><pr-icon name="cal" /></span>
               <div class="il-tx">
                 <b>{{ daysOf(item) }}</b><span>{{ feeLineOf(item) }}</span>
               </div>
             </li>
           </ul>
-          <div v-if="winsOf(item).length" :aria-label="t('domino.co.windowsOf', '{way} windows', { way: wayTitleOf(item) })" class="chips-r" role="radiogroup">
+          <div v-if="winsOf(item).length" :aria-label="t('pralino.co.windowsOf', '{way} windows', { way: wayTitleOf(item) })" class="chips-r" role="radiogroup">
             <button
               v-for="w in winsOf(item)"
               :key="w"
@@ -55,7 +55,7 @@
               type="button"
               @click="pickWayWindow(item, w)"
             >
-              <dm-icon name="clock" />{{ windowName({ value: w, name: w }) }}
+              <pr-icon name="clock" />{{ windowName({ value: w, name: w }) }}
             </button>
           </div>
         </div>
@@ -63,28 +63,28 @@
       <div v-for="(pickup, i) in pickups || []" :key="'p' + i" :class="['dl', { on: isPickupOn(pickup) }]">
         <label class="dl-hd">
           <input :aria-label="pickupTitle(pickup)" :checked="isPickupOn(pickup)" :name="radioName" class="rdo" type="radio" :value="'pickup-' + i" @change="pickPickup(pickup)" />
-          <span class="mc-ic"><dm-icon name="store" /></span>
+          <span class="mc-ic"><pr-icon name="store" /></span>
           <span class="dl-t"
             ><b>{{ pickupTitle(pickup) }}</b><small v-if="pickup.message">{{ pickup.message }}</small></span
           >
-          <span class="mc-f">{{ t("domino.co.free", "Free") }}</span>
+          <span class="mc-f">{{ t("pralino.co.free", "Free") }}</span>
         </label>
         <div class="dl-b">
           <ul class="ils sm">
             <li class="il">
-              <span class="il-ic"><dm-icon name="pin" /></span>
+              <span class="il-ic"><pr-icon name="pin" /></span>
               <div class="il-tx">
                 <b>{{ [pickup.address, pickup.city].filter(Boolean).join(", ") }}</b><span v-if="pickup.message">{{ pickup.message }}</span>
               </div>
             </li>
             <li v-if="openWords" class="il">
-              <span class="il-ic"><dm-icon name="clock" /></span>
+              <span class="il-ic"><pr-icon name="clock" /></span>
               <div class="il-tx">
-                <b>{{ openWords }}</b><span>{{ t("domino.co.comeToCounter", "Choose a window and come to the counter") }}</span>
+                <b>{{ openWords }}</b><span>{{ t("pralino.co.comeToCounter", "Choose a window and come to the counter") }}</span>
               </div>
             </li>
           </ul>
-          <div v-if="winsOf(pickup_transportation).length" :aria-label="t('domino.co.windowsOf', '{way} windows', { way: pickupTitle(pickup) })" class="chips-r" role="radiogroup">
+          <div v-if="winsOf(pickup_transportation).length" :aria-label="t('pralino.co.windowsOf', '{way} windows', { way: pickupTitle(pickup) })" class="chips-r" role="radiogroup">
             <button
               v-for="w in winsOf(pickup_transportation)"
               :key="w"
@@ -94,16 +94,16 @@
               type="button"
               @click="pickPickupWindow(pickup, w)"
             >
-              <dm-icon name="clock" />{{ windowName({ value: w, name: w }) }}
+              <pr-icon name="clock" />{{ windowName({ value: w, name: w }) }}
             </button>
           </div>
         </div>
       </div>
     </div>
-    <div v-else-if="transportation_exclude_pickup?.length || pickups?.length" :aria-label="t('domino.co.method', 'Delivery method')" class="mcs" role="radiogroup">
+    <div v-else-if="transportation_exclude_pickup?.length || pickups?.length" :aria-label="t('pralino.co.method', 'Delivery method')" class="mcs" role="radiogroup">
       <label v-for="item in transportation_exclude_pickup" :key="item.type" :class="['mc', { on: transportation?.type === item.type && !selectedPickup }]">
         <input :aria-label="wayTitleOf(item)" :checked="transportation?.type === item.type && !selectedPickup" :name="radioName" class="rdo" type="radio" :value="item.type" @change="pickWay(item)" />
-        <span class="mc-ic"><dm-icon :name="wayIcon(item.type)" /></span>
+        <span class="mc-ic"><pr-icon :name="wayIcon(item.type)" /></span>
         <span class="mc-t">{{ wayTitleOf(item) }}</span>
         <span class="mc-f">{{ feeOf(item) }}</span>
         <span v-if="noteOf(item)" class="mc-n">{{ noteOf(item) }}</span>
@@ -118,17 +118,17 @@
           :value="'pickup-' + i"
           @change="pickPickup(pickup)"
         />
-        <span class="mc-ic"><dm-icon name="store" /></span>
+        <span class="mc-ic"><pr-icon name="store" /></span>
         <span class="mc-t">{{ pickupTitle(pickup) }}</span>
-        <span class="mc-f">{{ t("domino.co.free", "Free") }}</span>
+        <span class="mc-f">{{ t("pralino.co.free", "Free") }}</span>
         <span class="mc-n">{{ pickup.message || MapHelper.GenerateFullAddressFromMapInfo(pickup) }}</span>
       </label>
     </div>
 
     <template v-if="transportation">
       <div v-if="windowsOn && timeItems.length && !dmShipSheet" class="wins">
-        <p class="fl">{{ selectedPickup ? t("domino.co.pickupWindow", "Pickup window") : t("domino.co.deliveryWindow", "Delivery window") }}</p>
-        <div :aria-label="t('domino.co.window', 'Time window')" class="chips-r" role="radiogroup">
+        <p class="fl">{{ selectedPickup ? t("pralino.co.pickupWindow", "Pickup window") : t("pralino.co.deliveryWindow", "Delivery window") }}</p>
+        <div :aria-label="t('pralino.co.window', 'Time window')" class="chips-r" role="radiogroup">
           <button
             v-for="span in timeItems"
             :key="span.value"
@@ -139,18 +139,18 @@
             type="button"
             @click="pickWindow(span.value)"
           >
-            <dm-icon name="clock" />{{ windowName(span) }}
+            <pr-icon name="clock" />{{ windowName(span) }}
           </button>
         </div>
       </div>
       <div v-if="need_ask_shipping_date" class="wins">
-        <label class="fld dm-ship-date">
-          <span class="fl">{{ t("domino.co.date", "Date") }}</span>
+        <label class="fld pr-ship-date">
+          <span class="fl">{{ t("pralino.co.date", "Date") }}</span>
           <input :min="minDate" :type="transportation.eta === ETA.date.code ? 'date' : 'datetime-local'" :value="dateValue" class="inp" @change="setDate($event.target.value)" />
         </label>
       </div>
       <p v-if="max_lead_time > 0 || transportation?.etd" class="cdlv-n">
-        <dm-icon name="clock" />{{ t("domino.co.readyIn", { one: "Ready in about {n} hour.", other: "Ready in about {n} hours." }, { n: max_lead_time + (transportation?.etd ? transportation.etd : 0) }) }}
+        <pr-icon name="clock" />{{ t("pralino.co.readyIn", { one: "Ready in about {n} hour.", other: "Ready in about {n} hours." }, { n: max_lead_time + (transportation?.etd ? transportation.etd : 0) }) }}
       </p>
     </template>
   </section>
@@ -170,9 +170,9 @@ import { TimeSpans } from "@selldone/core-js/enums/logistic/TimeSpans.ts";
 import TemplateMixin from "@selldone/components-vue/mixin/template/TemplateMixin.ts";
 import ProductMixin from "@selldone/components-vue/mixin/product/ProductMixin.ts";
 import MapMixin from "@selldone/components-vue/mixin/map/MapMixin.ts";
-import DmIcon from "../../../components/domino/DmIcon.vue";
-import { shopWay, wayIcon } from "../../../components/domino/buy/dm-cart";
-import { openLine, shopFacts, wayTitle } from "../../../components/domino/dm";
+import PrIcon from "../../../components/pralino/PrIcon.vue";
+import { shopWay, wayIcon } from "../../../components/pralino/buy/pr-cart";
+import { openLine, shopFacts, wayTitle } from "../../../components/pralino/pr";
 
 export default defineComponent({
   name: "SCartShippingOptions",
@@ -180,7 +180,7 @@ export default defineComponent({
 
   components: {
     ProductsDenseImagesCircles,
-    DmIcon,
+    PrIcon,
   },
   inject: { $shop: { default: null }, dmShipSheet: { default: false } },
   emits: ["update:transportation", "set-basket-config", "pickupSelected"],
@@ -220,7 +220,7 @@ export default defineComponent({
   computed: {
     /* One radio group per package (the page and the delivery sheet each draw one). */
     radioName() {
-      if (!this._dmUid) this._dmUid = "dm-ship-" + Math.random().toString(36).slice(2, 8);
+      if (!this._dmUid) this._dmUid = "pr-ship-" + Math.random().toString(36).slice(2, 8);
       return this._dmUid;
     },
     /* The way offers parts of the day to choose from. */
@@ -487,7 +487,7 @@ export default defineComponent({
     moneyFrom,
     t,
     wayIcon,
-    /* ── Domino ── */
+    /* ── Pralino ── */
     /* A pickup point's card title: the pickup way's own title, else "Pickup at <place>". */
     pickupTitle(pickup) {
       return this.pickup_transportation?.title || t("bakini.way.pickupAt", "Pickup at {place}", { place: pickup.title || pickup.name || pickup.address });
@@ -528,7 +528,7 @@ export default defineComponent({
     daysOf(given) {
       const item = { ...given, ...shopWay(this.$shop, given) };
       const days = Array.isArray(item.days) ? item.days : [];
-      if (!days.length || days.length >= 7) return t("domino.co.everyDay", "Every day");
+      if (!days.length || days.length >= 7) return t("pralino.co.everyDay", "Every day");
       const names = days.map((d) => (WeekDays[d] ? this.$t(WeekDays[d].name) : d));
       try {
         return new Intl.ListFormat(document.documentElement.lang || "en", { style: "short", type: "conjunction" }).format(names);
@@ -539,10 +539,10 @@ export default defineComponent({
     /* "Free on orders over $500", "$10.00 per order" or "No delivery fee". */
     feeLineOf(given) {
       const item = { ...given, ...shopWay(this.$shop, given) };
-      if (item.free_shipping && item.free_shipping_limit > 0) return t("domino.co.freeOverOrders", "Free on orders over {amount}", { amount: moneyFrom(item.free_shipping_limit, item.currency, { short: "auto" }) });
+      if (item.free_shipping && item.free_shipping_limit > 0) return t("pralino.co.freeOverOrders", "Free on orders over {amount}", { amount: moneyFrom(item.free_shipping_limit, item.currency, { short: "auto" }) });
       const fee = Number(item.const) || 0;
-      if (item.free_shipping || !fee) return t("domino.co.noFee", "No delivery fee");
-      return t("domino.co.perOrder", "{fee} per order", { fee: moneyFrom(fee, item.currency) });
+      if (item.free_shipping || !fee) return t("pralino.co.noFee", "No delivery fee");
+      return t("pralino.co.perOrder", "{fee} per order", { fee: moneyFrom(fee, item.currency) });
     },
     /* The parts of the day a way offers (when it offers a choice). */
     winsOf(given) {

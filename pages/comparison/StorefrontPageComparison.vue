@@ -13,19 +13,19 @@
   -->
 
 <!--
-  The compare page is Domino's (DmCompare: domino-design/compare-b.html),
+  The compare page is Pralino's (PrCompare: pralino-design/compare-b.html),
   built on Kalio's compare logic. The address keeps Selldone's ?list=
   format, so its old links still open here.
 -->
 <template>
-  <dm-compare />
+  <pr-compare />
 </template>
 
 <script lang="ts">
-import DmCompare from "../../components/domino/compare/DmCompare.vue";
+import PrCompare from "../../components/pralino/compare/PrCompare.vue";
 
 export default {
   name: "StorefrontPageComparison",
-  components: { DmCompare },
+  components: { PrCompare },
 };
 </script>

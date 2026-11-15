@@ -1,6 +1,6 @@
 // docs/screenshots from the live shop: desktop 1440×900 and phone 390×844 (home, collection, product,
 // a filled bag), the dark home on both, the Theme row, and a 2400×1260 cover.
-//   node --use-system-ca scripts/doc-shots.cjs [base=https://domino.selldone.shop]
+//   node --use-system-ca scripts/doc-shots.cjs [base=https://pralino.selldone.shop]
 // One browser, one page at a time (the live shop rate-limits parallel browsers). The bag is filled
 // through the Layout's own "Add to bag" (a guest bag; nothing is ordered) and emptied again at the end.
 "use strict";
@@ -8,7 +8,7 @@ const path = require("path");
 const fs = require("fs");
 const { chromium } = require("../kalio-marketplace/node_modules/playwright");
 const sharp = require("../kalio-marketplace/node_modules/sharp");
-const base = (process.argv[2] || "https://domino.selldone.shop").replace(/\/$/, "");
+const base = (process.argv[2] || "https://pralino.selldone.shop").replace(/\/$/, "");
 const OUT = path.resolve(__dirname, "../docs/screenshots");
 fs.mkdirSync(OUT, { recursive: true });
 const push = (pg, to) =>
@@ -34,7 +34,7 @@ async function settle(pg, ms = 3000) {
 }
 async function emptyBag(pg) {
   await pg.goto(base + "/basket/PHYSICAL", { waitUntil: "domcontentloaded", timeout: 180000 });
-  await pg.waitForSelector(".dm .ftr", { timeout: 180000 });
+  await pg.waitForSelector(".pr .ftr", { timeout: 180000 });
   await pg.waitForTimeout(4000);
   for (let i = 0; i < 8; i++) {
     const rm = pg.locator("button.cr-rm").filter({ visible: true }).first();
@@ -54,12 +54,12 @@ async function shoot(phone, mode, jobs, after) {
   });
   await ctx.addInitScript((m) => {
     try {
-      localStorage.setItem("domino-theme", JSON.stringify({ palette: "pistachio", mode: m }));
+      localStorage.setItem("pralino-theme", JSON.stringify({ palette: "pistachio", mode: m }));
     } catch (e) {}
   }, mode);
   const pg = await ctx.newPage();
   await pg.goto(base + "/", { waitUntil: "domcontentloaded", timeout: 180000 });
-  await pg.waitForSelector(".dm .ftr", { timeout: 180000 });
+  await pg.waitForSelector(".pr .ftr", { timeout: 180000 });
   for (const [name, fn] of jobs) {
     await fn(pg);
     const file = path.join(OUT, name + ".jpg");
@@ -114,7 +114,7 @@ async function shoot(phone, mode, jobs, after) {
       },
     ],
   ]);
-  // the cover: the desktop home and the phone home on Domino's cream, side by side
+  // the cover: the desktop home and the phone home on Pralino's cream, side by side
   const desk = await sharp(path.join(OUT, "desktop-home.jpg")).resize(1760, 1100).toBuffer();
   const ph = await sharp(path.join(OUT, "phone-home.jpg")).resize(476, 1030).toBuffer();
   await sharp({ create: { width: 2400, height: 1260, channels: 3, background: "#f3e9de" } })

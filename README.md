@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/screenshots/cover.jpg" alt="Domino Cocoa Patisserie, a cocoa-and-pistachio storefront Layout for Selldone, on desktop and phone" width="100%">
+  <img src="docs/screenshots/cover.jpg" alt="Pralino Cocoa Patisserie, a cocoa-and-pistachio storefront Layout for Selldone, on desktop and phone" width="100%">
 </p>
 
-<h1 align="center">Domino Cocoa Patisserie</h1>
+<h1 align="center">Pralino Cocoa Patisserie</h1>
 
 <p align="center">
   <b>A single bakery in cocoa and pistachio: a cream ground, cocoa ink, a cocoa header and footer, one pistachio accent, rounded photos and pill buttons.</b><br>
@@ -10,19 +10,19 @@
 </p>
 
 <p align="center">
-  <a href="https://domino.selldone.shop"><img src="https://img.shields.io/badge/live%20shop-domino.selldone.shop-5A7440?style=flat-square" alt="Live shop"></a>
-  <a href="https://github.com/selldone-custom-layouts/official-domino/wiki"><img src="https://img.shields.io/badge/docs-wiki-3A2A22?style=flat-square" alt="Wiki"></a>
-  <a href="https://github.com/selldone-custom-layouts/official-domino/wiki/Install-with-AI"><img src="https://img.shields.io/badge/set%20up-with%20AI-F7F1EA?style=flat-square" alt="Set up with AI"></a>
+  <a href="https://pralino.selldone.shop"><img src="https://img.shields.io/badge/live%20shop-pralino.selldone.shop-5A7440?style=flat-square" alt="Live shop"></a>
+  <a href="https://github.com/selldone-custom-layouts/official-pralino/wiki"><img src="https://img.shields.io/badge/docs-wiki-3A2A22?style=flat-square" alt="Wiki"></a>
+  <a href="https://github.com/selldone-custom-layouts/official-pralino/wiki/Install-with-AI"><img src="https://img.shields.io/badge/set%20up-with%20AI-F7F1EA?style=flat-square" alt="Set up with AI"></a>
   <img src="https://img.shields.io/badge/Selldone-Layout-2B2F7A?style=flat-square" alt="Selldone Layout">
   <img src="https://img.shields.io/badge/Vue-3-1fc8a9?style=flat-square&logo=vuedotjs&logoColor=white" alt="Vue 3">
   <img src="https://img.shields.io/badge/languages-en%20·%20ar-26333A?style=flat-square" alt="Languages">
 </p>
 
 <p align="center">
-  <a href="https://domino.selldone.shop"><b>Open the live shop</b></a> ·
-  <a href="https://github.com/selldone-custom-layouts/official-domino/wiki/Install-with-AI">Set it up with AI</a> ·
-  <a href="https://github.com/selldone-custom-layouts/official-domino/wiki/Manual-Setup">Manual setup</a> ·
-  <a href="https://github.com/selldone-custom-layouts/official-domino/wiki/Shop-Requirements">What your shop needs</a> ·
+  <a href="https://pralino.selldone.shop"><b>Open the live shop</b></a> ·
+  <a href="https://github.com/selldone-custom-layouts/official-pralino/wiki/Install-with-AI">Set it up with AI</a> ·
+  <a href="https://github.com/selldone-custom-layouts/official-pralino/wiki/Manual-Setup">Manual setup</a> ·
+  <a href="https://github.com/selldone-custom-layouts/official-pralino/wiki/Shop-Requirements">What your shop needs</a> ·
   <a href="https://github.com/selldone-custom-layouts">All Selldone custom layouts</a>
 </p>
 
@@ -30,7 +30,7 @@
 
 ## What it is
 
-**Domino Cocoa Patisserie** dresses a single pâtisserie in cocoa and pistachio, in the manner of a calm bakery website: a top bar with the counter's hours and contact, a cocoa header with the shop's name as a centred italic wordmark, a hero of the collection names over photos, counters on a scalloped cocoa band, the best-selling collections as cards, how ordering works, the ways to receive an order, a gallery of the collections, today's selection as rows, a photo band, a marquee of the collections and the journal. It was drawn for **Bakio**, a bakery that sells individual pastries for courier delivery, worldwide shipping and pickup, paid in cash on delivery.
+**Pralino Cocoa Patisserie** dresses a single pâtisserie in cocoa and pistachio, in the manner of a calm bakery website: a top bar with the counter's hours and contact, a cocoa header with the shop's name as a centred italic wordmark, a hero of the collection names over photos, counters on a scalloped cocoa band, the best-selling collections as cards, how ordering works, the ways to receive an order, a gallery of the collections, today's selection as rows, a photo band, a marquee of the collections and the journal. It was drawn for **Bakio**, a bakery that sells individual pastries for courier delivery, worldwide shipping and pickup, paid in cash on delivery.
 
 - a cream ground (`#f7f1ea`) and cream cards with cocoa ink (`#3a2a22`); a cocoa top bar and header, a dark cocoa footer;
 - **one** pistachio `#5a7440` for every action (buttons, chosen states, links); on the cocoa header and footer, its light shade;
@@ -40,7 +40,7 @@
 - light by default, with a cocoa-night dark mode; a **Theme** row in the footer on the showcase shop: four palettes (Pistachio, Cherry, Caramel, Blueberry), a **Custom colour** and Light / Dark;
 - it says **bag**, never cart; every word it writes is in English and Arabic (right to left).
 
-It runs on **[domino.selldone.shop](https://domino.selldone.shop)**, one domain of the Selldone shop Bakio (Selldone lets each domain of a shop carry its own Layout; the shop's default and its other domains keep theirs).
+It runs on **[pralino.selldone.shop](https://pralino.selldone.shop)**, one domain of the Selldone shop Bakio (Selldone lets each domain of a shop carry its own Layout; the shop's default and its other domains keep theirs).
 
 Everything is read live from the shop: its title (drawn as the wordmark), collections, products, prices and savings, sales (for the hero, the collection cards and today's selection), delivery ways with their days, fees and time windows, the pickup counter and its hours, the way to pay, the articles. Nothing about Bakio is written in the code, so another bakery that imports the Layout gets its own data. Selldone's own bag, checkout, payments and orders keep working underneath.
 
@@ -55,7 +55,7 @@ Everything is read live from the shop: its title (drawn as the wordmark), collec
 
 | Dark mode (desktop) | Dark mode (phone) | The Theme row (footer) |
 | --- | --- | --- |
-| ![Domino in dark mode](docs/screenshots/desktop-dark.jpg) | ![Domino in dark mode on a phone](docs/screenshots/phone-dark.jpg) | ![The Theme row in the footer](docs/screenshots/desktop-theme.jpg) |
+| ![Pralino in dark mode](docs/screenshots/desktop-dark.jpg) | ![Pralino in dark mode on a phone](docs/screenshots/phone-dark.jpg) | ![The Theme row in the footer](docs/screenshots/desktop-theme.jpg) |
 
 ## Highlights
 
@@ -74,12 +74,12 @@ Everything is read live from the shop: its title (drawn as the wordmark), collec
 Every check runs one browser at a time against the live shop, at 1440px and 390px, dark and light, a custom yellow brand colour and Arabic (right to left). Each is delivered at **TOTAL 0**.
 
 <!-- TESTS:START -->
-Live shop **domino.selldone.shop**, version **1.0.2**, 14 November 2026 (`CIRCLE_CURRENCIES=USD,AED,DKK,SAR bash scripts/run-checks.sh https://domino.selldone.shop <logs>`): 28 checks, each at 1440px and 390px.
+Live shop **pralino.selldone.shop**, version **1.0.2**, 14 November 2026 (`CIRCLE_CURRENCIES=USD,AED,DKK,SAR bash scripts/run-checks.sh https://pralino.selldone.shop <logs>`): 28 checks, each at 1440px and 390px.
 
 | Check | What it looks for | Where | TOTAL |
 | --- | --- | --- | --- |
 | Ring sweep (dark, light, Arabic) | every selection ring and edge drawn inside its box | 17 pages (home, collection, deals, search, two products, compare, journal, article, About, Terms, Privacy, Contact, FAQ, 404, bag, account), 8 in Arabic | **0** |
-| Card edge (kit; Domino's cards, dark and light) | no card's content touching its edge | home, collection, search, deals, journal, About, Terms, FAQ, Contact, account | **0** |
+| Card edge (kit; Pralino's cards, dark and light) | no card's content touching its edge | home, collection, search, deals, journal, About, Terms, FAQ, Contact, account | **0** |
 | Corner clear | the quick-view eye on a card never on or touching words | 8 pages, 390 to 1920px | **0** |
 | Circle fit (light, dark, Arabic; USD, AED, DKK, SAR; long prices) | the words in any circle stay inside it, also with a made-up "XXXX 1,234,567" in every circle | home, deals, two products | **0** |
 | Contrast (dark, light, yellow brand, Arabic) | every word at 4.5:1 or better on what is really behind it | 17 pages, 8 for yellow and Arabic | **0** |
@@ -91,37 +91,37 @@ Live shop **domino.selldone.shop**, version **1.0.2**, 14 November 2026 (`CIRCLE
 | Console sweep | no console or page error on any page type, opened in-app; every grouped chunk of the release evaluates | 26 pages and flows (product pages, compare, order, account, sign-in sheet, bag drawer, checkout, delivery sheet, address sheet, payment window…), light and dark, English and Arabic, 1440 and 390 | **0** |
 | Checkout walk | the guest checkout from "Add to bag" to Selldone's payment window, compared with the mockups; nothing is ordered and the bag is emptied | desktop and phone | **0** |
 
-Bakio sells in USD only, so AED, DKK and SAR stay USD on its pages; the long made-up amount stands in for them. The same suite was at 0 on 1.0.0 and 1.0.1 too. 1.0.2 put Selldone's pickup chip under the product's price and its hover card in Domino's dress (it was a black label) and drew Selldone's cookie-settings icon in the footer's light ink. The walk on 1.0.0 led to 1.0.1: the delivery sheet drawn as the mockup's rows (each way with its days, fee line and its own windows), the fee alone on the method card, "Almost there" only after a place attempt, the checkout never wider than a phone (Selldone's coupon row), the discount code and coupons in Domino's dress.
+Bakio sells in USD only, so AED, DKK and SAR stay USD on its pages; the long made-up amount stands in for them. The same suite was at 0 on 1.0.0 and 1.0.1 too. 1.0.2 put Selldone's pickup chip under the product's price and its hover card in Pralino's dress (it was a black label) and drew Selldone's cookie-settings icon in the footer's light ink. The walk on 1.0.0 led to 1.0.1: the delivery sheet drawn as the mockup's rows (each way with its days, fee line and its own windows), the fee alone on the method card, "Almost there" only after a place attempt, the checkout never wider than a phone (Selldone's coupon row), the discount code and coupons in Pralino's dress.
 <!-- TESTS:END -->
 
 ## Languages
 
-Every word Domino writes goes through `t("key", "English")` ([`components/kalio/i18n/`](components/kalio/i18n/)): the shared words in `base/<lang>.ts`, the Layout's own in `domino.<lang>.ts` (keys `domino.*`), and the `bakini.*` words the shared code still uses in `bakini.<lang>.ts`. Arabic loads only when a visitor picks it and turns the whole page right to left. The wiki page [Customize](https://github.com/selldone-custom-layouts/official-domino/wiki/Customize) has the steps for another language.
+Every word Pralino writes goes through `t("key", "English")` ([`components/kalio/i18n/`](components/kalio/i18n/)): the shared words in `base/<lang>.ts`, the Layout's own in `pralino.<lang>.ts` (keys `pralino.*`), and the `bakini.*` words the shared code still uses in `bakini.<lang>.ts`. Arabic loads only when a visitor picks it and turns the whole page right to left. The wiki page [Customize](https://github.com/selldone-custom-layouts/official-pralino/wiki/Customize) has the steps for another language.
 
 ## Theme and colours
 
-Domino runs the shared theme switcher (`components/theme-switcher/`, the same code as the other custom Layouts). On your own shop the visitor switcher is hidden, and Domino shows the theme you set in **one file**, [`components/domino/domino-theme.settings.ts`](components/domino/domino-theme.settings.ts): a palette (`pistachio`, `cherry`, `caramel`, `blueberry`) or any brand colour (`brandColor: "#F5C400"`; a light colour keeps dark words on it with `textOnBrand: "auto"`), `light` or `dark`, and whether your visitors get the switcher (`themeSwitcher: "showcase" | "on" | "off"`). The header and footer stay cocoa in every palette. Every colour is made readable automatically. An AI agent finds the steps in the "Theme" section of [`AGENTS.md`](AGENTS.md).
+Pralino runs the shared theme switcher (`components/theme-switcher/`, the same code as the other custom Layouts). On your own shop the visitor switcher is hidden, and Pralino shows the theme you set in **one file**, [`components/pralino/pralino-theme.settings.ts`](components/pralino/pralino-theme.settings.ts): a palette (`pistachio`, `cherry`, `caramel`, `blueberry`) or any brand colour (`brandColor: "#F5C400"`; a light colour keeps dark words on it with `textOnBrand: "auto"`), `light` or `dark`, and whether your visitors get the switcher (`themeSwitcher: "showcase" | "on" | "off"`). The header and footer stay cocoa in every palette. Every colour is made readable automatically. An AI agent finds the steps in the "Theme" section of [`AGENTS.md`](AGENTS.md).
 
 ## Use it on your shop
 
 | You want to… | Read |
 | --- | --- |
-| Let an AI agent (Claude Code, Codex…) set it up for your shop | [Install with AI](https://github.com/selldone-custom-layouts/official-domino/wiki/Install-with-AI) |
-| Do it yourself, step by step | [Manual Setup](https://github.com/selldone-custom-layouts/official-domino/wiki/Manual-Setup) |
-| Know what data your shop needs for the design to look right | [Shop Requirements](https://github.com/selldone-custom-layouts/official-domino/wiki/Shop-Requirements) |
-| Build, upload and verify a release | [Build and Upload](https://github.com/selldone-custom-layouts/official-domino/wiki/Build-and-Upload) |
-| Put the Layout live on your shop, or on one domain of it | [Go Live](https://github.com/selldone-custom-layouts/official-domino/wiki/Go-Live) |
-| Change the name, sections, pages, photos or languages | [Customize](https://github.com/selldone-custom-layouts/official-domino/wiki/Customize) |
-| Change the colours, dark or light, the visitor switcher | [Theme and colours](https://github.com/selldone-custom-layouts/official-domino/wiki/Theme-and-colours) |
-| Fix a blank page, a rejected upload or an old version showing | [Troubleshooting](https://github.com/selldone-custom-layouts/official-domino/wiki/Troubleshooting) |
+| Let an AI agent (Claude Code, Codex…) set it up for your shop | [Install with AI](https://github.com/selldone-custom-layouts/official-pralino/wiki/Install-with-AI) |
+| Do it yourself, step by step | [Manual Setup](https://github.com/selldone-custom-layouts/official-pralino/wiki/Manual-Setup) |
+| Know what data your shop needs for the design to look right | [Shop Requirements](https://github.com/selldone-custom-layouts/official-pralino/wiki/Shop-Requirements) |
+| Build, upload and verify a release | [Build and Upload](https://github.com/selldone-custom-layouts/official-pralino/wiki/Build-and-Upload) |
+| Put the Layout live on your shop, or on one domain of it | [Go Live](https://github.com/selldone-custom-layouts/official-pralino/wiki/Go-Live) |
+| Change the name, sections, pages, photos or languages | [Customize](https://github.com/selldone-custom-layouts/official-pralino/wiki/Customize) |
+| Change the colours, dark or light, the visitor switcher | [Theme and colours](https://github.com/selldone-custom-layouts/official-pralino/wiki/Theme-and-colours) |
+| Fix a blank page, a rejected upload or an old version showing | [Troubleshooting](https://github.com/selldone-custom-layouts/official-pralino/wiki/Troubleshooting) |
 
 The wiki's source is also in [`docs/wiki/`](docs/wiki/).
 
 ## Quick start (developers)
 
 ```bash
-git clone https://github.com/selldone-custom-layouts/official-domino.git
-cd official-domino
+git clone https://github.com/selldone-custom-layouts/official-pralino.git
+cd official-pralino
 npm run setup            # the six Selldone modules (modules/)
 for p in components translate; do git -C modules/$p apply ../../patches/modules-$p.kalio.patch; done
 npm install --force
@@ -134,36 +134,36 @@ npm run serve            # dev server on http://localhost:9140, reading the shop
 LAYOUT_ID=<your Layout id> SELLDONE_CLI_SRC=<cli clone> bash scripts/release.sh <new version> desk
 ```
 
-Leave `LAYOUT_ID` out on the first upload; use the id printed after it from then on. Never reuse a version number. Keep the build under about 360 files (the release script prints the count; Domino 1.0.1 has 273).
+Leave `LAYOUT_ID` out on the first upload; use the id printed after it from then on. Never reuse a version number. Keep the build under about 360 files (the release script prints the count; Pralino 1.0.1 has 273).
 
 ## Where things are
 
 | Area | Files |
 | --- | --- |
-| Your theme (palette, brand colour, mode, switcher) | [`components/domino/domino-theme.settings.ts`](components/domino/domino-theme.settings.ts) |
-| Domino's tokens for both modes (`:root` light, `html.dm-dark` dark) | [`style/domino-theme.scss`](style/domino-theme.scss) |
-| The mockup's stylesheets, scoped to `.dm` (generated by [`scripts/domino-css.cjs`](scripts/domino-css.cjs), never edited) | [`style/domino/`](style/domino/) |
-| The Layout's own touches; Selldone's address sheet and payment window in Domino's dress | [`style/domino-layout.scss`](style/domino-layout.scss), [`style/domino-sd.scss`](style/domino-sd.scss) |
-| Header, bag drawer and footer | [`components/domino/shell/`](components/domino/shell/) (`DominoHeader.vue`, `DominoBagDrawer.vue`, `DominoFooter.vue`) |
-| Home | [`components/domino/DominoHome.vue`](components/domino/DominoHome.vue) |
-| The wordmark, from the shop's title | [`components/domino/DominoLogo.vue`](components/domino/DominoLogo.vue) |
-| Shared data and layers (the collections, the catalogue, the shop's facts, one layer at a time) | [`components/domino/dm.ts`](components/domino/dm.ts) |
-| Shared UI (title band, card, quick view, modal, empty state, sample label, numerals, icon lines, the shop's mark) | [`components/domino/ui/`](components/domino/ui/) |
-| Photo slots and their fallbacks | [`components/domino/dm-photos.ts`](components/domino/dm-photos.ts), `DmPhoto.vue`, `DmCuts.vue` |
-| The shop's photos (optional; the slots fall back to drawings and cut-outs) | `assets/domino/<slot>.webp` and `assets/domino/hero-<collection>.webp`, names in `dm-photos.ts` |
-| Collections, search, deals, every pastry (filters and sort) | [`components/domino/shop/DmListing.vue`](components/domino/shop/DmListing.vue), [`pages/products/`](pages/products/) |
-| Product page and compare | [`components/domino/product/`](components/domino/product/), [`pages/product/`](pages/product/), [`components/domino/compare/`](components/domino/compare/) |
-| Bag and checkout, the delivery sheet | [`pages/basket/cart/`](pages/basket/cart/) with [`components/domino/buy/dm-cart.ts`](components/domino/buy/dm-cart.ts); the delivery sheet in [`pages/basket/cart/SCartShippingOptions.vue`](pages/basket/cart/SCartShippingOptions.vue) |
-| Order page | [`components/domino/order/`](components/domino/order/), [`pages/basket/order/`](pages/basket/order/) |
+| Your theme (palette, brand colour, mode, switcher) | [`components/pralino/pralino-theme.settings.ts`](components/pralino/pralino-theme.settings.ts) |
+| Pralino's tokens for both modes (`:root` light, `html.pr-dark` dark) | [`style/pralino-theme.scss`](style/pralino-theme.scss) |
+| The mockup's stylesheets, scoped to `.pr` (generated by [`scripts/pralino-css.cjs`](scripts/pralino-css.cjs), never edited) | [`style/pralino/`](style/pralino/) |
+| The Layout's own touches; Selldone's address sheet and payment window in Pralino's dress | [`style/pralino-layout.scss`](style/pralino-layout.scss), [`style/pralino-sd.scss`](style/pralino-sd.scss) |
+| Header, bag drawer and footer | [`components/pralino/shell/`](components/pralino/shell/) (`PralinoHeader.vue`, `PralinoBagDrawer.vue`, `PralinoFooter.vue`) |
+| Home | [`components/pralino/PralinoHome.vue`](components/pralino/PralinoHome.vue) |
+| The wordmark, from the shop's title | [`components/pralino/PralinoLogo.vue`](components/pralino/PralinoLogo.vue) |
+| Shared data and layers (the collections, the catalogue, the shop's facts, one layer at a time) | [`components/pralino/pr.ts`](components/pralino/pr.ts) |
+| Shared UI (title band, card, quick view, modal, empty state, sample label, numerals, icon lines, the shop's mark) | [`components/pralino/ui/`](components/pralino/ui/) |
+| Photo slots and their fallbacks | [`components/pralino/pr-photos.ts`](components/pralino/pr-photos.ts), `PrPhoto.vue`, `PrCuts.vue` |
+| The shop's photos (optional; the slots fall back to drawings and cut-outs) | `assets/pralino/<slot>.webp` and `assets/pralino/hero-<collection>.webp`, names in `pr-photos.ts` |
+| Collections, search, deals, every pastry (filters and sort) | [`components/pralino/shop/PrListing.vue`](components/pralino/shop/PrListing.vue), [`pages/products/`](pages/products/) |
+| Product page and compare | [`components/pralino/product/`](components/pralino/product/), [`pages/product/`](pages/product/), [`components/pralino/compare/`](components/pralino/compare/) |
+| Bag and checkout, the delivery sheet | [`pages/basket/cart/`](pages/basket/cart/) with [`components/pralino/buy/pr-cart.ts`](components/pralino/buy/pr-cart.ts); the delivery sheet in [`pages/basket/cart/SCartShippingOptions.vue`](pages/basket/cart/SCartShippingOptions.vue) |
+| Order page | [`components/pralino/order/`](components/pralino/order/), [`pages/basket/order/`](pages/basket/order/) |
 | Account and sign-in | [`components/kalio/account/`](components/kalio/account/), [`pages/user/`](pages/user/), [`components/kalio/shell/KalioSignIn.vue`](components/kalio/shell/KalioSignIn.vue) |
-| Journal, article, About, Terms, Privacy, FAQ, Contact, 404 | [`components/domino/read/`](components/domino/read/), [`pages/blog/`](pages/blog/), [`pages/official/`](pages/official/), [`pages/faq/`](pages/faq/), [`pages/errors/404/`](pages/errors/404/) |
-| Words (English and Arabic) | [`components/kalio/i18n/domino.en.ts`](components/kalio/i18n/domino.en.ts), [`domino.ar.ts`](components/kalio/i18n/domino.ar.ts) (`domino.*`; `bakini.*` for the shared code) |
-| How the mockup became the Layout, reversible choices, data rules and releases | [`DOMINO.md`](DOMINO.md) |
+| Journal, article, About, Terms, Privacy, FAQ, Contact, 404 | [`components/pralino/read/`](components/pralino/read/), [`pages/blog/`](pages/blog/), [`pages/official/`](pages/official/), [`pages/faq/`](pages/faq/), [`pages/errors/404/`](pages/errors/404/) |
+| Words (English and Arabic) | [`components/kalio/i18n/pralino.en.ts`](components/kalio/i18n/pralino.en.ts), [`pralino.ar.ts`](components/kalio/i18n/pralino.ar.ts) (`pralino.*`; `bakini.*` for the shared code) |
+| How the mockup became the Layout, reversible choices, data rules and releases | [`PRALINO.md`](PRALINO.md) |
 | The checks | [`scripts/run-checks.sh`](scripts/run-checks.sh) and the tools it names (`CIRCLE_CURRENCIES` for the circle checks) |
 | Release tooling | [`scripts/`](scripts/) |
 | Selldone storefront's original README | [`README.selldone.md`](README.selldone.md) |
 
-Domino started from [Bakini Noir](https://github.com/selldone-custom-layouts/official-bakini) and keeps its buy flow underneath (the Kalio base: Selldone's bag, checkout, address sheet, payment window, order, account, sign-in and compare logic; the theme and region switchers; the release scripts and the checks); every page's markup is Domino's own.
+Pralino started from [Bakini Noir](https://github.com/selldone-custom-layouts/official-bakini) and keeps its buy flow underneath (the Kalio base: Selldone's bag, checkout, address sheet, payment window, order, account, sign-in and compare logic; the theme and region switchers; the release scripts and the checks); every page's markup is Pralino's own.
 
 ## Credits and license
 

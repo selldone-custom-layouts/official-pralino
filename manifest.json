@@ -1,10 +1,10 @@
 {
   "deploy_server": "https://layouts.selldone.com",
   "deploy_path": "",
-  "package": "domino-cocoa-patisserie",
-  "name": "Domino Cocoa Patisserie",
-  "version": "1.0.2",
+  "package": "pralino-classic-patisserie",
+  "name": "Pralino Classic Patisserie",
+  "version": "1.0.0",
   "storefront": true,
   "backoffice": false,
-  "description": "A light cocoa-and-pistachio pâtisserie for a single bakery: a top bar with the shop’s hours and contact, a cocoa header with the shop’s name drawn as a centred italic wordmark, a hero of collection names over photos, counters on a scalloped cocoa band, the four best-selling collections as cards, how ordering works, three ways to receive an order, a gallery of the collections, today’s selection as rows, a photo band, a marquee of the collections and the journal; a bag drawer and a footer with a Theme row; dark through the footer."
+  "description": "A classic, editorial pâtisserie for a single bakery: white and soft-tint bands, near-black ink and a tan accent, Cormorant Garamond over Mulish, and big photography. A white header with the shop's name as a centred serif wordmark; a hero with the counter photo bleeding to the edge, a framed inset across the seam and the most-ordered collections on its dark corner; the shop in numbers and its story; the four best-selling collections as photo rows; how ordering works; an offer card beside the ways to receive an order; a gallery of the collections; today's selection as numbered rows; a full-width photo band; a marquee of the collections and the journal. One colour family follows the chosen palette (Tan, Rose, Sage, Slate, Ink or any custom colour), one small-radius shape language, light by default with a dark mode, all from the footer's Theme row."
 }

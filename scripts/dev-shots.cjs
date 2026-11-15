@@ -1,18 +1,18 @@
-// dev-shots.cjs: full-page screenshots of a Domino page on the dev server (or any address),
+// dev-shots.cjs: full-page screenshots of a Pralino page on the dev server (or any address),
 // at the given widths, light and dark, for comparing with the mockup's shots.
 //
 //   node --use-system-ca scripts/dev-shots.cjs [url] [outDir] [widths] [modes]
-//   node --use-system-ca scripts/dev-shots.cjs http://localhost:9140/ docs/dev-shots 1440,390 light,dark
+//   node --use-system-ca scripts/dev-shots.cjs http://localhost:9150/ docs/dev-shots 1440,390 light,dark
 //
 // One browser, one page at a time (Selldone answers parallel jobs with 429). The theme is set
-// the way the footer's Theme row stores it (localStorage "domino-theme"). Lazy images are made
+// the way the footer's Theme row stores it (localStorage "pralino-theme"). Lazy images are made
 // eager and the page is scrolled through once, so every photo is in the shot. Selldone's
 // checkout API (/buy/) is blocked, so nothing is ordered.
 const path = require("path");
 const fs = require("fs");
 const { chromium } = require(process.env.PLAYWRIGHT || "../kalio-marketplace/node_modules/playwright");
 
-const url = process.argv[2] || "http://localhost:9140/";
+const url = process.argv[2] || "http://localhost:9150/";
 const out = path.resolve(process.argv[3] || "docs/dev-shots");
 const widths = (process.argv[4] || "1440,390").split(",").map(Number);
 const modes = (process.argv[5] || "light,dark").split(",");
@@ -31,7 +31,7 @@ const evalJs = process.env.EVAL_FILE ? fs.readFileSync(process.env.EVAL_FILE, "u
       const ctx = await browser.newContext({ viewport: { width: w, height: w < 600 ? 844 : 900 }, deviceScaleFactor: 1, isMobile: w < 600, hasTouch: w < 600 });
       await ctx.addInitScript(([m, ls]) => {
         try {
-          localStorage.setItem("domino-theme", JSON.stringify({ palette: "pistachio", mode: m }));
+          localStorage.setItem("pralino-theme", JSON.stringify({ palette: "pistachio", mode: m }));
           for (const k of Object.keys(ls)) localStorage.setItem(k, ls[k]);
         } catch (e) {}
       }, [mode, extraLs]);
@@ -40,7 +40,7 @@ const evalJs = process.env.EVAL_FILE ? fs.readFileSync(process.env.EVAL_FILE, "u
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
       await page.goto(url, { waitUntil: "domcontentloaded", timeout: 180000 });
-      await page.waitForSelector(process.env.WAIT || ".dm .ftr", { timeout: 180000 });
+      await page.waitForSelector(process.env.WAIT || ".pr .ftr", { timeout: 180000 });
       await page.waitForTimeout(2500);
       if (evalJs) {
         await page.evaluate(evalJs);

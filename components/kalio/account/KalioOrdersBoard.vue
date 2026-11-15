@@ -1,5 +1,5 @@
 <!--
-  Domino — the shopper's orders (domino-design/account-b.html, the Orders
+  Pralino — the shopper's orders (pralino-design/account-b.html, the Orders
   panel): a row per order as the mockup's .ol-a — up to three of its photos,
   "Order SM-41" with where it stands, the date and its one line (the way ·
   window and how it is paid), the total and a chevron; the whole row opens
@@ -9,8 +9,8 @@
   error. The data is Kalio's (kalio-account.ts).
 -->
 <template>
-  <div :class="['acc-p', 'dm-orders', { '-compact': compact }]">
-    <div v-if="!compact" class="dm-or-hd">
+  <div :class="['acc-p', 'pr-orders', { '-compact': compact }]">
+    <div v-if="!compact" class="pr-or-hd">
       <div>
         <h2 class="h3x">{{ title }}</h2>
         <p v-if="line" class="co-p">{{ line }}</p>
@@ -18,42 +18,42 @@
       <kalio-order-kinds v-if="otherKinds" current="PHYSICAL" />
     </div>
 
-    <div v-if="!compact && account.orders.length" :aria-label="t('domino.acc.show', 'Show')" class="chips-r" role="tablist">
+    <div v-if="!compact && account.orders.length" :aria-label="t('pralino.acc.show', 'Show')" class="chips-r" role="tablist">
       <button v-for="f in filters" :key="f.key" :aria-selected="filter === f.key ? 'true' : 'false'" :class="['chip', { on: filter === f.key }]" role="tab" type="button" @click="pick(f.key)">
-        {{ f.word }}<small v-if="counts[f.key]" class="dm-chip-n">{{ counts[f.key] }}</small>
+        {{ f.word }}<small v-if="counts[f.key]" class="pr-chip-n">{{ counts[f.key] }}</small>
       </button>
     </div>
 
-    <div v-if="!account.loaded && !account.failed" :aria-label="t('domino.acc.loading', 'Loading your orders')" class="dm-od-load" role="status">
-      <span v-for="n in compact ? 2 : 3" :key="n" class="dm-od-sk -row"></span>
+    <div v-if="!account.loaded && !account.failed" :aria-label="t('pralino.acc.loading', 'Loading your orders')" class="pr-od-load" role="status">
+      <span v-for="n in compact ? 2 : 3" :key="n" class="pr-od-sk -row"></span>
     </div>
 
-    <dm-empty
+    <pr-empty
       v-else-if="account.failed && !account.orders.length && !USER()"
-      :text="t('domino.acc.deviceP', 'No orders on this device yet. Sign in to see the orders on your account.')"
-      :title="t('domino.acc.noOrders', 'No orders yet')"
+      :text="t('pralino.acc.deviceP', 'No orders on this device yet. Sign in to see the orders on your account.')"
+      :title="t('pralino.acc.noOrders', 'No orders yet')"
       cls="boxed"
       icon="box"
     >
-      <template #acts><button class="btn" type="button" @click="askSignIn">{{ t("domino.acc.signIn", "Sign in") }}</button></template>
-    </dm-empty>
+      <template #acts><button class="btn" type="button" @click="askSignIn">{{ t("pralino.acc.signIn", "Sign in") }}</button></template>
+    </pr-empty>
 
-    <dm-empty v-else-if="account.failed && !account.orders.length" :title="t('domino.acc.loadFailed', 'Your orders did not load')" cls="boxed" icon="info">
-      <template #acts><button class="btn quiet" type="button" @click="retry">{{ t("domino.acc.tryAgain", "Try again") }}</button></template>
-    </dm-empty>
+    <pr-empty v-else-if="account.failed && !account.orders.length" :title="t('pralino.acc.loadFailed', 'Your orders did not load')" cls="boxed" icon="info">
+      <template #acts><button class="btn quiet" type="button" @click="retry">{{ t("pralino.acc.tryAgain", "Try again") }}</button></template>
+    </pr-empty>
 
-    <dm-empty
+    <pr-empty
       v-else-if="!visible.length"
       :icon="filter === 'all' ? 'box' : 'filter'"
-      :text="filter === 'all' ? t('domino.acc.noOrdersP', 'When you place an order, it appears here with its delivery window and progress.') : ''"
-      :title="filter === 'all' ? t('domino.acc.noOrders', 'No orders yet') : emptyWords"
+      :text="filter === 'all' ? t('pralino.acc.noOrdersP', 'When you place an order, it appears here with its delivery window and progress.') : ''"
+      :title="filter === 'all' ? t('pralino.acc.noOrders', 'No orders yet') : emptyWords"
       cls="boxed"
     >
       <template #acts>
-        <router-link v-if="filter === 'all'" :to="{ path: '/' }" class="btn">{{ t("domino.acc.startShopping", "Start shopping") }}</router-link>
-        <button v-else class="btn quiet" type="button" @click="pick('all')">{{ t("domino.acc.showAll", "Show all orders") }}</button>
+        <router-link v-if="filter === 'all'" :to="{ path: '/' }" class="btn">{{ t("pralino.acc.startShopping", "Start shopping") }}</router-link>
+        <button v-else class="btn quiet" type="button" @click="pick('all')">{{ t("pralino.acc.showAll", "Show all orders") }}</button>
       </template>
-    </dm-empty>
+    </pr-empty>
 
     <ul v-else class="ol">
       <li v-for="order in visible" :key="order.id">
@@ -63,21 +63,21 @@
           ></span>
           <span class="ol-tx"
             ><b
-              >{{ t("domino.acc.orderCode", "Order {code}", { code: code(order) }) }}<span :class="['tagx', '-' + standing(order).tone]">{{ standing(order).word }}</span></b
+              >{{ t("pralino.acc.orderCode", "Order {code}", { code: code(order) }) }}<span :class="['tagx', '-' + standing(order).tone]">{{ standing(order).word }}</span></b
             ><small>{{ longDate(order.reserved_at || order.created_at) }} · {{ lineOf(order) }}</small
-            ><small v-if="chatCount(order)" class="dm-ol-chat"><dm-icon name="chat" />{{ t("domino.acc.messages", { one: "{n} message", other: "{n} messages" }, { n: chatCount(order) }) }}</small></span
+            ><small v-if="chatCount(order)" class="pr-ol-chat"><pr-icon name="chat" />{{ t("pralino.acc.messages", { one: "{n} message", other: "{n} messages" }, { n: chatCount(order) }) }}</small></span
           >
           <span class="ol-v money">{{ money(order.price, order.currency) }}</span>
-          <dm-icon cls="chev" name="right" />
+          <pr-icon cls="chev" name="right" />
         </router-link>
       </li>
     </ul>
 
-    <div v-if="canShowMore" class="dm-or-more">
-      <button :aria-disabled="account.loading ? 'true' : undefined" class="btn quiet sm" type="button" @click="account.loading || more()">{{ t("domino.acc.older", "Show older orders") }}</button>
+    <div v-if="canShowMore" class="pr-or-more">
+      <button :aria-disabled="account.loading ? 'true' : undefined" class="btn quiet sm" type="button" @click="account.loading || more()">{{ t("pralino.acc.older", "Show older orders") }}</button>
     </div>
     <router-link v-if="compact && filtered.length > limit" :to="allRoute" class="qlink">
-      {{ t("domino.acc.seeAll", { one: "See all {n} orders", other: "See all {n} orders" }, { n: account.total }) }}<dm-icon name="right" />
+      {{ t("pralino.acc.seeAll", { one: "See all {n} orders", other: "See all {n} orders" }, { n: account.total }) }}<pr-icon name="right" />
     </router-link>
   </div>
 </template>
@@ -89,9 +89,9 @@ import { reorder } from "../kalio-basket";
 import { t } from "../i18n/kalio-i18n";
 import { productImage, vendors } from "../kalio-catalog";
 import KalioOrderKinds from "./KalioOrderKinds.vue";
-import DmIcon from "../../domino/DmIcon.vue";
-import DmEmpty from "../../domino/ui/DmEmpty.vue";
-import { longDate, orderLine } from "../../domino/order/od";
+import PrIcon from "../../pralino/PrIcon.vue";
+import PrEmpty from "../../pralino/ui/PrEmpty.vue";
+import { longDate, orderLine } from "../../pralino/order/od";
 import { money } from "../../region-switcher/region";
 import {
   ORDERS_DESK,
@@ -119,7 +119,7 @@ const STEP = 10;
 
 export default {
   name: "KalioOrdersBoard",
-  components: { KalioOrderKinds, DmIcon, DmEmpty },
+  components: { KalioOrderKinds, PrIcon, PrEmpty },
   inject: ["$shop"],
 
   props: {
@@ -149,7 +149,7 @@ export default {
       return state.some((it) => it.type !== "PHYSICAL" && it.count > 0);
     },
     title() {
-      return t("domino.acc.orders", "Orders");
+      return t("pralino.acc.orders", "Orders");
     },
     line() {
       if (!account.loaded || !ORDERS_DESK) return null;
