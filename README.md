@@ -74,7 +74,25 @@ Everything is read live from the shop: its title (drawn as the wordmark), collec
 Every check runs one browser at a time against the shop, at 1440px, 1024px and 390px, dark and light, every palette and the custom colours #ffff00, #00ffff and #111111, and Arabic (right to left). Each is delivered at **TOTAL 0**.
 
 <!-- TESTS:START -->
-(filled in with the 1.0.0 results)
+Version **1.0.0**, 15 November 2026, on the dev server against the live shop data (`CIRCLE_CURRENCIES=USD,AED,DKK,SAR bash scripts/run-checks.sh http://localhost:9150 <logs>`): 49 checks.
+
+| Check | What it looks for | Where | TOTAL |
+| --- | --- | --- | --- |
+| Ring sweep (dark, light, Arabic) | every selection ring and edge drawn inside its box | 18 pages (home, collection, deals, search, two products, compare, journal, post, About, Terms, Privacy, Contact, FAQ, 404, bag, checkout, account), 9 in Arabic | **0** |
+| Card edge (kit; Pralino's cards: dark, light, Arabic) | no card's content touching its edge | home, collection, search, deals, journal, About, Terms, Privacy, FAQ, Contact, account, compare; 1440, 1024, 390 | **0** |
+| Corner clear (and Arabic) | the quick-view eye on a card never on or touching words | 9 pages, 390, 768, 900, 1024, 1280, 1366, 1440, 1920 | **0** |
+| Circle fit (light, dark, Arabic; USD, AED, DKK, SAR; long prices) | the words in any circle stay inside it, also with a made-up "XXXX 1,234,567" in every circle | home, deals, a collection, two products | **0** |
+| Contrast: Tan dark and light; Rose, Sage, Slate, Ink and the custom #ffff00, #00ffff, #111111 in both modes; Arabic light and dark | every word at 4.5:1 or better on what is really behind it | 18 pages for Tan, 9 for each other theme; 1440, 1024, 390 | **0** |
+| Contrast with layers open | the bag drawer or the phone menu open; the sign-in sheet open | home | **0** |
+| Bag audit (dark, light) | the drawer, the bag page and the address sheet | 1440 and 390 | **0** |
+| Currency | every price, filter and total follows the picked currency at once | home, collection, product, deals, drawer, menus | **0** |
+| Box check (dark, light, Arabic) | no photo over words, icon rows aligned | 16 pages and the open layers | **0** |
+| Arabic words | every word the Layout writes is Arabic after the switch | home, footer, collection, product, bag, sign-in, FAQ, 404, About, Contact, journal, Terms, Privacy, account, compare | **0** |
+| Shape audit (light, dark, custom teal, Arabic) | every edge a circle, 8 px or 4 px (square only at the window's edge), focus keeps its shape, one inset ring per field, nothing past the window; with every layer open | 16 pages | **0** |
+| Underline (dark, light) | no line under any word or icon, at rest or on hover | 14 pages | **0** |
+| Production bundle | the built release loads through the shop's own HTML and draws home, a collection, a product, the journal, a post, the bag and the checkout with no page error | 1440 | **OK** |
+
+Bakio sells in USD only, so AED, DKK and SAR stay USD on its pages; the long made-up amount stands in for them. Bakio sells in English only; the Arabic runs use the dev server's test switch.
 <!-- TESTS:END -->
 
 ## Languages
