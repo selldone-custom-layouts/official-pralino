@@ -83,7 +83,8 @@ export function cityLine(f: ShopFacts): string {
 
 /** "Open every day · 8:00–18:00" (or the days). */
 export function openLine(f: ShopFacts): string {
-  if (!f.days.length && !f.hours) return "";
+  if (!f.ready || (!f.days.length && !f.hours)) return "";
+  if (!f.days.length) return f.hours;
   const days = f.everyDay ? t("bakini.n.rd.openEvery", "Open every day") : f.days.map((d) => d.slice(0, 3)).join(", ");
   return f.hours ? `${days} · ${f.hours}` : days;
 }

@@ -74,6 +74,7 @@ export default {
     },
     light() {
       const f = this.facts;
+      if (!f.ready) return null;
       if (f.pickup) {
         const note = f.pickupNote ? f.pickupNote.replace(/\.?\s*$/, ".") : "";
         return { title: t("pralino.strip.pickupT", "Pickup at the counter"), text: [note, f.gateway?.name ? f.gateway.name + "." : ""].filter(Boolean).join(" "), btn: t("pralino.strip.findCounter", "Find the counter") };

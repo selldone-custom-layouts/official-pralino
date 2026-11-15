@@ -241,6 +241,10 @@ export interface ShopFacts {
   country: string;
   phone: string;
   email: string;
+  /** The shop's own details (info) have arrived. Selldone draws the page first with a shop record
+      that has its delivery ways but not its info (days, email, address); until then every fact
+      that comes from the info is left out, so no text says "0 days" or changes under the reader. */
+  ready: boolean;
   days: string[];
   everyDay: boolean;
   hours: string;
@@ -258,6 +262,7 @@ export interface ShopFacts {
 const WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export function shopFacts(shop: any): ShopFacts {
+  const ready = !!shop?.info;
   const info = shop?.info || {};
   const ways = deliveryWays(shop);
   const pickup = ways.find((w) => w.pickup) || null;
@@ -267,6 +272,7 @@ export function shopFacts(shop: any): ShopFacts {
   const gws = (shop?.gateways || []).filter((g: any) => g && g.enable !== false);
   const g = gws[0] || null;
   return {
+    ready,
     title: shop?.title || "",
     address: info.address || (point ? [point.address, point.city].filter(Boolean).join(", ") : ""),
     city: info.locality || point?.city || "",
@@ -276,8 +282,8 @@ export function shopFacts(shop: any): ShopFacts {
     phone: info.phone || point?.phone || "",
     email: info.email || "",
     days: WEEK.filter((d) => days.includes(d)),
-    everyDay: WEEK.every((d) => days.includes(d)),
-    hours: hoursFrom(note) || hoursFrom(info.hours || ""),
+    everyDay: days.length > 0 && WEEK.every((d) => days.includes(d)),
+    hours: ready ? hoursFrom(note) || hoursFrom(info.hours || "") : "",
     location: info.location?.lat ? info.location : point?.location?.lat ? point.location : null,
     ways,
     courier: ways.find((w) => COURIER.includes(w.type)) || null,
@@ -293,7 +299,8 @@ export function shopFacts(shop: any): ShopFacts {
 /** "Open every day 8:00–18:00" (or "Open 5 days a week, …") from the
     shop's own days and hours; "" when it gives neither. */
 export function openLine(f: ShopFacts): string {
-  if (!f.days.length && !f.hours) return "";
+  if (!f.ready || (!f.days.length && !f.hours)) return "";
+  if (!f.days.length) return t("pralino.hdr.openHours", "Open {hours}", { hours: f.hours });
   if (f.everyDay) return f.hours ? t("pralino.hdr.openEvery", "Open every day {hours}", { hours: f.hours }) : t("pralino.hdr.openEveryNoHours", "Open every day");
   return f.hours
     ? t("pralino.hdr.openDays", { one: "Open {n} day a week, {hours}", other: "Open {n} days a week, {hours}" }, { n: f.days.length, hours: f.hours })

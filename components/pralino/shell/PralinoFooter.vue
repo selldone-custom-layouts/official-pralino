@@ -21,7 +21,7 @@
           <span class="ftr-wm"><bdi>{{ shopName }}</bdi></span>
           <p class="ftr-line">{{ line }}</p>
         </div>
-        <div v-if="facts.address || openLine" class="ftr-col">
+        <div v-if="facts.ready && (facts.address || openLine)" class="ftr-col">
           <h3>{{ t("pralino.ftr.visit", "Visit") }}</h3>
           <p v-if="addressLines.length">
             <template v-for="(l, i) in addressLines" :key="i"><bdi>{{ l }}</bdi><br v-if="i < addressLines.length - 1" /></template>
@@ -36,7 +36,7 @@
             </li>
           </ul>
         </div>
-        <div v-if="facts.email || facts.phone" class="ftr-col">
+        <div v-if="facts.ready && (facts.email || facts.phone)" class="ftr-col">
           <h3>{{ t("pralino.ftr.contact", "Contact") }}</h3>
           <p v-if="facts.email">
             <a :href="'mailto:' + facts.email">{{ facts.email }}</a>

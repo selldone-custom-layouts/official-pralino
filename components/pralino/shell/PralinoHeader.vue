@@ -28,7 +28,7 @@
 
     <div class="topbar">
       <div class="wrap tb-in">
-        <ul :aria-label="t('pralino.hdr.facts', 'Shop facts')" class="tb-l">
+        <ul v-if="facts.ready" :aria-label="t('pralino.hdr.facts', 'Shop facts')" class="tb-l">
           <li v-if="openLine">{{ openLine }}</li>
           <li v-if="facts.gateway?.name">{{ facts.gateway.name }}</li>
           <li v-if="facts.pickup && street">{{ t("pralino.hdr.pickupAt", "Pickup at {street}", { street }) }}</li>
@@ -47,8 +47,8 @@
               <pr-icon name="globe" /><span dir="ltr">{{ regionShort }}</span><pr-icon cls="chev" name="down" />
             </button>
           </li>
-          <li v-if="facts.phone" class="tb-tel"><a :href="tel" dir="ltr">{{ facts.phone }}</a></li>
-          <li v-if="facts.email" class="tb-mail"><a :href="'mailto:' + facts.email">{{ facts.email }}</a></li>
+          <li v-if="facts.ready && facts.phone" class="tb-tel"><a :href="tel" dir="ltr">{{ facts.phone }}</a></li>
+          <li v-if="facts.ready && facts.email" class="tb-mail"><a :href="'mailto:' + facts.email">{{ facts.email }}</a></li>
         </ul>
       </div>
     </div>
@@ -267,7 +267,7 @@ import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import { catalogueRoute, dealsRoute, percentOff } from "../../kalio/kalio-catalog";
 import { journalRoute } from "../../kalio/pages/kalio-journal";
 import { currencies, currentCurrency, currentLanguage, hasChoice, isRtl, regionState, showLanguages } from "../../region-switcher/region";
-import {
+import { openLine as openLineOf,
   bySells,
   catOf,
   catTitle,
@@ -338,12 +338,7 @@ export default {
     },
     /* "Open every day 8:00–18:00" (the counter's days and hours). */
     openLine() {
-      const f = this.facts;
-      if (!f.days.length && !f.hours) return "";
-      if (f.everyDay) return f.hours ? t("pralino.hdr.openEvery", "Open every day {hours}", { hours: f.hours }) : t("pralino.hdr.openEveryNoHours", "Open every day");
-      return f.hours
-        ? t("pralino.hdr.openDays", { one: "Open {n} day a week, {hours}", other: "Open {n} days a week, {hours}" }, { n: f.days.length, hours: f.hours })
-        : t("pralino.hdr.openDaysNoHours", { one: "Open {n} day a week", other: "Open {n} days a week" }, { n: f.days.length });
+      return openLineOf(this.facts);
     },
     tel() {
       return "tel:" + String(this.facts.phone || "").replace(/[^\d+]/g, "");

@@ -29,7 +29,7 @@
           <div class="hero-sub">
             <p class="eyebrow">{{ t("pralino.home.heroEyebrow", "What we bake") }}</p>
             <h2 class="h2">{{ t("pralino.home.heroH", "Every pastry, sold on its own") }}</h2>
-            <p v-if="heroLead" class="lead">{{ heroLead }}</p>
+            <p v-if="ready && heroLead" class="lead">{{ heroLead }}</p>
             <a class="btn" href="#collections" @click.prevent="jump('collections')">{{ t("pralino.home.heroBtn", "Shop the collections") }}</a>
           </div>
         </div>
@@ -78,11 +78,13 @@
               <template v-if="spread.length" #fallback><pr-cuts :products="spread" kind="spread" /></template>
             </pr-photo>
             <div class="about-copy">
-              <p>{{ aboutP1 }}</p>
-              <p v-if="aboutP2">{{ aboutP2 }}</p>
+              <template v-if="ready">
+                <p>{{ aboutP1 }}</p>
+                <p v-if="aboutP2">{{ aboutP2 }}</p>
+              </template>
             </div>
           </div>
-          <ul class="about-links">
+          <ul v-if="ready" class="about-links">
             <li v-if="facts.ways.length">
               <a href="#ways" @click.prevent="jump('ways')"><span>{{ t("pralino.home.linkDelivery", "Delivery") }}</span><pr-icon cls="chev" name="right" /></a>
             </li>
@@ -138,8 +140,8 @@
         <div class="how-txt">
           <p class="eyebrow">{{ t("pralino.home.howEyebrow", "Smart and simple") }}</p>
           <h2 id="how-h" class="h2">{{ t("pralino.home.howH", "How ordering works") }}</h2>
-          <p class="lead">{{ howLead }}</p>
-          <ul class="feats">
+          <p v-if="ready" class="lead">{{ howLead }}</p>
+          <ul v-if="ready" class="feats">
             <li v-for="f in feats" :key="f.k" class="feat">
               <pr-art :name="f.art" cls="feat-ic" />
               <h3>{{ f.title }}</h3>
@@ -175,7 +177,7 @@
         </dl>
         <pr-photo art="macaron" class="offer" deep name="pralino-offer" pos="50% 30%">
           <template v-if="offerPiece" #fallback><pr-cuts :products="[offerPiece]" kind="one" /></template>
-          <div class="offer-tx" data-over-photo>
+          <div v-if="ready" class="offer-tx" data-over-photo>
             <p class="offer-e">{{ offLine ? t("pralino.home.rightNow", "Right now") : t("pralino.home.everyDay", "Every day") }}</p>
             <h3>{{ offLine ? capital(offLine) : t("pralino.home.soldOne", "Sold one by one") }}</h3>
             <p v-if="fromPrice">{{ t("pralino.home.fromLine", "Every pastry on the counter, from {price}", { price: fromPrice }) }}</p>
@@ -416,8 +418,15 @@ export default {
     },
     /* Four counters (or two): no product count (the owner's rule), only the
        shop's real facts. */
+    /* The shop's details, its collections and its catalogue are all in. Every sentence built from them
+       (the hero's line, About, How ordering works, the offer card, the counters) waits for this, so
+       none is drawn half-made and then rewritten ("Every day" turning into "Right now", "0 days"). */
+    ready() {
+      return this.facts.ready && this.pr.ready && this.pr.catsReady;
+    },
     nums() {
       const f = this.facts;
+      if (!this.ready) return [];
       const out = [];
       if (this.cats.length) out.push({ k: "c", value: this.cats.length, unit: "", label: t("pralino.home.numCols", { one: "collection", other: "collections" }, { n: this.cats.length }) });
       if (this.offMax) out.push({ k: "o", value: this.offMax, unit: "%", label: this.offEvery ? t("pralino.home.numOffEvery", "off every piece") : t("pralino.home.numOffMost", "off, at most") });

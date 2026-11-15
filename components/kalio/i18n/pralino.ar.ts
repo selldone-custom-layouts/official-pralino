@@ -1,5 +1,5 @@
 /*
- * Pralino's own words (pralino.*): Arabic (ar). Translated from pralino.en.ts (804 strings); plural keys carry the six Arabic forms.
+ * Pralino's own words (pralino.*): Arabic (ar). Translated from pralino.en.ts (805 strings); plural keys carry the six Arabic forms.
  * Glossary (as base/ar.ts and bakini.ar.ts): bag (the basket) = الحقيبة · Add to bag = أضف إلى الحقيبة · Your bag = حقيبتك ·
  * In your bag = في حقيبتك · collection = التشكيلة (التشكيلات) · pastry / piece = قطعة (pastries as food = الحلويات) ·
  * counter = الكاونتر · bakery = المخبز · pickup = الاستلام من المحل · courier = المندوب (courier delivery = التوصيل بالمندوب) ·
@@ -318,6 +318,7 @@ const ar: Record<string, string> = {
   "pralino.hdr.openDaysNoHours.other": "مفتوح {n} يوم في الأسبوع",
   "pralino.hdr.openDaysNoHours.two": "مفتوح يومين في الأسبوع",
   "pralino.hdr.openDaysNoHours.zero": "مفتوح {n} أيام في الأسبوع",
+  "pralino.hdr.openHours": "مفتوح {hours}",
   "pralino.hdr.openEvery": "مفتوح كل يوم {hours}",
   "pralino.hdr.openEveryNoHours": "مفتوح كل يوم",
   "pralino.hdr.orderNow": "اطلب الآن",

@@ -66,6 +66,8 @@ export interface DeliveryLine {
 export function deliveryLines(shop: any): DeliveryLine[] {
   const f = shopFacts(shop);
   const out: DeliveryLine[] = [];
+  /* no lines until the shop's details are in (the pickup line carries the counter's hours) */
+  if (!f.ready) return out;
   const priceWord = (fee: number, free: boolean) => (free || !fee ? t("pralino.pd.free", "free") : money(fee));
   const street = f.pickupPoint?.address || String(f.address || "").split(",")[0];
   const open = f.hours ? (f.everyDay ? t("pralino.hdr.openEvery", "Open every day {hours}", { hours: f.hours }) : f.hours) : "";
