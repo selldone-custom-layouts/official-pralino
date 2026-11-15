@@ -15,6 +15,7 @@
 //█████████████████████████████████████████████████████████████
 //―――――――――――――――― Imports ――――――――――――――――
 //█████████████████████████████████████████████████████████████
+import "./components/kalio/kalio-https"; // FIRST: move http:// visitors to https:// (Selldone serves http without a redirect)
 import "@selldone/core-js/utils/service-worker/registerServiceWorker"; // Register service worker:
 import {createApp} from "vue";
 import StorefrontApp from "./StorefrontApp.vue";
