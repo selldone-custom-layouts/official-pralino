@@ -1563,6 +1563,9 @@ html.pr-dark .pr .pr-map__img {
 /* ── Pralino A: the product page's bands reach the window edges (the tint title band, the tabs band) ── */
 .pr.pr-pdp {
   padding-inline: 0 !important;
+  /* the Kalio base caps .s--product at 1440px; the product page's bands run the window like every page,
+     its content stays in the wrap */
+  max-width: none !important;
 }
 /* The stock dot and the compare row's dot sit in the line (Selldone's pods.scss makes a .dot absolute). */
 .pr .pd-stock .dot,

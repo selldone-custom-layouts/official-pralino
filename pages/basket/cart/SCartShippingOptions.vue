@@ -587,8 +587,8 @@ export default defineComponent({
        until the shopper picks another. */
     firstWindow() {
       if (!this.transportation) return;
-      /* A way without windows (shipping): no window is kept from the way before it, so neither the
-         receipt nor the order names one ("Worldwide shipping · Morning"). */
+      /* A way without windows reached another way than pickWay (the shop's first way on load): clear a
+         kept window too; pickWay already cleared it for a pick, so no second basket update races the first. */
       if (!this.windowsOn || !this.timeItems.length) {
         if (this.deliveryInfo?.custom || this.deliveryInfo?.time_spans?.length) {
           this.deliveryInfo.custom = false;
@@ -680,6 +680,12 @@ export default defineComponent({
       /* leaving pickup: the counter's address is not a delivery address */
       const me = this.buyerBits();
       if (me.point && this.basket) this.basket.receiver_info = { phone: me.phone, message: me.message };
+      /* a way without windows (shipping) does not keep the window of the way before it: cleared here, before
+         the one basket update below, so the receipt and the order never name it ("Worldwide shipping · Morning") */
+      if (!this.winsOf(item).length && this.deliveryInfo && (this.deliveryInfo.custom || this.deliveryInfo.time_spans?.length)) {
+        this.deliveryInfo.custom = false;
+        this.deliveryInfo.time_spans = [];
+      }
       this.$emit("update:transportation", item);
       this.$nextTick(() => this.setBasketConfig());
     },

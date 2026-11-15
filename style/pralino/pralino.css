@@ -63,7 +63,7 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 .hero:is(.pr,.pr *), .how:is(.pr,.pr *), .journal:is(.pr,.pr *), .pt:is(.pr,.pr *) { container-type: inline-size; }
 /* the frame: the bleeding parts of the hero, How ordering works, the journal, the photo band and a title band with a
    photo end at the frame's edge, so the hero's photo and the photos below share one right and one left edge */
-.hero-in:is(.pr,.pr *), .how-in:is(.pr,.pr *), .j-in:is(.pr,.pr *), .pband:is(.pr,.pr *), .pt.has-ph:is(.pr,.pr *) { max-width: var(--pr-frame-max); margin-inline: auto; }
+.hero-in:is(.pr,.pr *), .how-in:is(.pr,.pr *), .j-in:is(.pr,.pr *), .pband:is(.pr,.pr *) { max-width: var(--pr-frame-max); margin-inline: auto; }
 .hero-in:is(.pr,.pr *) { --pr-seam: max(calc(var(--pr-frame-w) * .38), calc(var(--pr-hero-pad) + 420px)); --pr-inset-w: clamp(240px, calc(var(--pr-frame-w) * .23), 340px); min-height: clamp(700px, calc(var(--pr-frame-w) * .58), 860px); }
 .hero-copy:is(.pr,.pr *) { width: calc(var(--pr-seam) - var(--pr-inset-w) * .2 - 40px); padding-block: clamp(64px, 7cqw, 108px) 72px; padding-inline: var(--pr-hero-pad) 0; }
 .hero-h:is(.pr,.pr *) { width: auto; max-width: 100%; }
@@ -194,7 +194,8 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 .pt.has-ph:is(.pr,.pr *) .pt-in { align-items: flex-start; padding-block: 28px 32px; }
 .pt.has-ph:is(.pr,.pr *) .pt-in > * { max-width: min(560px, 44cqw); }
 .pt.has-ph:is(.pr,.pr *) .crumbs ol { justify-content: flex-start; }
-.pt-ph:is(.pr,.pr *) { position: absolute; top: 22px; bottom: 22px; inset-inline-start: 52%; inset-inline-end: 0; border-start-start-radius: var(--pr-r-pn); border-start-end-radius: 0; border-end-end-radius: 0; border-end-start-radius: var(--pr-r-pn); overflow: hidden; background: var(--pr-plate); }
+/* the title band runs the window; its photo stops at the frame's edge (52% of the frame in, the frame's edge out) */
+.pt-ph:is(.pr,.pr *) { position: absolute; top: 22px; bottom: 22px; inset-inline-start: calc(max(0px, (100cqw - var(--pr-frame-max)) / 2) + var(--pr-frame-w) * .52); inset-inline-end: max(0px, calc((100cqw - var(--pr-frame-max)) / 2)); border-start-start-radius: var(--pr-r-pn); border-start-end-radius: 0; border-end-end-radius: 0; border-end-start-radius: var(--pr-r-pn); overflow: hidden; background: var(--pr-plate); }
 .pt-ph:is(.pr,.pr *) img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; }
 .pt-ph:is(.pr,.pr *) .collage { position: absolute; }
 /* checkout steps on the tint band */
@@ -354,3 +355,11 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 /* one colour family: low stock is said in the palette's colour, not a stray red (red is kept for form errors only) */
 .pc-u:is(.pr,.pr *) .low, .cr-u:is(.pr,.pr *) .low, .pd-stock.low:is(.pr,.pr *) { color: var(--pr-act-text); font-weight: 700; }
 .pd-stock.low:is(.pr,.pr *) .dot { background: var(--pr-act); }
+
+/* wider than the frame, a bleeding photo no longer meets the window's edge: it takes the panel radius all round */
+@container (min-width: 1921px) {
+  .hero-back:is(.pr,.pr *), .how-ph:is(.pr,.pr *), .j-ph:is(.pr,.pr *), .pt-ph:is(.pr,.pr *) { border-radius: var(--pr-r-pn); }
+}
+@media (min-width: 1921px) {
+  .pband:is(.pr,.pr *) .pb-ph { border-radius: var(--pr-r-pn); }
+}
