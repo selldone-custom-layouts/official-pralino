@@ -1,9 +1,9 @@
 /*
- * Pralino Cocoa Patisserie — typefaces (pralino-design/home-b.html, set B
- * "Cocoa & Pistachio").
+ * Pralino Classic Patisserie — typefaces (pralino-design/home-a.html, set A
+ * "Classic").
  *
- * Cormorant (display: headings, the wordmark, numbers set large, italic
- * accents) over Jost (text and UI). Material Symbols Rounded still draws the
+ * Cormorant Garamond (display: headings, the wordmark, numbers set large,
+ * italic accents) over Mulish (text and UI). Material Symbols Rounded draws the
  * icons of the shared pieces until each page is ported to the mockup's inline
  * line icons. They are requested from the app at start-up rather than from
  * index.html: in production the Layout runs inside the HTML Selldone renders
@@ -13,7 +13,7 @@
  */
 
 const FONTS = [
-  "https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@400;500;600;700&display=swap",
+  "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Mulish:wght@400;500;600;700&display=swap",
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..24,400..600,0..1,0&display=block",
 ];
 

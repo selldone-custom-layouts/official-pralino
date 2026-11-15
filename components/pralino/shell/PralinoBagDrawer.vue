@@ -1,5 +1,5 @@
 <!--
-  Pralino — the bag drawer (pralino-design/src/pralino.js drawerHTML(),
+  Pralino — the bag drawer (pralino-design/src/shell.js drawerHTML(),
   renderDrawer()): "Your bag" from the right; a row per line (the pastry on
   its plate, the name, the price per unit, the line total and − n +); the
   receipt (items at full price, savings, delivery at checkout or the free

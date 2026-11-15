@@ -30,7 +30,7 @@
           </div>
           <div class="md-body">
             <div :data-step="step === 'code' ? 2 : 1" class="lg">
-              <div aria-hidden="true" class="lg-wm"><span class="wm-name">{{ shopWord }}</span><i class="wm-dot"></i></div>
+              <div aria-hidden="true" class="lg-wm pr-wm"><span class="wm-name">{{ shopWord }}</span><span v-if="shopCity" class="wm-sub">{{ shopCity }}</span></div>
 
               <template v-if="step !== 'done'">
                 <p class="lg-p">{{ t("pralino.lg.why", "Sign in to see your orders and saved addresses.") }}</p>
@@ -121,7 +121,7 @@ import { throttle } from "lodash-es";
 import SShopLogin from "@selldone/components-vue/storefront/login/SShopLogin.vue";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import PrIcon from "../../pralino/PrIcon.vue";
-import { guestCheckout } from "../../pralino/pr";
+import { guestCheckout, shopFacts } from "../../pralino/pr";
 import { isRtl } from "../../region-switcher/region";
 import { t } from "../i18n/kalio-i18n";
 
@@ -162,7 +162,15 @@ export default {
       return isRtl();
     },
     shopWord() {
-      return String(this.shop?.title || "").toLowerCase();
+      const w = String(this.shop?.title || "").trim();
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    },
+    shopCity() {
+      try {
+        return shopFacts(this.shop).city || "";
+      } catch {
+        return "";
+      }
     },
     modes() {
       return Array.isArray(this.shop?.login_modes) ? this.shop.login_modes : [];

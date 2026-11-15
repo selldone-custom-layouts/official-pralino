@@ -34,7 +34,7 @@ export default {
   data: () => ({ theme: themeState }),
   computed: {
     letter() {
-      return (Array.from(String(this.title || "").trim())[0] || "·").toLowerCase();
+      return (Array.from(String(this.title || "").trim())[0] || "·").toUpperCase();
     },
     dark() {
       void this.theme.mode;

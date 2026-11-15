@@ -34,7 +34,7 @@
         <button class="btn sm" type="submit">{{ t("pralino.ls.searchBtn", "Search") }}</button>
       </form>
     </pr-pt>
-    <pr-pt v-else-if="kind === 'category'" :crumbs="[{ label: catTitle(cat) || categoryName }]" :lead="catLead" :title="catTitle(cat) || ''" art="croissant" art2="tart" cls="compact" />
+    <pr-pt v-else-if="kind === 'category'" :crumbs="[{ label: catTitle(cat) || categoryName }]" :cuts="catPhoto ? [] : catCuts" :eyebrow="t('pralino.ls.theCollection', 'The collection')" :lead="catLead" :photo="catPhoto" :title="catTitle(cat) || ''" cls="compact" />
     <pr-pt v-else-if="kind === 'deals'" :crumbs="[{ label: t('pralino.ls.deals', 'Deals') }]" :lead="dealsLead" :title="t('pralino.ls.deals', 'Deals')" art="macaron" art2="cake" cls="compact" />
     <pr-pt v-else :crumbs="[{ label: t('pralino.ls.all', 'Every pastry') }]" :lead="allLead" :title="t('pralino.ls.all', 'Every pastry')" art="croissant" art2="macaron" cls="compact" />
 
@@ -224,6 +224,7 @@ import { currentCurrency, isRtl, regionState, signOf } from "../../region-switch
 import { breakable, fitInCircle } from "../../bakini/fit-in-circle";
 import { fitOnResize } from "../pr-fit";
 import { t } from "../../kalio/i18n/kalio-i18n";
+import { collectionPhoto } from "../pr-photos";
 
 /* A spec key whose every value reads like a paragraph is a note, not a filter. */
 const NOTE = 80;
@@ -405,6 +406,13 @@ export default {
       const max = Math.max(...this.offs);
       const every = this.offs.length === this.pr.products.length && Math.min(...this.offs) === max;
       return every ? t("pralino.ls.offEvery", "{off}% off every piece", { off: max }) : t("pralino.ls.offUpTo", "Up to {off}% off", { off: max });
+    },
+    /* the collection's own photo for the title band, else its three best sellers */
+    catPhoto() {
+      return this.cat ? collectionPhoto(this.cat) || "" : "";
+    },
+    catCuts() {
+      return this.cat ? bySells(inCat(this.cat.id)).slice(0, 3) : [];
     },
     catLead() {
       const desc = this.cat?.description || "";

@@ -1,15 +1,15 @@
 <!--
-  Pralino — the top bar and the header (pralino-design/src/pralino.js topbar(),
-  header(), menuPanel(); set B "Cocoa & Pistachio"):
+  Pralino — the top bar and the header (pralino-design/src/shell.js topbar(),
+  header(), menuPanel(); set A "Classic"):
 
   - the top bar (it scrolls away): the counter's days and hours, the way to
     pay and "Pickup at <street>" on the left; the language & currency pill
     (EN · USD; the region-switcher kit's chips in a small panel), the phone
     and the email on the right. All from the shop's live data.
-  - the cocoa header (it sticks): "Shop ⌄" (every collection with its best
+  - the header (it sticks): "Shop ⌄" (every collection with its best
     seller's photo and its lowest price, and the deals line), Deals,
     Journal, About and Contact on the left; the shop's live title drawn as
-    the centred italic wordmark; search (live suggestions from the
+    the centred wordmark (with the city under it); search (live suggestions from the
     catalogue, Enter opens every result), the account, the bag with its
     count and "Order now" on the right.
   - phone (≤979px): the menu button, the wordmark (never lost), search and
@@ -73,6 +73,7 @@
                 {{ t("pralino.hdr.shop", "Shop") }}<pr-icon cls="chev" name="down" />
               </button>
               <div id="dd-shop" :class="['dd', { open: is('dd-shop') }]">
+                <div class="dd-main">
                 <p class="dd-h">{{ t("pralino.hdr.collections", "The collections") }}</p>
                 <ul class="dd-list">
                   <li v-for="c in cats" :key="c.id">
@@ -85,13 +86,19 @@
                   </li>
                 </ul>
                 <router-link :to="dealsTo" class="dd-all">{{ dealsLine }}<pr-icon name="right" /></router-link>
+                </div>
+                <router-link v-if="feature" :to="catTo(feature)" class="dd-feat">
+                  <span class="dd-fph"><img :src="featurePhoto" alt="" loading="lazy" /></span>
+                  <span class="dd-fk">{{ t("pralino.hdr.mostOrdered", "Most ordered") }}</span>
+                  <b><bdi>{{ catTitle(feature) }}</bdi></b>
+                </router-link>
               </div>
             </li>
             <li>
               <router-link :aria-current="onDeals ? 'page' : undefined" :to="dealsTo" class="nav-a">{{ t("pralino.hdr.deals", "Deals") }}</router-link>
             </li>
             <li>
-              <router-link :to="blogTo" class="nav-a">{{ t("pralino.hdr.journal", "Journal") }}</router-link>
+              <router-link :aria-current="onJournal ? 'page' : undefined" :to="blogTo" class="nav-a">{{ t("pralino.hdr.journal", "Journal") }}</router-link>
             </li>
             <li>
               <router-link :to="aboutTo" class="nav-a">{{ t("pralino.hdr.about", "About") }}</router-link>
@@ -284,6 +291,7 @@ import {
   wireLayers,
 } from "../pr";
 import { t } from "../../kalio/i18n/kalio-i18n";
+import { collectionPhoto } from "../pr-photos";
 
 /* Words that say nothing about a pastry, left out of "Popular". */
 const STOP = new Set(["and", "with", "the", "of", "a", "an", "in", "on", "mini", "classic", "double", "cake", "cakes"]);
@@ -312,6 +320,18 @@ export default {
     cats() {
       return this.pr.cats;
     },
+    /* The most-ordered collection with its own photo (the Shop menu's feature card); none without a photo. */
+    feature() {
+      const ranked = this.cats
+        .map((c, i) => ({ c, i, sold: inCat(c.id).reduce((s, p) => s + (p.sells || 0), 0) }))
+        .filter((x) => x.sold || inCat(x.c.id).length)
+        .sort((a, b) => b.sold - a.sold || a.i - b.i);
+      const hit = ranked.find((x) => collectionPhoto(x.c));
+      return hit ? hit.c : null;
+    },
+    featurePhoto() {
+      return this.feature ? collectionPhoto(this.feature) : null;
+    },
     street() {
       const p = this.facts.pickupPoint;
       return p?.address || String(this.facts.address || "").split(",")[0];
@@ -327,6 +347,11 @@ export default {
     },
     tel() {
       return "tel:" + String(this.facts.phone || "").replace(/[^\d+]/g, "");
+    },
+    /* the Journal link stays lit on a post too (the router marks only the list itself) */
+    onJournal() {
+      const r = window.$storefront?.routes || {};
+      return [r.BLOGS_PAGE, r.SHOP_BLOG_PAGE, r.SHOP_BLOG_PAGE_SLUG].filter(Boolean).includes(this.$route?.name);
     },
     onDeals() {
       return !!this.$route?.query?.filter && /only_has_discount/.test(String(this.$route.query.filter)) && !this.$route?.params?.category_name;

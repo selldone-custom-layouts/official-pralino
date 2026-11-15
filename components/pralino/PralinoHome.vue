@@ -1,36 +1,26 @@
 <!--
-  Pralino — the home (pralino-design/home-b.html, src/pralino.js; set B
-  "Cocoa & Pistachio"). Every section from the shop's live data; nothing
-  names a product, price, collection, address or delivery way.
+  Pralino — the home (pralino-design/home-a.html and src/home.js; set A "Classic"). Every section from
+  the shop's live data; nothing names a product, price, collection, address or delivery way.
 
-   1. Hero: the shop's name and line over the photos (the slot
-      pralino-hero-back with the three most-ordered collections on it, the
-      framed pralino-hero-inset, the best seller as a cut-out).
-   2. Counters on the scalloped cocoa band (collections, the saving, the
-      counter's days and hours, the ways to receive an order).
-   3. About: the slot pralino-about and the shop's facts in two lines, with
-      links to delivery, pickup and payment.
-   4. The four collections people order most (2 × 2 cards: the collection
-      photo, its numeral, line and three best sellers).
-   5. How ordering works (the slot pralino-how; piece by piece, the
-      courier's windows, the way to pay, pickup; the courier's card).
-   6. Counters, the offer card (the slot pralino-offer) and every way to
-      receive an order.
-   7. The gallery of the collections around the most-ordered one.
-   8. Today's selection: best sellers, mixed across collections, as rows
-      with the add box.
-   9. The photo band (the slot pralino-parallax).
-  10. The marquee of the collections.
-  11. The journal: the four newest posts beside the slot pralino-journal.
-
-  The mockup's file-name captions and "stand-in" notes are not drawn: a
-  slot without its photo shows its designed fallback (PrPhoto, PrCuts).
+   1. Hero: the shop's name and line; the counter photo (pralino-hero-back) bleeding to the window edge,
+      the framed photo across the seam (pralino-hero-inset) with the best seller as its caption, and the
+      three most-ordered collections on the photo's dark corner (under the photo on a phone).
+   2. About (tint band): the shop in numbers (collections, the saving, the ways to receive an order, the
+      counter's days and hours — never a product count) beside the slot pralino-about and the shop's facts.
+   3. The four collections people order most (rows: the collection's photo, numeral, line, best sellers).
+   4. How ordering works (tint band; the slot pralino-how bleeding to the left edge; the courier's card).
+   5. Counters, the offer card (the slot pralino-offer) and every way to receive an order.
+   6. The gallery of the collections around the most-ordered one.
+   7. Today's selection (tint band): best sellers, mixed across collections, as numbered rows, one button style.
+   8. The photo band (the slot pralino-parallax).
+   9. The marquee of the collections.
+  10. The journal (tint band): the four newest posts beside the slot pralino-journal (last).
+  A slot without its photo shows its designed fallback (PrPhoto, PrCuts); never a caption or file name.
 -->
 <template>
   <div class="pr pr-home">
     <!-- 1 · Hero -->
     <section aria-labelledby="hero-h" class="hero">
-      <pr-art name="croissant" wrap="ah1" /><pr-art name="macaron" wrap="ah2" />
       <div class="hero-in">
         <div class="hero-copy">
           <h1 id="hero-h" class="hero-h">
@@ -44,47 +34,47 @@
           </div>
         </div>
         <div class="hero-media">
-          <pr-photo art="cake" class="hero-back" deep eager name="pralino-hero-back">
-            <ul v-if="rank.length" :aria-label="t('pralino.home.heroWords', 'Most ordered collections')" class="hero-words">
-              <li v-for="x in rank.slice(0, 3)" :key="x.c.id">
-                <router-link :to="catTo(x.c)"><bdi>{{ catTitle(x.c) }}</bdi></router-link>
-              </li>
-            </ul>
+          <pr-photo :alt="t('pralino.home.heroAlt', 'The counter')" art="cake" class="hero-back" deep eager name="pralino-hero-back" pos="64% 50%">
+            <template v-if="bandPieces.length" #fallback><pr-cuts :products="bandPieces.slice(0, 3)" kind="trio" /></template>
           </pr-photo>
-          <pr-photo art="cupcake" class="hero-inset" eager name="pralino-hero-inset">
-            <template v-if="insetPiece" #fallback><pr-cuts :products="[insetPiece]" kind="one" /></template>
-          </pr-photo>
-          <router-link v-if="best[0]" :aria-label="best[0].title + ', ' + money(pv(best[0]).now)" :to="productTo(best[0])" class="hero-piece">
-            <img :src="img(best[0])" alt="" draggable="false" height="640" width="640" />
-          </router-link>
+          <figure class="hero-inset">
+            <pr-photo art="cupcake" class="hi-ph" eager name="pralino-hero-inset">
+              <template v-if="insetPiece" #fallback><pr-cuts :products="[insetPiece]" kind="one" /></template>
+            </pr-photo>
+            <figcaption v-if="best[0]" class="hi-cap">
+              <span class="hi-k">{{ t("pralino.home.mostOrdered", "Most ordered") }}</span>
+              <router-link :to="productTo(best[0])" class="hi-n">{{ best[0].title }}</router-link>
+              <span class="hi-p"><span class="now money">{{ money(pv(best[0]).now) }}</span><template v-if="pv(best[0]).was">{{ " " }}<s class="was money">{{ money(pv(best[0]).was) }}</s></template></span>
+            </figcaption>
+          </figure>
         </div>
+        <ul v-if="rank.length" :aria-label="t('pralino.home.heroWords', 'Most ordered collections')" class="hero-words" data-over-photo>
+          <li v-for="x in rank.slice(0, 3)" :key="x.c.id">
+            <router-link :to="catTo(x.c)"><bdi>{{ catTitle(x.c) }}</bdi></router-link>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- 2 · Counters on the cocoa band -->
-    <section v-if="nums.length" :aria-label="t('pralino.home.numsAria', '{shop} in numbers', { shop: shopName })" class="nums-band">
-      <pr-art name="macaron" wrap="an1" />
-      <div class="wrap">
-        <dl :class="['nums', 'on-dark', 'n' + nums.length]">
-          <div v-for="n in nums" :key="n.k" class="num">
-            <dt>{{ n.label }}</dt>
-            <dd>
-              <span class="nv">{{ n.value }}</span><span v-if="n.unit" class="nu">{{ n.unit }}</span>
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-
-    <!-- 3 · About -->
+    <!-- 2 · About + the shop in numbers (tint band) -->
     <section id="about" aria-labelledby="about-h" class="sec about band">
-      <pr-art name="macaron" wrap="aa1" /><pr-art name="cupcake" wrap="aa2" />
       <div class="wrap about-in">
+        <div v-if="nums.length" class="about-nums">
+          <p class="eyebrow">{{ t("pralino.home.numsEyebrow", "{shop} in numbers", { shop: shopName }) }}</p>
+          <dl class="nums">
+            <div v-for="n in nums" :key="n.k" class="num">
+              <dt>{{ n.label }}</dt>
+              <dd>
+                <span class="nv">{{ n.value }}</span><span v-if="n.unit" class="nu">{{ n.unit }}</span>
+              </dd>
+            </div>
+          </dl>
+        </div>
         <div class="about-main">
-          <p class="eyebrow">{{ t("pralino.home.aboutEyebrow", "About {shop}", { shop: shopName }) }}</p>
+          <p class="eyebrow">{{ t("pralino.home.aboutEyebrow2", "Explore the counter") }}</p>
           <h2 id="about-h" class="h2">{{ t("pralino.home.aboutH", "Discover more about {shop}", { shop: shopName }) }}</h2>
           <div class="about-row">
-            <pr-photo art="croissant" class="about-ph" name="pralino-about">
+            <pr-photo :alt="t('pralino.home.aboutAlt', 'Pastries on the counter')" art="croissant" class="about-ph" name="pralino-about">
               <template v-if="spread.length" #fallback><pr-cuts :products="spread" kind="spread" /></template>
             </pr-photo>
             <div class="about-copy">
@@ -107,9 +97,8 @@
       </div>
     </section>
 
-    <!-- 4 · The collections people order most -->
+    <!-- 3 · The collections people order most -->
     <section v-if="topCols.length" id="collections" aria-labelledby="cols-h" class="sec cols">
-      <pr-art name="cake" wrap="ac1" />
       <div class="wrap">
         <header class="sec-hd">
           <p class="eyebrow">{{ t("pralino.home.colsEyebrow", "Tailored for you") }}</p>
@@ -134,7 +123,7 @@
               <router-link :to="catTo(x.c)" class="btn sm">{{ t("pralino.home.shopCol", "Shop {name}", { name: catTitle(x.c) }) }}</router-link>
             </div>
             <router-link :to="catTo(x.c)" aria-hidden="true" class="cc-ph" tabindex="-1">
-              <img v-if="colPhoto(x.c)" :src="colPhoto(x.c)" alt="" decoding="async" loading="lazy" />
+              <img v-if="colPhoto(x.c)" :src="colPhoto(x.c)" alt="" decoding="async" height="1050" loading="lazy" width="1400" />
               <pr-cuts v-else :products="x.ps" kind="trio" />
             </router-link>
           </article>
@@ -142,11 +131,10 @@
       </div>
     </section>
 
-    <!-- 5 · How ordering works -->
+    <!-- 4 · How ordering works (tint band) -->
     <section id="how" aria-labelledby="how-h" class="sec how band">
-      <pr-art name="whisk" wrap="aw1" />
       <div class="how-in">
-        <pr-photo art="tart" class="how-ph" name="pralino-how" />
+        <pr-photo :alt="t('pralino.home.howAlt', 'A box of pastries by the window')" art="tart" class="how-ph" name="pralino-how" pos="50% 30%" />
         <div class="how-txt">
           <p class="eyebrow">{{ t("pralino.home.howEyebrow", "Smart and simple") }}</p>
           <h2 id="how-h" class="h2">{{ t("pralino.home.howH", "How ordering works") }}</h2>
@@ -174,9 +162,8 @@
       </div>
     </section>
 
-    <!-- 6 · Counters, the offer, the ways -->
+    <!-- 5 · Counters, the offer, the ways -->
     <section id="ways" aria-labelledby="focus-h" class="sec focus">
-      <pr-art name="macaron" wrap="af1" /><pr-art name="cupcake" wrap="af2" />
       <div :class="['wrap', 'focus-in', { 'no-fnums': !fnums.length }]">
         <dl v-if="fnums.length" class="fnums">
           <div v-for="n in fnums" :key="n.k" class="fnum">
@@ -186,9 +173,9 @@
             </dd>
           </div>
         </dl>
-        <pr-photo art="macaron" class="offer" deep name="pralino-offer">
+        <pr-photo art="macaron" class="offer" deep name="pralino-offer" pos="50% 30%">
           <template v-if="offerPiece" #fallback><pr-cuts :products="[offerPiece]" kind="one" /></template>
-          <div class="offer-tx">
+          <div class="offer-tx" data-over-photo>
             <p class="offer-e">{{ offLine ? t("pralino.home.rightNow", "Right now") : t("pralino.home.everyDay", "Every day") }}</p>
             <h3>{{ offLine ? capital(offLine) : t("pralino.home.soldOne", "Sold one by one") }}</h3>
             <p v-if="fromPrice">{{ t("pralino.home.fromLine", "Every pastry on the counter, from {price}", { price: fromPrice }) }}</p>
@@ -200,7 +187,7 @@
           <h2 id="focus-h" class="h2">{{ waysTitle }}</h2>
           <ul class="ways">
             <li v-for="(w, i) in facts.ways" :key="w.id" :class="['way', { alt: i === 1 }]">
-              <span class="cb"><pr-icon name="check" /></span>
+              <span class="cb"><pr-icon :name="wayIcon(w)" /></span>
               <div>
                 <h3>{{ w.title }}</h3>
                 <p v-if="wayNote(w)">{{ wayNote(w) }}</p>
@@ -212,7 +199,7 @@
       </div>
     </section>
 
-    <!-- 7 · Gallery -->
+    <!-- 6 · Gallery -->
     <section v-if="gallery" aria-labelledby="gal-h" class="sec gal">
       <div class="wrap">
         <header class="sec-hd">
@@ -246,9 +233,8 @@
       </div>
     </section>
 
-    <!-- 8 · Today's selection -->
-    <section v-if="selection.length" id="selection" aria-labelledby="sel-h" class="sec sel">
-      <pr-art name="tart" wrap="as1" />
+    <!-- 7 · Today's selection (tint band, one button style) -->
+    <section v-if="selection.length" id="selection" aria-labelledby="sel-h" class="sec sel band">
       <div class="wrap">
         <header class="sec-hd">
           <p class="eyebrow">{{ t("pralino.home.selEyebrow", "Driven by what sells") }}</p>
@@ -269,54 +255,55 @@
             <p class="s-pr">
               <span class="now money">{{ money(pv(p).now) }}</span><template v-if="pv(p).was">{{ " " }}<s class="was money">{{ money(pv(p).was) }}</s></template>
             </p>
-            <div :class="['s-act', { dark: i % 2 }]"><pr-add :alt="!!(i % 2)" :product="p" /></div>
+            <div class="s-act"><pr-add :product="p" /></div>
           </li>
         </ol>
       </div>
     </section>
 
-    <!-- 9 · Photo band -->
+    <!-- 8 · Photo band -->
     <section :aria-label="t('pralino.home.bandAria', 'Photo band')" class="pband">
-      <pr-photo art="croissant" class="pb-ph" deep name="pralino-parallax">
+      <pr-photo :alt="t('pralino.home.bandAlt', 'Pastries in the warm light of the shop')" art="croissant" class="pb-ph" deep name="pralino-parallax">
         <template v-if="bandPieces.length" #fallback><pr-cuts :products="bandPieces" kind="row" /></template>
         <a :aria-label="t('pralino.home.toMarquee', 'Scroll to the collections')" class="pb-down" href="#marquee" @click.prevent="jump('marquee')"><pr-icon name="down" /></a>
       </pr-photo>
     </section>
 
-    <!-- 10 · Marquee -->
+    <!-- 9 · Marquee -->
     <section v-if="cats.length" id="marquee" :aria-label="t('pralino.home.marqAria', 'Collections')" class="marq">
       <div class="mq-track">
         <ul v-for="copy in [0, 1]" :key="copy" :aria-hidden="copy ? 'true' : undefined" class="mq-list">
           <li v-for="c in cats" :key="c.id">
-            <span aria-hidden="true" class="mq-h">#</span><router-link :tabindex="copy ? -1 : undefined" :to="catTo(c)"><bdi>{{ catTitle(c) }}</bdi></router-link>
+            <span aria-hidden="true" class="mq-h">·</span><router-link :tabindex="copy ? -1 : undefined" :to="catTo(c)"><bdi>{{ catTitle(c) }}</bdi></router-link>
           </li>
         </ul>
       </div>
     </section>
 
-    <!-- 11 · Journal (last) -->
-    <section v-if="posts.length" aria-labelledby="j-h" class="journal">
-      <pr-photo art="whisk" class="j-ph" deep name="pralino-journal">
-        <span aria-hidden="true" class="j-word">{{ t("pralino.home.journalWord", "Journal") }}</span>
-      </pr-photo>
-      <div class="j-txt">
-        <pr-art name="cookie" wrap="aj1" />
-        <p class="eyebrow">{{ t("pralino.home.jEyebrow", "Inspired by the counter") }}</p>
-        <h2 id="j-h" class="h2">{{ t("pralino.home.jH", "Notes from the {shop} journal", { shop: shopName }) }}</h2>
-        <p class="lead">{{ t("pralino.home.jLead", "Guides to the collections, and plain answers about ordering, delivery and pickup.") }}</p>
-        <ul class="posts">
-          <li v-for="b in posts" :key="b.id">
-            <router-link :to="postRoute(b)" class="post">
-              <span class="p-th"><img v-if="postImg(b)" :src="postImg(b)" :srcset="photoSrcset(postImg(b))" alt="" loading="lazy" sizes="112px" @error="dropSrcset" /></span>
-              <span class="p-tx"
-                ><span v-if="b.created_at" class="p-m"><pr-icon name="cal" /><time :datetime="b.created_at">{{ fmtDate(b.created_at) }}</time></span
-                ><span class="p-t">{{ b.title }}</span></span
-              >
-              <pr-icon cls="chev" name="right" />
-            </router-link>
-          </li>
-        </ul>
-        <router-link :to="blogTo" class="btn sm">{{ t("pralino.home.allPosts", "All journal posts") }}</router-link>
+    <!-- 10 · Journal (tint band, last) -->
+    <section v-if="posts.length" aria-labelledby="j-h" class="journal band">
+      <div class="j-in">
+        <pr-photo :alt="t('pralino.home.journalAlt', 'A café table by the window')" art="whisk" class="j-ph" name="pralino-journal">
+          <span aria-hidden="true" class="j-word" data-over-photo>{{ t("pralino.home.journalWord", "Journal") }}</span>
+        </pr-photo>
+        <div class="j-txt">
+          <p class="eyebrow">{{ t("pralino.home.jEyebrow", "Inspired by the counter") }}</p>
+          <h2 id="j-h" class="h2">{{ t("pralino.home.jH", "Notes from the {shop} journal", { shop: shopName }) }}</h2>
+          <p class="lead">{{ t("pralino.home.jLead", "Guides to the collections, and plain answers about ordering, delivery and pickup.") }}</p>
+          <ul class="posts">
+            <li v-for="b in posts" :key="b.id">
+              <router-link :to="postRoute(b)" class="post">
+                <span class="p-th"><img v-if="postImg(b)" :src="postImg(b)" :srcset="photoSrcset(postImg(b))" alt="" loading="lazy" sizes="112px" @error="dropSrcset" /></span>
+                <span class="p-tx"
+                  ><span v-if="b.created_at" class="p-m"><pr-icon name="cal" /><time :datetime="b.created_at">{{ fmtDate(b.created_at) }}</time></span
+                  ><span class="p-t">{{ b.title }}</span></span
+                >
+                <pr-icon cls="chev" name="right" />
+              </router-link>
+            </li>
+          </ul>
+          <router-link :to="blogTo" class="btn sm">{{ t("pralino.home.allPosts", "All journal posts") }}</router-link>
+        </div>
       </div>
     </section>
   </div>
@@ -680,6 +667,13 @@ export default {
     /* "six" in English; the number itself in a language without the word. */
     numWord(n) {
       return isEnglish() && n >= 0 && n < NUM_WORDS.length ? NUM_WORDS[n] : String(n);
+    },
+    /* the way's own line icon (the courier, shipping, pickup), else a tick */
+    wayIcon(w) {
+      if (w.pickup) return "store";
+      if (w.type === "Global" || w.type === "Post") return "plane";
+      if (w.type === "Motorbike" || w.type === "Car" || w.type === "Bicycle" || w.type === "Truck") return "bike";
+      return "check";
     },
     feeText(w) {
       if (!w.fee) return t("pralino.home.free", "Free");

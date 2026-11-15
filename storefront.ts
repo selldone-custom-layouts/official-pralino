@@ -44,6 +44,7 @@ import {SetupService} from "@selldone/core-js/server";
 import {Shop} from "@selldone/core-js/models";
 import { bootThemeSwitcher } from "./components/theme-switcher/theme-switcher"; // the shared theme switcher
 import { PRALINO_THEME } from "./components/pralino/pralino-theme";
+import { bootFamily } from "./components/pralino/pralino-family"; // one colour family from the chosen palette
 import { bootRegion, prepareLanguage } from "./components/region-switcher/region"; // language + currency (the owner's choice B)
 import { priceText } from "./components/kalio/i18n/price-text"; // money in sentences written as u-price writes it
 import { EN as LAYOUT_EN, LOADERS as LAYOUT_LANGUAGES } from "./components/kalio/i18n"; // the Kalio base + the Layout's own words
@@ -53,13 +54,14 @@ const vuetify = VuetifyInstance(i18n);
 // Vuetify's light error red reads 4.5:1 on white (its #ff5252 is 3.3:1); set
 // here, not in the switcher's config, so it stays when the switcher is hidden.
 try { vuetify.theme.themes.value.light.colors.error = "#c4122f"; } catch (e) {}
-// Pralino is light first (pralino-theme.settings.ts, mode "light"): on a shop
-// without the switcher the stock default needs nothing painted (the tokens'
-// :root is the cream ground and pistachio); a merchant's own settings are
-// painted before the first paint. On Pralino's showcase shop (Bakio) the
-// footer's Theme row lets a shopper pick a palette and Light / Dark, kept in
-// the browser.
+// Pralino is light first (pralino-theme.settings.ts: palette "tan", mode "light"):
+// style/pralino-theme.scss paints the Tan family before the app starts; the
+// switcher then writes the action colour and Vuetify's primary, and
+// pralino-family.ts every other colour of the chosen palette's family (one
+// colour family). On Pralino's showcase shop (Bakio) the footer's Theme row lets
+// a shopper pick a palette, a custom colour and Light / Dark, kept in the browser.
 bootThemeSwitcher(PRALINO_THEME, vuetify);
+bootFamily(vuetify);
 
 //█████████████████████████████████████████████████████████████
 //―――――――――――――― Global Types ―――――――――――――――

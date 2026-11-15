@@ -1,6 +1,6 @@
-/* ▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Pralino Cocoa Patisserie — the Layout's own touches ▆▆▆▆▆▆▆▆▆▆▆▆▆▆
+/* ▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Pralino Classic Patisserie — the Layout's own touches ▆▆▆▆▆▆▆▆▆▆▆▆▆▆
 
-   style/pralino/*.css are the B mockup's stylesheets, generated unchanged
+   style/pralino/*.css are the A "Classic" mockup's stylesheets, generated unchanged
    (scripts/pralino-css.cjs) and scoped to Pralino's markup (.pr). What the
    storefront needs on top of them lives here: the page ground, the sticky
    header inside Vuetify's app (the top bar scrolls away), the language &
@@ -65,7 +65,7 @@ html body,
   text-decoration: none !important;
 }
 
-/* ── The header: the top bar scrolls away, the cocoa bar sticks ── */
+/* ── The header: the top bar scrolls away, the white header sticks ── */
 .pr.pr-hdrwrap {
   position: sticky;
   top: calc(-1 * var(--pr-tb-h));
@@ -144,28 +144,37 @@ html body,
     font-size: 22px;
   }
 }
-/* The wordmark outside Pralino's own markup (the sign-in sheet). */
+/* The wordmark: the shop's title in Cormorant Garamond, its city in small tracked capitals (also outside
+   Pralino's own markup, e.g. the sign-in sheet). */
 .pr-wm {
   display: inline-flex;
-  align-items: baseline;
-  gap: 3px;
+  flex-direction: column;
+  align-items: center;
   .wm-name {
     font-family: var(--pr-serif);
-    font-style: italic;
-    font-weight: 600;
+    font-style: normal;
+    font-weight: 500;
     font-size: 40px;
     line-height: 0.9;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.04em;
   }
-  .wm-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--pr-act);
+  .wm-sub {
+    font: 700 9px/1 var(--pr-sans);
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    margin-top: 7px;
+    padding-inline-start: 0.38em;
+    color: var(--pr-muted);
   }
 }
-.pr .hdr .wm .wm-dot {
-  background: var(--pr-act-dk);
+@media (max-width: 760px) {
+  .pr-wm .wm-name {
+    font-size: 32px;
+  }
+  .pr-wm .wm-sub {
+    font-size: 8px;
+    margin-top: 5px;
+  }
 }
 /* The count on the bag sits on the light accent: cocoa words. */
 .pr .count {
@@ -210,7 +219,7 @@ html body,
   height: 28px;
   gap: 6px;
   padding: 0 10px 0 8px;
-  border-radius: 999px !important;
+  border-radius: var(--pr-r-in) !important;
   box-shadow: inset 0 0 0 1px var(--pr-dark-line-2);
   font: 600 10.5px/1 var(--pr-sans);
   letter-spacing: 0.14em;
@@ -286,7 +295,7 @@ html body,
 .pr .rs-chip {
   min-height: 44px;
   padding: 0 16px;
-  border-radius: 999px;
+  border-radius: var(--pr-r-in);
   background: var(--pr-band);
   color: var(--pr-ink);
   font: 600 14px/1 var(--pr-sans);
@@ -311,7 +320,7 @@ html body,
   margin: 0 auto;
   padding: 0 0 env(safe-area-inset-bottom, 0px);
   overflow: auto;
-  border-radius: 22px 22px 0 0;
+  border-radius: var(--pr-r-pn) var(--pr-r-pn) 0 0;
   background: var(--pr-surface);
   color: var(--pr-ink);
   animation: none;
@@ -824,7 +833,7 @@ html body,
   width: 80%;
   height: 14px;
   margin: 6px auto;
-  border-radius: 7px;
+  border-radius: var(--pr-r-in);
   background: var(--pr-band);
 }
 .pr .pr-skel .sk-l.s {
@@ -902,21 +911,21 @@ html body,
   display: block;
   height: 18px;
   margin-bottom: 16px;
-  border-radius: 9px;
+  border-radius: var(--pr-r-in);
   background: var(--pr-band);
 }
 .pr .pr-pd-skel .pd-buy .-a { width: 30%; }
 .pr .pr-pd-skel .pd-buy .-b { width: 80%; height: 46px; }
 .pr .pr-pd-skel .pd-buy .-c { width: 40%; }
 .pr .pr-pd-skel .pd-buy .-d { width: 55%; height: 40px; }
-.pr .pr-pd-skel .pd-buy .-e { width: 100%; height: 50px; border-radius: 999px; }
+.pr .pr-pd-skel .pd-buy .-e { width: 100%; height: 50px; border-radius: var(--pr-r-in); }
 /* Selldone's option picker and buy section for other kinds of product, in Pralino's dress. */
 .pr .pr-sd-variants,
 .pr .pr-sd-more {
   width: 100%;
 }
 .pr .pr-sd-buy .v-btn {
-  border-radius: 999px !important;
+  border-radius: var(--pr-r-in) !important;
   background: var(--pr-act) !important;
   color: var(--pr-act-on) !important;
   box-shadow: none !important;
@@ -994,7 +1003,7 @@ html body,
   justify-items: start;
   padding: 16px;
   margin-bottom: 16px;
-  border-radius: 14px;
+  border-radius: var(--pr-r-in);
   background: var(--pr-act-soft);
   color: var(--pr-act-text);
   font-size: 14px;
@@ -1012,7 +1021,7 @@ html body,
   gap: 10px;
   padding: 12px 16px;
   margin-bottom: 16px;
-  border-radius: 14px;
+  border-radius: var(--pr-r-in);
   background: var(--pr-act-soft);
   color: var(--pr-act-text);
   font-size: 14px;
@@ -1083,7 +1092,7 @@ html body,
   width: 100%;
 }
 .pr .pr-od-sd .v-btn {
-  border-radius: 999px !important;
+  border-radius: var(--pr-r-in) !important;
   box-shadow: none !important;
   text-transform: none !important;
   letter-spacing: 0 !important;
@@ -1129,7 +1138,7 @@ html body,
   min-width: 32px;
   height: 32px;
   padding: 0 6px;
-  border-radius: 999px;
+  border-radius: var(--pr-r-in);
   color: var(--pr-muted);
   font-size: 12px;
   opacity: 0;
@@ -1357,7 +1366,7 @@ html.pr-dark .pr .pr-map__img {
 }
 .pr .pr-map__b {
   fill: var(--pr-surface);
-  font: italic 600 17px/1 var(--pr-serif);
+  font: 500 17px/1 var(--pr-serif);
   text-anchor: middle;
 }
 /* The article's comments: Selldone's list in the reading column, without
@@ -1448,7 +1457,7 @@ html.pr-dark .pr .pr-map__img {
   color: var(--pr-ink) !important;
 }
 .pr .pr-code .v-field {
-  border-radius: 999px !important;
+  border-radius: var(--pr-r-in) !important;
   background: var(--pr-field) !important;
   color: var(--pr-ink) !important;
 }
@@ -1483,7 +1492,7 @@ html.pr-dark .pr .pr-map__img {
 }
 .pr .pr-offers .s--coupon-card {
   border: 1.5px dashed var(--pr-line) !important;
-  border-radius: 14px;
+  border-radius: var(--pr-r-in);
   padding: 12px;
   background: var(--pr-bg);
   color: var(--pr-ink);
@@ -1498,7 +1507,7 @@ html.pr-dark .pr .pr-map__img {
   color: var(--pr-muted) !important;
 }
 .pr .pr-offers .coupon-slide > .v-btn {
-  border-radius: 14px !important;
+  border-radius: var(--pr-r-in) !important;
   background: var(--pr-bg) !important;
   color: var(--pr-ink) !important;
   box-shadow: inset 0 0 0 1.5px var(--pr-line) !important;
@@ -1530,7 +1539,7 @@ html.pr-dark .pr .pr-map__img {
   height: auto !important;
   min-height: 24px;
   padding: 3px 10px !important;
-  border-radius: 999px !important;
+  border-radius: var(--pr-r-in) !important;
   background: var(--pr-act-soft) !important;
   color: var(--pr-act-text) !important;
   font: 600 12px/1.2 var(--pr-sans) !important;
@@ -1549,4 +1558,20 @@ html.pr-dark .pr .pr-map__img {
    stars) drawn in the footer's own light ink, like Selldone's mark beside it. */
 .pr .ftr-bot .pr-gdpr .v-img {
   filter: brightness(0) invert(0.82);
+}
+
+/* ── Pralino A: the product page's bands reach the window edges (the tint title band, the tabs band) ── */
+.pr.pr-pdp {
+  padding-inline: 0 !important;
+}
+/* The stock dot and the compare row's dot sit in the line (Selldone's pods.scss makes a .dot absolute). */
+.pr .pd-stock .dot,
+.pr .cmp-row .dot {
+  position: static !important;
+  flex: none;
+}
+/* The theme row's Light / Dark switch on the shape scale (the kit draws pills). */
+.pr .dts-in .ts-mode,
+.pr .dts-in .ts-mode .ts-mode__btn {
+  border-radius: var(--pr-r-in) !important;
 }

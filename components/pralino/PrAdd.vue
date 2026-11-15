@@ -1,5 +1,5 @@
 <!--
-  Pralino — the add box (pralino-design/src/pralino.js addBox()): "Add to bag"
+  Pralino — the add box (pralino-design/src/shell.js addBox()): "Add to bag"
   (a flat pill), then − n + in its place. The count is the bag's own line
   (kalio-basket's queue through the shared buy mixin: a tap shows at once,
   the requests go out one at a time, quick taps are never lost). The "+"

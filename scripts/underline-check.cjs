@@ -6,11 +6,11 @@
 //   LINE  text-decoration-line is not "none" (underline / overline / line-through on a link or button,
 //         except a struck "was" price, which is a price, not a link line).
 // Usage: node scripts/underline-check.cjs <base> [wait-selector]
-//   PAGES="home=/,…" WIDTHS=1440,390 STORAGE='{"bakini-theme":"{\"palette\":\"caramel\",\"mode\":\"dark\"}"}' MAX=80
+//   PAGES="home=/,…" WIDTHS=1440,390 STORAGE='{"pralino-theme":"{\"palette\":\"tan\",\"mode\":\"dark\"}"}' MAX=80
 // Prints each finding and "TOTAL n". Deliver at 0.
 const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright";
 const { chromium } = require(PW);
-const base = (process.argv[2] || "http://localhost:9135").replace(/\/$/, "");
+const base = (process.argv[2] || "http://localhost:9150").replace(/\/$/, "");
 const WAIT = process.argv[3] || ".ftr";
 const PAGES = (process.env.PAGES || "home=/,category=/croissants-category,product=/product/720375,blog=/blog,about=/about-us,contact=/contact-us,faq=/faq,404=/no-such-page")
   .split(",")

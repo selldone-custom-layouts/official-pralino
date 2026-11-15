@@ -31,7 +31,7 @@ const evalJs = process.env.EVAL_FILE ? fs.readFileSync(process.env.EVAL_FILE, "u
       const ctx = await browser.newContext({ viewport: { width: w, height: w < 600 ? 844 : 900 }, deviceScaleFactor: 1, isMobile: w < 600, hasTouch: w < 600 });
       await ctx.addInitScript(([m, ls]) => {
         try {
-          localStorage.setItem("pralino-theme", JSON.stringify({ palette: "pistachio", mode: m }));
+          localStorage.setItem("pralino-theme", JSON.stringify({ palette: "tan", mode: m }));
           for (const k of Object.keys(ls)) localStorage.setItem(k, ls[k]);
         } catch (e) {}
       }, [mode, extraLs]);

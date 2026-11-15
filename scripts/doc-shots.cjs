@@ -54,7 +54,7 @@ async function shoot(phone, mode, jobs, after) {
   });
   await ctx.addInitScript((m) => {
     try {
-      localStorage.setItem("pralino-theme", JSON.stringify({ palette: "pistachio", mode: m }));
+      localStorage.setItem("pralino-theme", JSON.stringify({ palette: "tan", mode: m }));
     } catch (e) {}
   }, mode);
   const pg = await ctx.newPage();

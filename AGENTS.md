@@ -22,26 +22,26 @@ the owner's controlled clone, fork, or release branch.
 
 ## Theme (palette, brand colour, light or dark, the visitor switcher)
 
-When a merchant asks for a theme ("use the cherry theme", "my brand colour is #F5C400", "make it dark"), edit **one file only**: `components/pralino/pralino-theme.settings.ts`. Nothing else needs to change, and the colours are made readable automatically (buttons, links, chosen states, dark mode). Pralino Cocoa Patisserie paints every action with one colour (pistachio by default) on a cream ground with cocoa ink; the header and footer stay cocoa in every palette.
+When a merchant asks for a theme ("use the rose theme", "my brand colour is #F5C400", "make it dark"), edit **one file only**: `components/pralino/pralino-theme.settings.ts`. Nothing else needs to change, and the colours are made readable automatically (buttons, links, chosen states, dark mode). Pralino Classic Patisserie is drawn in **one colour family**: the palette's hue gives every ground (the white page and its soft tint bands, the plates under the pastries, the lines, the words, the dark top bar and footer) and the action colour, so a palette or a brand colour re-tints the whole page, never just the buttons.
 
 | Setting | Allowed values |
 | --- | --- |
-| `palette` | `"pistachio"` (the brand; the default), `"cherry"`, `"caramel"`, `"blueberry"` |
-| `brandColor` | any `"#RRGGBB"`; when set it replaces `palette` |
-| `mode` | `"light"` (the cream ground; the default) or `"dark"` (the cocoa night) |
+| `palette` | `"tan"` (the brand; the default), `"rose"`, `"sage"`, `"slate"`, `"ink"` |
+| `brandColor` | any `"#RRGGBB"`; when set it replaces `palette` (the whole page takes this colour's family) |
+| `mode` | `"light"` (white and the soft tint; the default) or `"dark"` (the family's night) |
 | `themeSwitcher` | `"showcase"` (the visitor switcher shows only on the Layout's own showcase shop, Bakio 15740; the default), `"on"` (the merchant's visitors get the Theme row in the footer), `"off"` |
 | `textOnBrand` | only with `brandColor`: `"auto"` (a light brand such as yellow keeps its colour, with dark words on it) or `"white"` (white words; a light colour is darkened) |
 
 Worked examples (change only these lines; leave the rest of the file as it is):
 
-- **"Use the cherry theme"**: `palette: "cherry"`.
+- **"Use the rose theme"**: `palette: "rose"`.
 - **"My brand colour is #F5C400"**: `brandColor: "#F5C400", textOnBrand: "auto"`. Use `textOnBrand: "white"` if they want white words; the colour is then darkened.
 - **"Make it dark"**: `mode: "dark"`.
 - **"Let visitors switch themes"**: `themeSwitcher: "on"`.
 - **"Remove the switcher"**: `themeSwitcher: "off"`. On a merchant's own shop it is already hidden with `"showcase"`.
-- **"Go back to the original colours"**: remove `brandColor` and set `palette: "pistachio", mode: "light"`.
+- **"Go back to the original colours"**: remove `brandColor` and set `palette: "tan", mode: "light"`.
 
-The switcher itself is the shared package in `components/theme-switcher/` (the same code as every other Layout; see its PORTING.md in the kit). Pralino's palettes are in `components/pralino/pralino-theme.ts` and its grounds, lines and words for both modes in `style/pralino-theme.scss`; do not edit them for a merchant's theme.
+The switcher itself is the shared package in `components/theme-switcher/` (the same code as every other Layout; see its PORTING.md in the kit). Pralino's palettes are in `components/pralino/pralino-theme.ts`, the family that paints every ground from the palette in `components/pralino/pralino-family.ts`, and the Tan defaults for both modes (and the shape scale: circle, 8 px panels, 4 px inner parts) in `style/pralino-theme.scss`; do not edit them for a merchant's theme.
 
 Then release and check:
 
@@ -50,7 +50,7 @@ Then release and check:
    ```sh
    PAGES="home=/,category=/<a category>,product=/product/<id>" node components/theme-switcher/tools/contrast-audit.cjs https://<your shop> ".ftr"
    ```
-3. If the visitor switcher is on, also run the kit's `ring-sweep.cjs` in light and dark (`STORAGE='{"pralino-theme":"{\\"palette\\":\\"pistachio\\",\\"mode\\":\\"dark\\"}"}'`). The switcher is the Theme row in the footer.
+3. If the visitor switcher is on, also run the kit's `ring-sweep.cjs` in light and dark (`STORAGE='{"pralino-theme":"{\\"palette\\":\\"tan\\",\\"mode\\":\\"dark\\"}"}'`). The switcher is the Theme row in the footer.
 
 ## Words and languages
 

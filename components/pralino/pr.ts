@@ -1,6 +1,6 @@
 /*
  * Pralino — the shared shell state and the shop's data as the mockups
- * (pralino-design/src/pralino.js) use them, read live from the shop: one
+ * (pralino-design/src/shell.js) use them, read live from the shop: one
  * layer state and one catalogue for every page.
  *
  * - `pr`: the collections (root categories, the shop's order) and the

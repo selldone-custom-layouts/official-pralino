@@ -1,15 +1,14 @@
 <!--
-  Pralino — the footer (pralino-design/src/pralino.js footer(); set B): a dark
-  cocoa band over the slot pralino-footer (a dark linen texture; without the
-  photo, the mockup's fine dot texture), one line in the large serif that
-  says how orders reach the buyer (from the shop's own ways), the counter's
-  address and days and hours, the email and the phone set large. Then the
-  Theme band (the owner's rule of 10 November 2026: palettes, a custom
-  colour and Light / Dark, in a band of its own above the legal row; the
-  kit's ThemeSwitcherRow, only on the showcase shop). Then the legal row:
-  Privacy, Terms, FAQ, Selldone's cookie settings, the copyright and city,
-  the shop's social links and a small "made with" credit. A shop with
-  custom footer code keeps Selldone's footer (StorefrontLayout).
+  Pralino — the footer (pralino-design/src/shell.js footer(); set A "Classic"): the family dark band over
+  the slot pralino-footer (a dark linen texture under a family scrim, so it takes the palette's hue;
+  without the photo, the plain family dark). Four columns: the shop's name set large with one line that
+  says how orders reach the buyer (from the shop's own ways); Visit (the counter's address, days and
+  hours); Shop (the collections, from the live catalogue); Contact (the email, the phone set large, the
+  Journal, About and Contact pages). Then the Theme band (the owner's rule of 10 November 2026: palettes,
+  a custom colour and Light / Dark, in a band of its own above the legal row; the kit's
+  ThemeSwitcherRow, only on the showcase shop). Then the legal row: Privacy, Terms, FAQ, Selldone's
+  cookie settings, the copyright and city, the shop's social links and a small "made with" credit. A
+  shop with custom footer code keeps Selldone's footer (StorefrontLayout).
 -->
 <template>
   <div class="pr pr-ftrwrap">
@@ -18,13 +17,24 @@
         <template #fallback><span aria-hidden="true" class="ph-art"></span></template>
       </pr-photo>
       <div class="wrap ftr-in">
-        <p class="ftr-line">{{ line }}</p>
+        <div class="ftr-brand">
+          <span class="ftr-wm"><bdi>{{ shopName }}</bdi></span>
+          <p class="ftr-line">{{ line }}</p>
+        </div>
         <div v-if="facts.address || openLine" class="ftr-col">
-          <h3>{{ t("pralino.ftr.address", "Address") }}</h3>
+          <h3>{{ t("pralino.ftr.visit", "Visit") }}</h3>
           <p v-if="addressLines.length">
             <template v-for="(l, i) in addressLines" :key="i"><bdi>{{ l }}</bdi><br v-if="i < addressLines.length - 1" /></template>
           </p>
           <p v-if="openLine" class="ftr-h">{{ openLine }}</p>
+        </div>
+        <div v-if="cats.length" class="ftr-col">
+          <h3>{{ t("pralino.ftr.shop", "Shop") }}</h3>
+          <ul class="ftr-l">
+            <li v-for="c in cats.slice(0, 8)" :key="c.id">
+              <router-link :to="catTo(c)"><bdi>{{ catTitle(c) }}</bdi></router-link>
+            </li>
+          </ul>
         </div>
         <div v-if="facts.email || facts.phone" class="ftr-col">
           <h3>{{ t("pralino.ftr.contact", "Contact") }}</h3>
@@ -32,6 +42,11 @@
             <a :href="'mailto:' + facts.email">{{ facts.email }}</a>
           </p>
           <a v-if="facts.phone" :href="'tel:' + facts.phone.replace(/[^\d+]/g, '')" class="ftr-phone" dir="ltr">{{ facts.phone }}</a>
+          <ul class="ftr-l sm">
+            <li><router-link :to="blogTo">{{ t("pralino.ftr.journal", "Journal") }}</router-link></li>
+            <li><router-link :to="{ name: r.SHOP_PROFILE_PAGE_ABOUT_US }">{{ t("pralino.ftr.about", "About") }}</router-link></li>
+            <li><router-link :to="{ name: r.SHOP_CONTACT_US }">{{ t("pralino.ftr.contactPage", "Contact") }}</router-link></li>
+          </ul>
         </div>
       </div>
 
@@ -67,7 +82,8 @@ import { themeState } from "../../theme-switcher/theme-switcher";
 import SStorefrontSocialButtons from "@selldone/components-vue/storefront/social/SStorefrontSocialButtons.vue";
 import SFooterSectionGdpr from "@selldone/components-vue/storefront/footer/section/gdpr/SFooterSectionGdpr.vue";
 import SFooterSectionSelldone from "@selldone/components-vue/storefront/footer/section/selldone/SFooterSectionSelldone.vue";
-import { loadDm, openLine as openLineOf, shopFacts } from "../pr";
+import { catTitle, catTo, loadDm, openLine as openLineOf, pr, shopFacts } from "../pr";
+import { journalRoute } from "../../kalio/pages/kalio-journal";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 /* A US state's two letters for the address line ("CA"). */
@@ -76,7 +92,7 @@ const US = { California: "CA", "New York": "NY", Texas: "TX", Washington: "WA", 
 export default {
   name: "PralinoFooter",
   components: { PrPhoto, ThemeSwitcherRow, SStorefrontSocialButtons, SFooterSectionGdpr, SFooterSectionSelldone },
-  data: () => ({ theme: themeState }),
+  data: () => ({ theme: themeState, pr }),
   computed: {
     shop() {
       return this.$store.getters.getShop;
@@ -93,6 +109,12 @@ export default {
     },
     year() {
       return new Date().getFullYear();
+    },
+    cats() {
+      return this.pr.cats;
+    },
+    blogTo() {
+      return journalRoute();
     },
     faqTo() {
       return this.$router.hasRoute("ShopFAQ") ? { name: "ShopFAQ" } : { name: this.r.SHOP_CONTACT_US };
@@ -122,6 +144,6 @@ export default {
   created() {
     loadDm();
   },
-  methods: { t },
+  methods: { t, catTitle, catTo },
 };
 </script>

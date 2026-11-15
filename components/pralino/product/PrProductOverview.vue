@@ -306,9 +306,11 @@ export default {
       this.io = new IntersectionObserver(
         (entries) => {
           const e = entries[entries.length - 1];
-          this.barOn = !!e && !e.isIntersecting && e.boundingClientRect.bottom < 0;
+          this.barOn = !!e && !e.isIntersecting;
         },
-        { threshold: 0 },
+        /* the box counts as "in view" while it is anywhere below the top of the window, so the bar
+           shows only once it has scrolled away above, and hides again on the way back up */
+        { threshold: 0, rootMargin: "0px 0px 100000px 0px" },
       );
       this.io.observe(this.$refs.add);
     }

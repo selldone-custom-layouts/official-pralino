@@ -19,7 +19,7 @@
 // Prints each finding and "TOTAL n". Deliver at 0.
 const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright";
 const { chromium } = require(PW);
-const base = (process.argv[2] || "http://localhost:9135").replace(/\/$/, "");
+const base = (process.argv[2] || "http://localhost:9150").replace(/\/$/, "");
 const WAIT = process.argv[3] || ".ftr";
 const PAGES = (process.env.PAGES ||
   "home=/,category=/croissants-category,deals=/?filter=%7B%22only_has_discount%22%3Atrue%7D,search=/?search=pistachio,product=/product/720375,product2=/product/720359,compare=/comparison?list=p720375_p720378_p720380,blog=/blog,404=/no-such-page,faq=/faq,contact=/contact-us,about=/about-us")
@@ -158,7 +158,7 @@ const fillCart = (pg) =>
       await push(pg, "/");
       await pg.waitForTimeout(3500);
       if (!mob) {
-        await pg.click(".hdr-nav [aria-controls=mega]").catch(() => {});
+        await pg.click(process.env.MEGA || "[aria-controls=dd-shop]").catch(() => {});
         await pg.waitForTimeout(800);
         report(`${w} shop-menu`, await pg.evaluate(audit));
         await pg.keyboard.press("Escape");
@@ -171,7 +171,7 @@ const fillCart = (pg) =>
       await pg.waitForTimeout(500);
       await push(pg, "/croissants-category");
       await pg.waitForTimeout(3500);
-      const opened = await pg.evaluate(() => { const b = document.querySelector(".pc-look"); if (b) { b.scrollIntoView(); b.click(); } return !!b; });
+      const opened = await pg.evaluate(() => { const b = document.querySelector(".pc-qv"); if (b) { b.scrollIntoView(); b.click(); } return !!b; });
       if (opened) {
         await pg.waitForTimeout(3500);
         report(`${w} quick-look`, await pg.evaluate(audit));

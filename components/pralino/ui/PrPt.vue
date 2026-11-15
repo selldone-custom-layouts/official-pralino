@@ -1,13 +1,18 @@
 <!--
-  Pralino — the page-title band (pralino-design/src/shell.js pt(), nicdark's
-  title band): cocoa, a scalloped lower edge, two faint drawings, the
-  breadcrumb (Home first), the italic title and a lead. cls: "compact",
-  "slim" (breadcrumb only), "art-pt". The default slot is the band's extra
-  (a search form, the checkout steps, a sample tag).
+  Pralino — the page-title band (pralino-design/src/shell.js pt()): a quiet family tint, the breadcrumb
+  (Home first), the serif title and a lead; one faint drawing. cls: "compact", "slim" (breadcrumb only),
+  "art-pt" (the article: its cover overlaps the band). With `photo` (a collection's own photo) or
+  `cuts` (its best sellers, when it has no photo) the band is the collection page's: the words left and
+  the photo bleeding to the window edge on the right (on a phone, the photo first, inside the gutters).
+  The default slot is the band's extra (a search form, the checkout steps, a sample tag).
 -->
 <template>
-  <section :aria-label="label || undefined" :class="['pt', cls]">
-    <pr-art :name="art" wrap="pt-a1" /><pr-art :name="art2" wrap="pt-a2" />
+  <section :aria-label="label || undefined" :class="['pt', cls, { 'has-ph': hasPh }]">
+    <div v-if="hasPh" class="pt-ph">
+      <img v-if="photo" :src="photo" alt="" decoding="async" height="1050" width="1400" />
+      <pr-cuts v-else :products="cuts" kind="trio" />
+    </div>
+    <pr-art v-else :name="art" wrap="pt-a1" />
     <div class="wrap pt-in">
       <nav :aria-label="t('pralino.pt.crumbs', 'Breadcrumb')" class="crumbs">
         <ol>
@@ -20,6 +25,7 @@
           </li>
         </ol>
       </nav>
+      <p v-if="eyebrow" class="eyebrow pt-e">{{ eyebrow }}</p>
       <h1 v-if="title" class="pt-h"><bdi>{{ title }}</bdi></h1>
       <p v-if="lead" class="pt-l">{{ lead }}</p>
       <slot />
@@ -29,19 +35,30 @@
 
 <script>
 import PrArt from "../PrArt.vue";
+import PrCuts from "../PrCuts.vue";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 export default {
   name: "PrPt",
-  components: { PrArt },
+  components: { PrArt, PrCuts },
   props: {
     crumbs: { type: Array, default: () => [] },
     title: { type: String, default: "" },
     lead: { type: String, default: "" },
+    eyebrow: { type: String, default: "" },
     cls: { type: String, default: "" },
     label: { type: String, default: "" },
     art: { type: String, default: "croissant" },
     art2: { type: String, default: "macaron" },
+    /** the collection's own photo (url) */
+    photo: { type: String, default: "" },
+    /** its best sellers, drawn when it has no photo */
+    cuts: { type: Array, default: () => [] },
+  },
+  computed: {
+    hasPh() {
+      return !!this.photo || this.cuts.length > 0;
+    },
   },
   methods: { t },
 };

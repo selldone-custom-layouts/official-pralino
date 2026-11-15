@@ -1,12 +1,10 @@
 <!--
-  Pralino — the product card (pralino-design/src/shell.js card()): the plate
-  with the cut-out (a fixed square, the photo contained), the −25% roundel and
-  the quick-view eye in the plate's top corners (no words there), then the
-  collection, the name (two lines), "Per <unit>" (and "only n left" when five
-  or fewer), the price with the struck was-price, the saving, and "Add to
-  bag", which turns into − n + in place (PrAdd). The roundel's words always
-  fit their circle (fit-in-circle). A card without a saving keeps the saving
-  line's height, so a row's buttons stay level.
+  Pralino — the product card (pralino-design/src/shell.js card(); set A): an open card (no box) with a
+  tinted plate (a fixed square, the cut-out contained), the near-black −25% roundel and the quick-view
+  disc in the plate's top corners (no words there); then, left-aligned, the collection, the name (two
+  lines), "Per <unit>" (and "only n left" when five or fewer), the price with the struck was-price and
+  the saving, and "Add to bag", which turns into − n + in place (PrAdd). The roundel's words always fit
+  their circle (fit-in-circle).
 -->
 <template>
   <article :class="['pc', cls]" :style="delay != null ? { '--d': delay + 'ms' } : null">
@@ -39,10 +37,8 @@
         {{ t("pralino.card.per", "Per {unit}", { unit }) }}<template v-if="low">{{ " · " }}<span class="low">{{ t("pralino.card.onlyLeft", "only {n} left", { n: product.quantity }) }}</span></template>
       </p>
       <p class="pc-pr">
-        <span class="now money">{{ money(pv.now) }}</span><template v-if="pv.was">{{ " " }}<s class="was money">{{ money(pv.was) }}</s></template>
-      </p>
-      <p :aria-hidden="pv.save > 0 ? undefined : 'true'" :class="['pc-sv', { '-none': !(pv.save > 0) }]">
-        {{ pv.save > 0 ? t("pralino.card.save", "Save {amount}", { amount: money(pv.save) }) : " " }}
+        <span class="now money">{{ money(pv.now) }}</span><template v-if="pv.was">{{ " " }}<s class="was money">{{ money(pv.was) }}</s></template
+        ><span v-if="pv.save > 0" class="pc-sv">{{ t("pralino.card.save", "Save {amount}", { amount: money(pv.save) }) }}</span>
       </p>
       <div class="pc-add"><pr-add :product="product" /></div>
     </div>

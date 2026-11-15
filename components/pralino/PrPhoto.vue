@@ -1,7 +1,7 @@
 <!--
-  Pralino — a photo slot (pralino-design/CODEX-PROMPTS.md; the mockup's ph()).
+  Pralino — a photo slot (the A mockup's ph(); the photos are assets/pralino/*.webp).
   With assets/pralino/<name>.webp in the build it shows that photo (cover),
-  with the mockup's soft scrim under words on a deep slot. Without it, the
+   Without it, the
   designed fallback: the tinted surface (light or deep) with the mockup's
   line art, or whatever the "fallback" slot draws (live cut-outs of the
   shop's own pastries). Never a caption, a file name or a size. The default
@@ -9,7 +9,7 @@
 -->
 <template>
   <div :class="['ph', { deep, 'has-photo': !!src }]" :data-photo="name">
-    <img v-if="src" :alt="alt" :loading="eager ? 'eager' : 'lazy'" :src="src" class="ph-img" decoding="async" draggable="false" />
+    <img v-if="src" :alt="alt" :loading="eager ? 'eager' : 'lazy'" :src="src" :style="pos ? { objectPosition: pos } : undefined" class="ph-img" decoding="async" draggable="false" />
     <template v-else>
       <slot name="fallback">
         <span aria-hidden="true" class="ph-art"><pr-art :name="art" /></span>
@@ -35,6 +35,8 @@ export default {
     art: { type: String, default: "croissant" },
     alt: { type: String, default: "" },
     eager: { type: Boolean, default: false },
+    /** object-position of the photo (keeps its calm part under words). */
+    pos: { type: String, default: "" },
   },
   computed: {
     src() {

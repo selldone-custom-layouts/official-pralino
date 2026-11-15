@@ -1,28 +1,21 @@
 /*
- * Pralino Cocoa Patisserie — the theme switcher's config (the footer's Theme
- * row: the owner's rules: colour palettes, a custom colour and Light / Dark,
- * a click changes the whole site; the same shared package in every Layout,
- * components/theme-switcher/).
+ * Pralino Classic Patisserie — the theme switcher's config (the footer's Theme row: the owner's rules:
+ * colour palettes, a custom colour and Light / Dark, a click changes the whole site; the same shared
+ * package in every Layout, components/theme-switcher/).
  *
- * Pralino is light first (pralino-design/home-b.html, set B "Cocoa &
- * Pistachio"): a cream ground, cocoa ink and header, a pistachio accent.
- * Dark is the cocoa night version. Both sets of grounds, lines and words
- * are in style/pralino-theme.scss (:root = light, html.pr-dark = dark); this
- * config writes only the palette's action colours (--pr-act*) and Vuetify's
- * theme, and keeps the inherited names (--bk-act*, which Vuetify's
- * --v-theme-primary and the not-yet-ported pages read) on the same colour.
+ * Pralino is light first (pralino-design/home-a.html, set A "Classic"): white and soft-tint bands, the
+ * family's near-black ink, a tan accent. ONE COLOUR FAMILY: components/pralino/pralino-family.ts writes
+ * every colour of the chosen palette's family (grounds, plates, lines, words, the dark bars) inline on
+ * <html>; this config writes the action colour (--pr-act, -deep, -on, -text) and Vuetify's primary, and
+ * keeps the inherited names (--bk-act*, which Vuetify's --v-theme-primary in kalio-tokens.scss and the
+ * shared Kalio pages read) on the same colour.
  *
- * The palettes are the mockup's (pralino-design/src/pralino.js PRESETS):
- * Pistachio (the brand, with the mockup's hand-set values), Cherry, Caramel
- * and Blueberry, each built by paletteFromColor() with Pralino's surfaces
- * (the same function the Custom swatch uses), exactly as the mockup's
- * palVars() builds them. "dk" is the palette's light shade for words on the
- * cocoa header and footer (the mockup's --act-dk: the dark mode's text).
- *
- * Contrast (WCAG 2.1, paletteFromColor against the surfaces below): white
- * on each light primary 4.5:1 or more (Pistachio #5a7440 5.30); the dark
- * primaries keep their words (Pistachio's dark #a9c584 carries cocoa words
- * #1a1310, 9.4:1).
+ * The palettes are the mockup's (pralino-design/src/tokens.js PRESETS): Tan (the brand), Rose, Sage,
+ * Slate and Ink, each built by paletteFromColor() on its own family's surfaces, exactly as tokens.js
+ * vars() builds them (the values below are its output). Contrast (WCAG 2.1): white on every light
+ * primary 5.1:1 or more (Tan #8b6640 5.16); every link colour 4.6:1 or more on the white page, the tint
+ * band and the plate; the dark primaries keep white words (5.1:1+) and their link colours read 7:1 on
+ * the dark grounds.
  */
 import type { ThemeSwitcherConfig } from "../theme-switcher/theme-switcher";
 import { THEME_SETTINGS } from "./pralino-theme.settings";
@@ -40,9 +33,10 @@ function pal(id: string, name: () => string, light: Record<string, string>, dark
   };
 }
 
-/** The surfaces every palette is made readable on (the mockup's SURF). */
-const LIGHT_SURFACES = ["#f7f1ea", "#efe5d9", "#fffaf4"];
-const DARK_SURFACES = ["#1a1310", "#231a15", "#2d221b"];
+/* The surfaces a Custom colour is made readable on: every family's grounds sit at these lightnesses
+   (white, the band L .985, the plate L .966; dark: page .17, band .195, card .225, plate .26). */
+const LIGHT_SURFACES = ["#ffffff", "#fafafa", "#f4f4f4"];
+const DARK_SURFACES = ["#0f0f0f", "#151515", "#1c1c1c", "#242424"];
 
 export const PRALINO_THEME: ThemeSwitcherConfig = {
   /* The merchant's choice: pralino-theme.settings.ts, the one file to edit. */
@@ -52,7 +46,7 @@ export const PRALINO_THEME: ThemeSwitcherConfig = {
      own shop must not see the switcher. With themeSwitcher "showcase" it
      shows only on these shops (window.shop.id, else <meta name="shop-name">). */
   showcaseShops: [
-    { id: 15740, name: "bakio" }, // Bakio: Bakini Noir, Pralino
+    { id: 15740, name: "bakio" }, // Bakio: Bakini Noir, Domino, Galio, Pralino
     { id: 15549, name: "digini-hzgablru" }, // Digini: Digito, Besti, Argon, Senso, Medio
     { id: 15645, name: "molino" }, // Molino: Molino, Tario, Walio, Dino, Valero
   ],
@@ -63,41 +57,48 @@ export const PRALINO_THEME: ThemeSwitcherConfig = {
 
   palettes: [
     pal(
-      "pistachio",
-      () => t("pralino.palette.pistachio", "Pistachio"),
-      { primary: "#5a7440", deep: "#465b31", soft: "#e5ecd8", onPrimary: "#ffffff", text: "#4d6436" },
-      { primary: "#a9c584", deep: "#bdd69c", soft: "#2a3321", onPrimary: "#1a1310", text: "#b7d192" },
+      "tan",
+      () => t("pralino.palette.tan", "Tan"),
+      { primary: "#8b6640", deep: "#76522d", soft: "#ffeddb", onPrimary: "#ffffff", text: "#8b6640" },
+      { primary: "#8a653f", deep: "#7b5731", soft: "#3f2810", onPrimary: "#ffffff", text: "#d1a881" },
     ),
     pal(
-      "cherry",
-      () => t("pralino.palette.cherry", "Cherry"),
-      { primary: "#a43c4c", deep: "#8d2639", soft: "#ffeaeb", onPrimary: "#ffffff", text: "#a43c4c" },
-      { primary: "#b54c5a", deep: "#a43c4c", soft: "#4b1d23", onPrimary: "#ffffff", text: "#ff909c" },
+      "rose",
+      () => t("pralino.palette.rose", "Rose"),
+      { primary: "#a15668", deep: "#8b4255", soft: "#ffeaee", onPrimary: "#ffffff", text: "#a15668" },
+      { primary: "#a05668", deep: "#90475a", soft: "#43232a", onPrimary: "#ffffff", text: "#ea98aa" },
     ),
     pal(
-      "caramel",
-      () => t("pralino.palette.caramel", "Caramel"),
-      { primary: "#98571a", deep: "#814400", soft: "#ffecdf", onPrimary: "#ffffff", text: "#98571a" },
-      { primary: "#a05f24", deep: "#915010", soft: "#472301", onPrimary: "#ffffff", text: "#e8a169" },
+      "sage",
+      () => t("pralino.palette.sage", "Sage"),
+      { primary: "#577652", deep: "#44623f", soft: "#e4f7e1", onPrimary: "#ffffff", text: "#577652" },
+      { primary: "#567451", deep: "#476643", soft: "#1f341c", onPrimary: "#ffffff", text: "#99bb94" },
     ),
     pal(
-      "blueberry",
-      () => t("pralino.palette.blueberry", "Blueberry"),
-      { primary: "#4f5f9f", deep: "#3d4b89", soft: "#ebf0ff", onPrimary: "#ffffff", text: "#4f5f9f" },
-      { primary: "#5a6aac", deep: "#4c5c9b", soft: "#222b51", onPrimary: "#ffffff", text: "#9aaef5" },
+      "slate",
+      () => t("pralino.palette.slate", "Slate"),
+      { primary: "#546f8e", deep: "#415b79", soft: "#e6f1ff", onPrimary: "#ffffff", text: "#546f8e" },
+      { primary: "#55708f", deep: "#476280", soft: "#1a2f46", onPrimary: "#ffffff", text: "#96b3d5" },
+    ),
+    pal(
+      "ink",
+      () => t("pralino.palette.ink", "Ink"),
+      { primary: "#4a4a4a", deep: "#383838", soft: "#f0f0f0", onPrimary: "#ffffff", text: "#4a4a4a" },
+      { primary: "#6c6c6c", deep: "#5e5e5e", soft: "#2e2e2e", onPrimary: "#ffffff", text: "#b1b1b1" },
     ),
   ],
 
   /* Palette value -> the variables that carry it. --pr-* are Pralino's own
      (style/pralino-theme.scss); --bk-act* are the inherited names that
      Vuetify's primary (kalio-tokens.scss) and the pages not yet ported read. */
+  /* Palette value -> the variables that carry it. --pr-act* are Pralino's own (the rest of the family:
+     pralino-family.ts); --bk-act* are the inherited names that Vuetify's primary (kalio-tokens.scss)
+     and the shared Kalio pages read. */
   tokens: {
     "--pr-act": "primary",
     "--pr-act-deep": "deep",
-    "--pr-act-soft": "soft",
     "--pr-act-on": "onPrimary",
     "--pr-act-text": "text",
-    "--pr-act-dk": "dark.text",
     "--pr-act-rgb": "primary:rgb",
     "--bk-act": "primary",
     "--bk-act-deep": "deep",
@@ -108,8 +109,7 @@ export const PRALINO_THEME: ThemeSwitcherConfig = {
     "--bk-act-on-rgb": "onPrimary:rgb",
   },
 
-  /* The grounds, lines and words of each mode are in pralino-theme.scss
-     (:root and html.pr-dark), so nothing is written inline for a mode. */
+  /* The grounds, lines and words of each mode: pralino-family.ts (and pralino-theme.scss for the first paint). */
   dark: {},
   light: {},
 
@@ -117,36 +117,36 @@ export const PRALINO_THEME: ThemeSwitcherConfig = {
     light: "light",
     dark: "dark",
     paletteColors: { primary: "primary", "on-primary": "onPrimary" },
-    /* The cocoa night: Selldone's fields, menus, dialogs and sheets are dark too. */
+    /* The Tan family's night (pralino-family.ts repaints these for the palette on the page). */
     darkColors: {
-      background: "#1a1310",
-      surface: "#2d221b",
-      "surface-bright": "#352920",
-      "surface-variant": "#3e3129",
-      "on-background": "#f3e9de",
-      "on-surface": "#f3e9de",
-      "on-surface-variant": "#e4d6c8",
-      secondary: "#b7d192",
-      "on-secondary": "#1a1310",
-      error: "#f2a07f",
-      info: "#b7d192",
-      success: "#a9c584",
-      warning: "#f2c27f",
+      background: "#130e0a",
+      surface: "#221a13",
+      "surface-bright": "#2e2114",
+      "surface-variant": "#3a2a1b",
+      "on-background": "#f8f1ea",
+      "on-surface": "#f8f1ea",
+      "on-surface-variant": "#cfc3b6",
+      secondary: "#d6b08b",
+      "on-secondary": "#130e0a",
+      error: "#f1a497",
+      info: "#d6b08b",
+      success: "#9fbf8f",
+      warning: "#e8c27f",
     },
     lightColors: {
-      background: "#f7f1ea",
-      surface: "#fffaf4",
-      "on-background": "#3a2a22",
-      "on-surface": "#3a2a22",
-      secondary: "#3a2a22",
-      "on-secondary": "#f7f1ea",
-      error: "#c4122f",
+      background: "#ffffff",
+      surface: "#ffffff",
+      "on-background": "#282017",
+      "on-surface": "#282017",
+      secondary: "#2b1c0c",
+      "on-secondary": "#ffffff",
+      error: "#a3322a",
     },
   },
 
   /* The browser's own bar: the page's ground, not the action colour. */
   metaThemeColor: false,
-  /* The row sits on the cocoa footer in both modes (style/pralino-layout.scss). */
+  /* The row sits on the family-dark footer in both modes (style/pralino-layout.scss). */
   ui: { ink: "var(--pr-dark-ink)", muted: "var(--pr-dark-muted)", line: "var(--pr-dark-line-2)", surface: "var(--pr-dark)", font: "var(--pr-sans)" },
   /* Read when drawn, so they follow the visitor's language (theme.* are the
      shared Kalio words). */
@@ -180,13 +180,13 @@ export const PRALINO_THEME: ThemeSwitcherConfig = {
     },
   },
 
-  /* "Custom colour" (the owner, 9 November 2026): any colour, made readable
-     by paletteFromColor() against Pralino's own surfaces (the mockup's SURF).
-     No band carries the action colour under words, so 4.5:1. */
+  /* "Custom colour" (the owner, 9 November 2026): any colour, made readable by paletteFromColor()
+     against the lightnesses of Pralino's grounds (above). No band carries the action colour under
+     words, so 4.5:1. */
   custom: {
     headerContrast: 4.5,
     lightSurfaces: LIGHT_SURFACES,
     darkSurfaces: DARK_SURFACES,
-    darkText: "#1a1310",
+    darkText: "#111111",
   },
 };

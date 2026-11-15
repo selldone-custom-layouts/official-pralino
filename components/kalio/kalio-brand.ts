@@ -7,26 +7,25 @@
    Walio did on a shared shop.
 
    The mark (the browser tab's icon, the avatar on order messages and the
-   compare page's share card) is drawn from the same title: its first letter
-   in Cormorant italic, cream on cocoa, with the pistachio dot of the
-   wordmark. It is an inline SVG, so no image file is needed. */
+   compare page's share card) is drawn from the same title: its first letter,
+   a capital in Cormorant Garamond, cream in a Tan family-dark circle (the
+   Pralino mark, PrMark.vue). It is an inline SVG, so no image file is needed. */
 
 export const BRAND: { name: string | null; mark: string } = {
   name: null,
   mark: markFor(""),
 };
 
-/** The mark as an SVG data URL: the title's first letter, cream on cocoa. */
+/** The mark as an SVG data URL: the title's first letter, cream in a family-dark circle. */
 export function markFor(title: string): string {
-  const letter = (String(title || "").trim().charAt(0) || "·").toLowerCase();
+  const letter = (String(title || "").trim().charAt(0) || "·").toUpperCase();
   const esc = letter.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
   const svg =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">' +
-    '<rect width="64" height="64" rx="16" fill="#3a2a22"/>' +
-    '<text x="29" y="45" text-anchor="middle" font-family="Cormorant, Cormorant Garamond, Georgia, serif" font-style="italic" font-weight="600" font-size="46" fill="#f7f1ea">' +
+    '<circle cx="32" cy="32" r="32" fill="#2b1c0c"/>' +
+    '<text x="32" y="44" text-anchor="middle" font-family="Cormorant Garamond, Cormorant, Georgia, serif" font-weight="500" font-size="36" fill="#fbf5ee">' +
     esc +
     "</text>" +
-    '<circle cx="47" cy="42" r="4" fill="#b9d398"/>' +
     "</svg>";
   return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 }
