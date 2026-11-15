@@ -92,7 +92,9 @@ Version **1.0.0**, 15 November 2026, on the dev server against the live shop dat
 | Underline (dark, light) | no line under any word or icon, at rest or on hover | 14 pages | **0** |
 | Production bundle | the built release loads through the shop's own HTML and draws home, a collection, a product, the journal, a post, the bag and the checkout with no page error | 1440 | **OK** |
 
-Bakio sells in USD only, so AED, DKK and SAR stay USD on its pages; the long made-up amount stands in for them. Bakio sells in English only; the Arabic runs use the dev server's test switch.
+Bakio sells in USD only, so AED, DKK and SAR stay USD on its pages; the long made-up amount stands in for them. Bakio sells in English only; the Arabic runs use the dev server's test switch (`scripts/pw-shop-languages.cjs` on a live shop).
+
+**1.0.1** (one 1920 px page frame, nothing sized from the window, the in-app splash, no half-made facts on first paint) added wide windows to the layout checks and a new probe, `scripts/text-column-check.cjs` (no running text in a sliver, no word broken mid-word, no squeezed track, no words over words): card edge, corner clear, box and text columns at 1440, 1920, 2560, 2880 and 3840 (and 390) **0**; the shape audit up to 3840 **0**; the splash's checks (`scripts/splash-check.mjs`: long and Arabic names, contrast in every palette and custom colour, hand-over from the domain's loading frame, gone by 4 s, never twice in a session) **0**; the guest checkout walk (`scripts/pralino-checkout-walk.mjs`, every way to Selldone's payment window, nothing ordered) **OK**.
 <!-- TESTS:END -->
 
 ## Languages
