@@ -37,8 +37,14 @@ node scripts/kalio-svg-flatten.mjs dist/app | tail -1
 J=$(find dist/app -type f \( -name '*.js' -o -name '*.mjs' \) -exec file -b --mime-type {} \; | grep -c text/x-java || true)
 S=$( (grep -l 'from"../shop.js"' -r dist/app || true) | wc -l)
 N=$(find dist -type f | wc -l)
-echo "java-mime:$J shop.js-imports:$S files:$N (keep under ~360)"
-[ "$J" = 0 ] && [ "$S" = 0 ] || { echo "CHECK FAILED"; exit 1; }
+echo "java-mime:$J shop.js-imports:$S files:$N (Pralino: at most 300)"
+[ "$J" = 0 ] && [ "$S" = 0 ] && [ "$N" -le 300 ] || { echo "CHECK FAILED"; exit 1; }
+
+# 5b. The built bundle must mount in a real browser before it goes up (Galio 1.0.0 passed every dev
+#     check and was blank live: dev checks never see chunking bugs). Loads dist/app through the shop's own
+#     storefront HTML and loader (SHOP_URL, default pralino.selldone.shop), walks home, a collection, a
+#     product, the journal, a post, the bag and the checkout; any page error or an empty page stops here.
+node --use-system-ca scripts/pralino-prod-check.mjs dist/app || { echo "PROD-CHECK FAILED: not uploading"; exit 1; }
 
 # 6. Package (always --force, or an old dist.zip is kept) and prove the ZIP is this build.
 python "$PACKAGER" dist dist.zip --manifest manifest.json --force

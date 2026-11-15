@@ -1575,3 +1575,13 @@ html.pr-dark .pr .pr-map__img {
 .pr .dts-in .ts-mode .ts-mode__btn {
   border-radius: var(--pr-r-in) !important;
 }
+
+/* A slot's photo lies behind everything drawn in its slot or over it (the offer card's words, the footer's
+   scrim and columns): the slot is its own layer and the photo the bottom of it, above the slot's ground.
+   The page looks the same; the words are on the photo on purpose, measured by the contrast audit. */
+.pr .ph.has-photo {
+  isolation: isolate;
+}
+.pr .ph.has-photo > .ph-img {
+  z-index: -1;
+}

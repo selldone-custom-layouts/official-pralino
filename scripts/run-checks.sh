@@ -10,7 +10,8 @@
 # Widths: 1440, 1024 (the header's first desktop width) and 390 where a check takes WIDTHS; corner-clear
 # 390–1920 with 1366; circles in USD, AED, DKK and SAR (LONG=1 also stress-tests a long code in every circle).
 # i18n-ar IGNORE: Bakio's own data that equals an English string of the Layout (its gateway "Cash on delivery",
-# its way "Worldwide shipping", the flavour "Pistachio", the cookies' spec key "Style", its counter note "Pickup counter at …").
+# its way "Worldwide shipping", the flavour "Pistachio", the cookies' spec key "Style", its counter note "Pickup counter at …",
+# the bag drawer's "Total · <the gateway's name>" and a cookie's own pro "Sold as one cookie for an easy personal treat.").
 set -u
 export MSYS_NO_PATHCONV=1
 BASE="${1:-http://localhost:9150}"
@@ -88,7 +89,7 @@ run currency    env WIDTHS="$W3" SHOP=bakio MENU=".menu-btn" MEGA="[aria-control
 run box-dark    env WIDTHS="$W3" PAGES="$BOX_PAGES" STORAGE="$DARK"  node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
 run box-light   env WIDTHS="$W3" PAGES="$BOX_PAGES" STORAGE="$LIGHT" node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
 run box-ar      env PAGES="$BOX_PAGES" STORAGE="$AR" STATES=0 node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
-run i18n-ar     env IGNORE="Cash on delivery|Worldwide shipping|Pistachio|Style|/^Pickup counter at /" I18N="$ROOT/components/kalio/i18n" LANGUAGES=ar SHOP=bakio MENU=".menu-btn" CART="$BAG" CATEGORY="@a[href$=\"-category\"]" PAGES="about=/about-us,contact=/contact-us,blog=/blog,terms=/terms,privacy=/privacy,account=/user,cart=/basket/PHYSICAL,compare=/comparison?list=p720375_p720378_p720380" node "$ROOT/scripts/i18n-check-forced.cjs" "$BASE" "$WAIT"
+run i18n-ar     env IGNORE="Cash on delivery|Worldwide shipping|Pistachio|Style|/^Pickup counter at /|/ · cash on delivery$/|Sold as one cookie for an easy personal treat." I18N="$ROOT/components/kalio/i18n" LANGUAGES=ar SHOP=bakio MENU=".menu-btn" CART="$BAG" CATEGORY="@a[href$=\"-category\"]" PAGES="about=/about-us,contact=/contact-us,blog=/blog,terms=/terms,privacy=/privacy,account=/user,cart=/basket/PHYSICAL,compare=/comparison?list=p720375_p720378_p720380" node "$ROOT/scripts/i18n-check-forced.cjs" "$BASE" "$WAIT"
 # One shape language: every edge a circle, 8 px (panel) or 4 px (inner), square only at the window's edge;
 # focus rings keep the control's shape; nothing past the window; the overlays open
 run shape-light env WIDTHS="$W3" PAGES="$SHAPE_PAGES" STORAGE="$LIGHT" node "$ROOT/scripts/shape-check.cjs" "$BASE" "$WAIT"
