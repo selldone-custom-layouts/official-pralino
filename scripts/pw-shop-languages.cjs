@@ -12,7 +12,7 @@
 // usage: PW=scripts/pw-shop-languages.cjs EXTRA_LANGUAGES=ar node scripts/i18n-check-forced.cjs <live base> …
 //        (PW_REAL: the Playwright install to wrap; default kalio-marketplace's)
 "use strict";
-const real = require(process.env.PW_REAL || "../kalio-marketplace/node_modules/playwright");
+const real = require(process.env.PW_REAL || (() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../kalio-marketplace/node_modules/playwright"); } })());
 const EXTRA = (process.env.EXTRA_LANGUAGES || "ar").split(",").filter(Boolean);
 let patched = 0;
 

@@ -49,6 +49,8 @@
 
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="s--storefront-layout">
+    <!-- Pralino: the in-app splash, the domain loading frame's picture kept until the page is ready (first load of a session) -->
+    <pralino-splash></pralino-splash>
     <!-- ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ Primary Header ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆ -->
     <!-- This is the primary header at the top of the website, where you can display your site's name, logo, user avatar, and navigation menu. -->
 
@@ -185,6 +187,7 @@
 
 <script lang="ts">
 import PralinoHeader from "../components/pralino/shell/PralinoHeader.vue";
+import PralinoSplash from "../components/pralino/shell/PralinoSplash.vue";
 import PralinoFooter from "../components/pralino/shell/PralinoFooter.vue";
 import SStorefrontTopMenu from "@selldone/components-vue/storefront/menu/header/SStorefrontTopMenu.vue";
 import SHeaderSection from "@selldone/components-vue/storefront/header/section/SHeaderSection.vue";
@@ -219,6 +222,7 @@ export default {
     SStorefrontTopMenu,
 
     PralinoHeader,
+    PralinoSplash,
     PralinoFooter,
 
     SStorefrontListingCompareBar: defineAsyncComponent(
@@ -376,11 +380,11 @@ export default {
      * @return {string}
      */
     max_width() {
-      if (this.is_fullscreen) {
-        return "100%";
-      } else {
-        return "1720px";
-      }
+      /* Pralino: the page runs the window's full width (Selldone caps it at 1720px). Its bands (the hero,
+         How ordering works, the journal, the title bands, the photo band) run edge to edge like the header
+         and the footer, and every page's content stays in the 1320px wrap, centred; nothing sizes itself
+         from the window (the bands measure themselves, cqw). */
+      return "100%";
     },
 
     globalStyle() {

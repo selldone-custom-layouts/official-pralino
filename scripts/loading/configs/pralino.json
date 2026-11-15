@@ -1,0 +1,4 @@
+{ "name": "Bakio", "sub": "San Francisco", "art": "croissant",
+  "bg": "#ffffff", "ink": "#2d2d2d", "muted": "#646464", "accent": "#8c6844", "line": "#e4dcd2",
+  "serif": "Cormorant+Garamond:wght@500", "sans": "Mulish:wght@700",
+  "serifCss": "\"Cormorant Garamond\",Georgia,serif", "sansCss": "\"Mulish\",system-ui,sans-serif" }

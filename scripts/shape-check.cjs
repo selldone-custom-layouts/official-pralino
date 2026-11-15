@@ -14,7 +14,7 @@
 //   STATES=0 (pages only) · V=1 (every finding)
 // Prints one line per page/state and "TOTAL n".
 "use strict";
-const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright";
+const PW = process.env.PW || (() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../kalio-marketplace/node_modules/playwright"); } })();
 const { chromium } = require(PW);
 const [base0, WAIT = ".pr .ftr"] = process.argv.slice(2);
 const BASE = (base0 || "http://localhost:9145").replace(/\/$/, "");

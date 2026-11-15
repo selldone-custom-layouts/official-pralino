@@ -21,7 +21,7 @@
 // Env: MIN (default 8), WIDTHS (default "1440,390"), DARK=1 for dark mode.
 // Output: one line per url and width, and TOTAL at the end; TOTAL must be 0.
 const path = require("path");
-const PW = process.env.PLAYWRIGHT || "../kalio-marketplace/node_modules/playwright";
+const PW = process.env.PLAYWRIGHT || (() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../kalio-marketplace/node_modules/playwright"); } })();
 const { chromium } = require(PW);
 
 const MIN = Number(process.env.MIN || 8);

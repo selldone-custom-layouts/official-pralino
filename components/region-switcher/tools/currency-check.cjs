@@ -19,7 +19,7 @@
 // It prints each stray amount as "<width> <currency> <page>: "<text>" looks <other>" and "TOTAL n". Deliver at 0.
 // AUD (and any currency whose Selldone sign is "$") cannot be told from USD by a bare "$": with such a pick a
 // bare "$" is not counted (A$, US$ and codes still are).
-const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright";
+const PW = process.env.PW || (() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../../../kalio-marketplace/node_modules/playwright"); } })();
 const { chromium } = require(PW);
 const [base0, WAIT = "footer", SHOTS = ""] = process.argv.slice(2);
 if (!base0) {

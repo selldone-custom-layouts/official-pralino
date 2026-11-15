@@ -20,7 +20,7 @@
 // packshot must sit on a light tile), and "TOTAL n" (failures). Deliver only at 0.
 // - As a module: require("./contrast-audit.cjs").probe is the in-page check (pass it to page.evaluate), for
 //   flows the router cannot open (the cart drawer, the checkout sheets).
-const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright";
+const PW = process.env.PW || (() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../../../kalio-marketplace/node_modules/playwright"); } })();
 const [base, wait = "main"] = process.argv.slice(2);
 /* Git Bash (MSYS) rewrites a path-like value in an env var: "/laptop-category" arrives as
    "C:/Program Files/Git/laptop-category". Before 11 Nov 2026 the tools then opened that

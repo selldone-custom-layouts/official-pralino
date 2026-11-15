@@ -17,6 +17,7 @@
  *   phone and place), so the bag shows the counter instead of an address.
  */
 import { ShopTransportations } from "@selldone/core-js/enums/logistic/ShopTransportations";
+import { ETA } from "@selldone/core-js/enums/logistic/ETA.ts";
 import { catImage, catOf, catTitle, catTo, closeLayer, hueOf, layer, loadDm, pr, bySells, openLayer, shopFacts, unitOf, productTo, wayTitle } from "../pr";
 import { catalogueRoute } from "../../kalio/kalio-catalog";
 import { shownCount, stepTo } from "../../kalio/kalio-basket";
@@ -58,7 +59,7 @@ export function wayWindowLine(shop: any, info: any): string {
   /* Only a window the way itself offers (a way the bill switched to keeps
      the old way's window in delivery_info). */
   const one = info.custom && (info.time_spans || []).length === 1 ? info.time_spans[0] : null;
-  const win = one && (!Array.isArray(way?.time_spans) || way.time_spans.includes(one)) ? windowWord(one) : "";
+  const win = one && Array.isArray(way?.time_spans) && way.time_spans.includes(one) ? windowWord(one) : "";
   return win ? `${name} · ${win}` : name;
 }
 
@@ -261,7 +262,11 @@ export default {
       const way = this.nx_way;
       if (!way) return "";
       const name = wayTitle(way, this.$shop);
-      const spans = this.delivery_info?.custom && this.delivery_info?.time_spans?.length === 1 ? windowWord(this.delivery_info.time_spans[0]) : "";
+      /* only a window this way offers (one kept from another way is not shown) */
+      const one = this.delivery_info?.custom && this.delivery_info?.time_spans?.length === 1 ? this.delivery_info.time_spans[0] : null;
+      const full = { ...way, ...shopWay(this.$shop, way) };
+      const offered = Array.isArray(full.time_spans) && [ETA.weekday_timeframe.code, ETA.timeframe.code].includes(full.eta) ? full.time_spans : [];
+      const spans = one && offered.includes(one) ? windowWord(one) : "";
       return spans ? `${name} · ${spans}` : name;
     },
     nx_delivery_label(this: any): string {

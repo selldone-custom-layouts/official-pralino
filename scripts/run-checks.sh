@@ -23,6 +23,8 @@ mkdir -p "$OUT"
 WAIT=".pr .ftr"
 SK='pralino-theme'
 W3="${W3:-1440,1024,390}"
+# Wide windows (the owner zoomed out to 2880 and 3840 CSS px, 15 Nov 2026): the layout checks also run there.
+WIDE="${WIDE:-1920,2560,2880,3840}"
 # On a live shop (Bakio sells in English only) the Arabic runs go through scripts/pw-shop-languages.cjs, which
 # offers Arabic in the test browser only (the shop-info answer gets a "languages" option); dev has its own switch.
 AREXT=()
@@ -60,11 +62,11 @@ run() { # name, command...
 run ring-dark   env PAGES="$PAGES_ALL" STORAGE="$DARK"  node "$KIT/single-vendor-shop/ring-sweep.cjs" "$BASE" "$WAIT"
 run ring-light  env PAGES="$PAGES_ALL" STORAGE="$LIGHT" node "$KIT/single-vendor-shop/ring-sweep.cjs" "$BASE" "$WAIT"
 run ring-ar     env "${AREXT[@]}" PAGES="$PAGES_MAIN" STORAGE="$AR" node "$KIT/single-vendor-shop/ring-sweep.cjs" "$BASE" "$WAIT"
-run card-edge   env WIDTHS="$W3" node "$KIT/single-vendor-shop/card-edge-check.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D"
-run card-edge-pr-dark  env WIDTHS="$W3" STORAGE="$DARK"  node "$ROOT/scripts/card-edge-pr.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D" "$BASE/blog" "$BASE/about-us" "$BASE/faq" "$BASE/contact-us" "$BASE/terms" "$BASE/privacy" "$BASE/user" "$BASE/comparison?list=p720375_p720378_p720380"
-run card-edge-pr-light env WIDTHS="$W3" STORAGE="$LIGHT" node "$ROOT/scripts/card-edge-pr.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/blog" "$BASE/about-us" "$BASE/contact-us"
+run card-edge   env WIDTHS="$W3,$WIDE" node "$KIT/single-vendor-shop/card-edge-check.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D"
+run card-edge-pr-dark  env WIDTHS="$W3,$WIDE" STORAGE="$DARK"  node "$ROOT/scripts/card-edge-pr.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D" "$BASE/blog" "$BASE/about-us" "$BASE/faq" "$BASE/contact-us" "$BASE/terms" "$BASE/privacy" "$BASE/user" "$BASE/comparison?list=p720375_p720378_p720380"
+run card-edge-pr-light env WIDTHS="$W3,$WIDE" STORAGE="$LIGHT" node "$ROOT/scripts/card-edge-pr.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=pistachio" "$BASE/blog" "$BASE/about-us" "$BASE/contact-us"
 run card-edge-pr-ar    env "${AREXT[@]}" WIDTHS="1440,390" STORAGE="$AR" node "$ROOT/scripts/card-edge-pr.cjs" "$BASE/" "$BASE/#cat" "$BASE/blog" "$BASE/about-us"
-run corner      env PAGES="$PAGES_MAIN" STORAGE="$DARK" WIDTHS="1920,1440,1366,1280,1024,900,768,390" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
+run corner      env PAGES="$PAGES_MAIN" STORAGE="$DARK" WIDTHS="3840,2880,2560,1920,1440,1366,1280,1024,900,768,390" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
 run corner-ar   env "${AREXT[@]}" PAGES="$PAGES_MAIN" STORAGE="$AR" WIDTHS="1920,1366,1024,390" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
 run circle      env PAGES="$CIRCLE_PAGES" LONG=1 CURRENCIES="$CUR" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
 run circle-ar   env "${AREXT[@]}" PAGES="$CIRCLE_PAGES" LONG=1 CURRENCIES="$CUR" STORAGE="$AR" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
@@ -90,10 +92,15 @@ run contrast-ar-dark env "${AREXT[@]}" PAGES="$PAGES_MAIN" STORAGE="$ARDARK" nod
 run cart-dark   env SHOP=bakio WAIT="$WAIT" CART=".bag-btn" STORAGE_KEY="$SK" node "$ROOT/components/theme-switcher/tools/cart-audit.cjs" "$BASE" tan dark
 run cart-light  env SHOP=bakio WAIT="$WAIT" CART=".bag-btn" STORAGE_KEY="$SK" node "$ROOT/components/theme-switcher/tools/cart-audit.cjs" "$BASE" tan light
 run currency    env WIDTHS="$W3" SHOP=bakio MENU=".menu-btn" MEGA="[aria-controls=dd-shop]" CART="$BAG" CATEGORY=/croissants-category DEALS='/?filter={"only_has_discount":true}' node "$ROOT/components/region-switcher/tools/currency-check.cjs" "$BASE" "$WAIT"
-run box-dark    env WIDTHS="$W3" PAGES="$BOX_PAGES" STORAGE="$DARK"  node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
-run box-light   env WIDTHS="$W3" PAGES="$BOX_PAGES" STORAGE="$LIGHT" node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
+run box-dark    env WIDTHS="$W3,$WIDE" PAGES="$BOX_PAGES" STORAGE="$DARK"  node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
+run box-light   env WIDTHS="$W3,$WIDE" PAGES="$BOX_PAGES" STORAGE="$LIGHT" node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
 run box-ar      env "${AREXT[@]}" PAGES="$BOX_PAGES" STORAGE="$AR" STATES=0 node "$ROOT/scripts/box-check.cjs" "$BASE" "$WAIT"
 run i18n-ar     env "${AREXT[@]}" IGNORE="Cash on delivery|Worldwide shipping|Pistachio|Style|/^Pickup counter at /|/ · cash on delivery$/|Sold as one cookie for an easy personal treat." I18N="$ROOT/components/kalio/i18n" LANGUAGES=ar SHOP=bakio MENU=".menu-btn" CART="$BAG" CATEGORY="@a[href$=\"-category\"]" PAGES="about=/about-us,contact=/contact-us,blog=/blog,terms=/terms,privacy=/privacy,account=/user,cart=/basket/PHYSICAL,compare=/comparison?list=p720375_p720378_p720380" node "$ROOT/scripts/i18n-check-forced.cjs" "$BASE" "$WAIT"
+# Text columns (scripts/text-column-check.cjs): no running text in a sliver, no word broken mid-word, no
+# track squeezed to nothing, no words over words; every width from 390 to 3840.
+TC_PAGES='home=/,category=/croissants-category,deals=/?filter={"only_has_discount":true},search=/?search=pistachio,product=/product/720375,compare=/comparison?list=p720375_p720378_p720380,blog=/blog,article=/blog/pickup-or-delivery-36222,about=/about-us,contact=/contact-us,faq=/faq,terms=/terms,privacy=/privacy,404=/no-such-page,cart=/basket/PHYSICAL,account=/user'
+run text-col    env WIDTHS="$W3,$WIDE" PAGES="$TC_PAGES" STORAGE="$LIGHT" node "$ROOT/scripts/text-column-check.cjs" "$BASE" "$WAIT"
+run text-col-ar env "${AREXT[@]}" WIDTHS="1440,2880,390" PAGES="$PAGES_MAIN" STORAGE="$AR" node "$ROOT/scripts/text-column-check.cjs" "$BASE" "$WAIT"
 # One shape language: every edge a circle, 8 px (panel) or 4 px (inner), square only at the window's edge;
 # focus rings keep the control's shape; nothing past the window; the overlays open
 run shape-light env WIDTHS="$W3" PAGES="$SHAPE_PAGES" STORAGE="$LIGHT" node "$ROOT/scripts/shape-check.cjs" "$BASE" "$WAIT"

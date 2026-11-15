@@ -103,6 +103,12 @@ Every word Pralino writes goes through `t("key", "English")` ([`components/kalio
 
 Pralino runs the shared theme switcher (`components/theme-switcher/`, the same code as the other custom Layouts). On your own shop the visitor switcher is hidden, and Pralino shows the theme you set in **one file**, [`components/pralino/pralino-theme.settings.ts`](components/pralino/pralino-theme.settings.ts): a palette (`tan`, `rose`, `sage`, `slate`, `ink`) or any brand colour (`brandColor: "#F5C400"`; a light colour keeps dark words on it with `textOnBrand: "auto"`), `light` or `dark`, and whether your visitors get the switcher (`themeSwitcher: "showcase" | "on" | "off"`). The whole page takes the colour's family (grounds, plates, lines, words, the dark bars), drawn by [`components/pralino/pralino-family.ts`](components/pralino/pralino-family.ts); every colour is made readable automatically. An AI agent finds the steps in the "Theme" section of [`AGENTS.md`](AGENTS.md).
 
+## Loading screen
+
+![Pralino's loading screen](docs/screenshots/loading.png)
+
+Pralino has its own loading screen in the same look: a white ground, a fine tan ring that turns, the croissant line art drawing itself, and your brand (a logo of any shape, or the name and sub line as the header draws them); only the ring and the line art move, it is still for reduced motion and fades when the shop is ready. Set your brand in a copy of `scripts/loading/configs/pralino.json`, run `node scripts/loading/make-loading.cjs <your config> <out folder>` (it writes `loading.json` and `loading-preview.html`; `scripts/loading/test-loading.cjs` proves long, Arabic, wide-logo and tall-logo brands still fit), then paste its head and body into the domain's **custom loading** in Selldone (mode custom; head ≤ 15,360 bytes, body ≤ 3,072 bytes, no data URIs). Steps: [Go Live](https://github.com/selldone-custom-layouts/official-pralino/wiki/Go-Live#5-your-own-loading-screen).
+
 ## Use it on your shop
 
 | You want to… | Read |
@@ -160,11 +166,11 @@ Leave `LAYOUT_ID` out on the first upload; use the id printed after it from then
 | Words (English and Arabic) | [`components/kalio/i18n/pralino.en.ts`](components/kalio/i18n/pralino.en.ts), [`pralino.ar.ts`](components/kalio/i18n/pralino.ar.ts) (`pralino.*`; `bakini.*` for the shared code) |
 | How the mockup became the Layout, reversible choices, data rules and releases | [`PRALINO.md`](PRALINO.md) |
 | The checks | [`scripts/run-checks.sh`](scripts/run-checks.sh) and the tools it names (`CIRCLE_CURRENCIES` for the circle checks) |
-| Release tooling | [`scripts/`](scripts/) |
+| Release tooling; the loading screen (`scripts/loading/`) | [`scripts/`](scripts/) |
 | Selldone storefront's original README | [`README.selldone.md`](README.selldone.md) |
 
 Pralino started from Domino (itself from [Bakini Noir](https://github.com/selldone-custom-layouts/official-bakini)) and keeps the buy flow underneath (the Kalio base: Selldone's bag, checkout, address sheet, payment window, order, account, sign-in and compare logic; the theme and region switchers; the release scripts and the checks); every page's markup is Pralino's own.
 
 ## Credits and license
 
-Built on the official [Selldone Storefront](https://github.com/selldone/storefront) (MIT License, © Selldone); see [`LICENSE.md`](LICENSE.md). Part of **[Selldone Custom Layouts](https://github.com/selldone-custom-layouts)**.
+Built on the official [Selldone Storefront](https://github.com/selldone/storefront) (MIT License, © Selldone); see [`LICENSE.md`](LICENSE.md). Photos generated with Magnific (Freepik) for Bakio under the owner's Premium plan. Part of **[Selldone Custom Layouts](https://github.com/selldone-custom-layouts)**.

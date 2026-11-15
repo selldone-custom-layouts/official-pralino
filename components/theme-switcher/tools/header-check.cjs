@@ -19,7 +19,7 @@ const themeChoice = (palette, mode) => {
   const m = String(palette).match(/^custom:(#?[0-9a-f]{3,6})$/i);
   return m ? { palette: "custom", custom: (m[1][0] === "#" ? "" : "#") + m[1].toLowerCase(), mode } : { palette, mode };
 };
-const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright";
+const PW = process.env.PW || (() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../../../kalio-marketplace/node_modules/playwright"); } })();
 const { chromium } = require(PW);
 const { probe } = require("./contrast-audit.cjs");
 const [base, palette = "blue", mode = "light", out, widthsArg = "360,390,768,1024,1440"] = process.argv.slice(2);

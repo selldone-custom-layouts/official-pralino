@@ -59,14 +59,19 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 .collage:is(.pr,.pr *) img { width: 100%; aspect-ratio: 1; object-fit: contain; }
 
 /* ───────── hero: words left, the counter photo right, a framed photo across the seam ───────── */
-.hero-in:is(.pr,.pr *) { --pr-seam: max(38vw, calc(var(--pr-hero-pad) + 420px)); --pr-inset-w: clamp(240px, 23vw, 340px); min-height: clamp(700px, 58vw, 860px); }
-.hero-copy:is(.pr,.pr *) { width: calc(var(--pr-seam) - var(--pr-inset-w) * .2 - 40px); padding-block: clamp(64px, 7vw, 108px) 72px; padding-inline: var(--pr-hero-pad) 0; }
+/* the bands whose parts bleed to an edge or align to the wrap measure themselves (cqw), not the window (vw) */
+.hero:is(.pr,.pr *), .how:is(.pr,.pr *), .journal:is(.pr,.pr *), .pt:is(.pr,.pr *) { container-type: inline-size; }
+/* the frame: the bleeding parts of the hero, How ordering works, the journal, the photo band and a title band with a
+   photo end at the frame's edge, so the hero's photo and the photos below share one right and one left edge */
+.hero-in:is(.pr,.pr *), .how-in:is(.pr,.pr *), .j-in:is(.pr,.pr *), .pband:is(.pr,.pr *), .pt.has-ph:is(.pr,.pr *) { max-width: var(--pr-frame-max); margin-inline: auto; }
+.hero-in:is(.pr,.pr *) { --pr-seam: max(calc(var(--pr-frame-w) * .38), calc(var(--pr-hero-pad) + 420px)); --pr-inset-w: clamp(240px, calc(var(--pr-frame-w) * .23), 340px); min-height: clamp(700px, calc(var(--pr-frame-w) * .58), 860px); }
+.hero-copy:is(.pr,.pr *) { width: calc(var(--pr-seam) - var(--pr-inset-w) * .2 - 40px); padding-block: clamp(64px, 7cqw, 108px) 72px; padding-inline: var(--pr-hero-pad) 0; }
 .hero-h:is(.pr,.pr *) { width: auto; max-width: 100%; }
 .hero-h:is(.pr,.pr *) .l2 { text-wrap: balance; }
 .hero-sub:is(.pr,.pr *) { max-width: 400px; }
 .hero-back:is(.pr,.pr *) { inset-inline-start: var(--pr-seam); inset-inline-end: 0; top: 0; bottom: 64px; border-start-start-radius: var(--pr-r-pn); border-start-end-radius: 0; border-end-end-radius: 0; border-end-start-radius: var(--pr-r-pn); }
 .hero-back:is(.pr,.pr *)::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit; background: linear-gradient(200deg, transparent 52%, rgba(12, 8, 5, .34) 100%); }
-.hero-inset:is(.pr,.pr *) { position: absolute; z-index: 2; inset-inline-start: calc(var(--pr-seam) - var(--pr-inset-w) * .2); top: clamp(96px, 10vw, 150px); width: var(--pr-inset-w); margin: 0; padding: 10px; aspect-ratio: auto; border: 0; background: var(--pr-paper); border-radius: var(--pr-r-pn); }
+.hero-inset:is(.pr,.pr *) { position: absolute; z-index: 2; inset-inline-start: calc(var(--pr-seam) - var(--pr-inset-w) * .2); top: clamp(96px, 10cqw, 150px); width: var(--pr-inset-w); margin: 0; padding: 10px; aspect-ratio: auto; border: 0; background: var(--pr-paper); border-radius: var(--pr-r-pn); }
 .hi-ph:is(.pr,.pr *) { aspect-ratio: 900 / 1100; border-radius: var(--pr-r-in); }
 .hi-cap:is(.pr,.pr *) { display: grid; gap: 1px; padding: 12px 6px 4px; line-height: 1.3; }
 .hi-k:is(.pr,.pr *) { font: 700 9.5px/1.4 var(--pr-sans); letter-spacing: .22em; text-transform: uppercase; color: var(--pr-act-text); }
@@ -74,7 +79,7 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 .hi-n:hover:is(.pr,.pr *) { color: var(--pr-act-text); }
 .hi-p:is(.pr,.pr *) { font-size: 13px; }
 /* the words keep to the photo's right edge, where its calm dark corner is, at every width */
-.hero-words:is(.pr,.pr *) { position: absolute; z-index: 3; inset-inline-end: clamp(32px, 4vw, 72px); bottom: calc(64px + clamp(26px, 3vw, 46px)); align-items: flex-end; text-align: end; }
+.hero-words:is(.pr,.pr *) { position: absolute; z-index: 3; inset-inline-end: clamp(32px, 4cqw, 72px); bottom: calc(64px + clamp(26px, 3cqw, 46px)); align-items: flex-end; text-align: end; }
 .hero-words:is(.pr,.pr *) a { color: #fff; text-shadow: 0 1px 18px rgba(0, 0, 0, .25); }
 .hero-words:is(.pr,.pr *) a:hover { color: var(--pr-on-photo-hover); }
 .hero:is(.pr,.pr *) .art { display: none; }
@@ -141,7 +146,7 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 .j-in:is(.pr,.pr *) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: stretch; }
 .j-ph:is(.pr,.pr *) { min-height: 720px; border-start-start-radius: 0; border-start-end-radius: var(--pr-r-pn); border-end-end-radius: var(--pr-r-pn); border-end-start-radius: 0; }
 .j-ph:is(.pr,.pr *) .ph-img { object-position: 50% 50%; }
-.j-word:is(.pr,.pr *) { color: var(--pr-phd-ink-btn); inset-inline-start: clamp(24px, 4vw, 64px); bottom: clamp(20px, 3vw, 44px); }
+.j-word:is(.pr,.pr *) { color: var(--pr-phd-ink-btn); inset-inline-start: clamp(24px, 4cqw, 64px); bottom: clamp(20px, 3cqw, 44px); }
 .posts:is(.pr,.pr *) li + li { border-top-color: var(--pr-line-2); }
 .p-th:is(.pr,.pr *) { background: var(--pr-plate); }
 
@@ -185,9 +190,9 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 .pt-e:is(.pr,.pr *) { margin: 14px 0 0; }
 /* (the title band uses the page's own rings; a field inside it keeps its single ring on its box) */
 /* the collection page: its photo bleeds to the right window edge */
-.pt.has-ph:is(.pr,.pr *) { text-align: start; padding: 0; min-height: clamp(280px, 24vw, 340px); display: flex; align-items: center; }
+.pt.has-ph:is(.pr,.pr *) { text-align: start; padding: 0; min-height: clamp(280px, 24cqw, 340px); display: flex; align-items: center; }
 .pt.has-ph:is(.pr,.pr *) .pt-in { align-items: flex-start; padding-block: 28px 32px; }
-.pt.has-ph:is(.pr,.pr *) .pt-in > * { max-width: min(560px, 44vw); }
+.pt.has-ph:is(.pr,.pr *) .pt-in > * { max-width: min(560px, 44cqw); }
 .pt.has-ph:is(.pr,.pr *) .crumbs ol { justify-content: flex-start; }
 .pt-ph:is(.pr,.pr *) { position: absolute; top: 22px; bottom: 22px; inset-inline-start: 52%; inset-inline-end: 0; border-start-start-radius: var(--pr-r-pn); border-start-end-radius: 0; border-end-end-radius: 0; border-end-start-radius: var(--pr-r-pn); overflow: hidden; background: var(--pr-plate); }
 .pt-ph:is(.pr,.pr *) img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; }
@@ -273,7 +278,7 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 @media (max-width: 979px) {
   .hero-in:is(.pr,.pr *) { padding: 32px var(--pr-gut) 56px; }
   .hero-h:is(.pr,.pr *), .hero-sub:is(.pr,.pr *) { width: auto; max-width: none; }
-  .hero-media:is(.pr,.pr *) { height: clamp(380px, 96vw, 640px); margin: 26px calc(var(--pr-gut) * -1) 0; }
+  .hero-media:is(.pr,.pr *) { height: clamp(380px, 96cqw, 640px); margin: 26px calc(var(--pr-gut) * -1) 0; }
   .hero-back:is(.pr,.pr *) { inset-inline-start: 14%; top: 0; bottom: 14%; border-start-start-radius: var(--pr-r-pn); border-start-end-radius: 0; border-end-end-radius: 0; border-end-start-radius: var(--pr-r-pn); }
   .hero-inset:is(.pr,.pr *) { inset-inline-start: var(--pr-gut); top: auto; bottom: 0; width: 44%; padding: 7px; }
   .hi-cap:is(.pr,.pr *) { padding: 8px 4px 2px; }
@@ -309,7 +314,7 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
   .wm-sub:is(.pr,.pr *) { font-size: 8px; margin-top: 5px; }
   .about-nums:is(.pr,.pr *) .num dt { font-size: 17px; }
   .hero-h:is(.pr,.pr *) .l1 { font-size: clamp(64px, 19vw, 96px); }
-  .hero-media:is(.pr,.pr *) { height: clamp(360px, 104vw, 520px); }
+  .hero-media:is(.pr,.pr *) { height: clamp(360px, 104cqw, 520px); }
   .ftr-in:is(.pr,.pr *) { grid-template-columns: 1fr; }
   .ftr-brand:is(.pr,.pr *) { grid-column: auto; }
   .grid:is(.pr,.pr *) { gap: 24px 12px; }
@@ -318,7 +323,7 @@ html.pr-dark .ph-img:is(.pr,.pr *), html.pr-dark .cc-ph:is(.pr,.pr *) img, html.
 
 /* text columns beside a bleeding photo end on the wrap's edge */
 @media (min-width: 980px) {
-  .how-txt:is(.pr,.pr *), .j-txt:is(.pr,.pr *) { padding-inline-end: var(--pr-hero-pad); padding-inline-start: clamp(40px, 5vw, 88px); max-width: none; }
+  .how-txt:is(.pr,.pr *), .j-txt:is(.pr,.pr *) { padding-inline-end: var(--pr-hero-pad); padding-inline-start: clamp(40px, 5cqw, 88px); max-width: none; }
   /* gallery: the columns start staggered but end on one line */
   .g:is(.pr,.pr *) { align-items: stretch; }
   .gc:is(.pr,.pr *) > .gt:last-child { flex: 1 1 auto; }

@@ -24,12 +24,21 @@
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
 const APP = path.resolve(process.argv[2] || "dist/app");
 const SHOP = (process.env.SHOP_URL || "https://pralino.selldone.shop").replace(/\/$/, "");
 const PORT = Number(process.env.PORT || 9151);
 const BASE = `http://localhost:${PORT}`;
-const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright/index.js";
+/* Playwright: PW (a path to its index.js), else the installed package, else the workspace's copy beside this repo */
+const PW = process.env.PW || (() => {
+  try {
+    return createRequire(import.meta.url).resolve("playwright");
+  } catch {
+    return path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../kalio-marketplace/node_modules/playwright/index.js");
+  }
+})();
 const MIME = { ".js": "text/javascript", ".mjs": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".woff2": "font/woff2", ".json": "application/json", ".m4v": "video/mp4" };
 
 if (!fs.existsSync(path.join(APP, "shop.js"))) {

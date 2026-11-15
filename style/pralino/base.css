@@ -134,9 +134,9 @@ h3:where(.pr,.pr *) { font-family: var(--pr-serif); font-weight: var(--pr-h-weig
 
 /* ───────── 3 · hero ───────── */
 .hero:is(.pr,.pr *) { position: relative; overflow: clip; background: var(--pr-bg); }
-.hero-in:is(.pr,.pr *) { position: relative; min-height: clamp(720px, 60vw, 880px); }
+.hero-in:is(.pr,.pr *) { position: relative; min-height: clamp(720px, 60cqw, 880px); }
 .hero-copy:is(.pr,.pr *) { position: relative; z-index: 3; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: inherit; width: var(--pr-copy-w); padding-block: clamp(64px, 7vw, 116px) 64px; padding-inline: var(--pr-hero-pad) 0; }
-.hero-h:is(.pr,.pr *) { width: max-content; max-width: calc(100vw - var(--pr-hero-pad) - 24px); font-family: var(--pr-serif); font-weight: var(--pr-h1-weight); color: var(--pr-ink); line-height: .9; letter-spacing: -.01em; }
+.hero-h:is(.pr,.pr *) { width: max-content; max-width: calc(var(--pr-frame-w, 100cqw) - var(--pr-hero-pad) - 24px); font-family: var(--pr-serif); font-weight: var(--pr-h1-weight); color: var(--pr-ink); line-height: .9; letter-spacing: -.01em; }
 .hero-h:is(.pr,.pr *) .l1 { display: block; font-size: clamp(76px, 9.2vw, 138px); }
 .hero-h:is(.pr,.pr *) .l2 { display: block; font-size: clamp(34px, 3.8vw, 58px); font-style: italic; font-weight: 400; line-height: 1.05; margin-top: .3em; }
 .hero-sub:is(.pr,.pr *) { max-width: min(400px, var(--pr-sub-w)); }
@@ -439,7 +439,7 @@ html.pr-dark .gt:is(.pr,.pr *) > img, html.pr-dark .cc-ph:is(.pr,.pr *) img { fi
   .hero-in:is(.pr,.pr *) { display: flex; flex-direction: column; min-height: 0; padding: 36px var(--pr-gut) 64px; }
   .hero-copy:is(.pr,.pr *) { display: contents; }
   .hero-h:is(.pr,.pr *) { order: 1; width: auto; max-width: none; }
-  .hero-media:is(.pr,.pr *) { order: 2; position: relative; inset: auto; height: clamp(380px, 100vw, 640px); margin: 28px calc(var(--pr-gut) * -1) 0; }
+  .hero-media:is(.pr,.pr *) { order: 2; position: relative; inset: auto; height: clamp(380px, 100cqw, 640px); margin: 28px calc(var(--pr-gut) * -1) 0; }
   .hero-sub:is(.pr,.pr *) { order: 3; margin-top: 40px; max-width: 520px; }
   .hero-back:is(.pr,.pr *) { top: 0; bottom: 18%; }
   .hero-inset:is(.pr,.pr *) { top: auto; bottom: 0; width: 42%; }
@@ -479,7 +479,7 @@ html.pr-dark .gt:is(.pr,.pr *) > img, html.pr-dark .cc-ph:is(.pr,.pr *) img { fi
   .hero-in:is(.pr,.pr *) { padding-top: 28px; }
   .hero-h:is(.pr,.pr *) .l1 { font-size: clamp(64px, 19vw, 96px); }
   .hero-h:is(.pr,.pr *) .l2 { font-size: clamp(28px, 7.6vw, 40px); }
-  .hero-media:is(.pr,.pr *) { height: clamp(360px, 108vw, 520px); }
+  .hero-media:is(.pr,.pr *) { height: clamp(360px, 108cqw, 520px); }
   .hero-inset:is(.pr,.pr *) { border-width: 6px; width: 44%; }
   .hero-words:is(.pr,.pr *) { bottom: 18px; }
   .ph-cap:is(.pr,.pr *) { font-size: 10px; padding: 4px 8px; }

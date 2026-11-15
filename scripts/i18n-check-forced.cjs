@@ -24,7 +24,7 @@
 // It prints each hit as "<width> <lang> <page>: "<text>" = <key>" and "TOTAL n". Deliver at 0.
 const fs = require("fs");
 const path = require("path");
-const PW = process.env.PW || "../kalio-marketplace/node_modules/playwright";
+const PW = process.env.PW || (() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../kalio-marketplace/node_modules/playwright"); } })();
 const { chromium } = require(PW);
 const [base0, WAIT = "footer", SHOTS = ""] = process.argv.slice(2);
 if (!base0 || !process.env.I18N) {

@@ -586,7 +586,17 @@ export default defineComponent({
     /* A way with windows always has one chosen (the mockup): the first,
        until the shopper picks another. */
     firstWindow() {
-      if (!this.transportation || !this.windowsOn || !this.timeItems.length) return;
+      if (!this.transportation) return;
+      /* A way without windows (shipping): no window is kept from the way before it, so neither the
+         receipt nor the order names one ("Worldwide shipping · Morning"). */
+      if (!this.windowsOn || !this.timeItems.length) {
+        if (this.deliveryInfo?.custom || this.deliveryInfo?.time_spans?.length) {
+          this.deliveryInfo.custom = false;
+          this.deliveryInfo.time_spans = [];
+          this.setBasketConfig();
+        }
+        return;
+      }
       const cur = this.deliveryInfo?.time_spans;
       if (this.deliveryInfo?.custom && cur?.length === 1 && this.transportation.time_spans.includes(cur[0])) return;
       const first = this.timeItems.find((x) => !x.props?.disabled);

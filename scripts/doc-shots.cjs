@@ -6,8 +6,8 @@
 "use strict";
 const path = require("path");
 const fs = require("fs");
-const { chromium } = require("../kalio-marketplace/node_modules/playwright");
-const sharp = require("../kalio-marketplace/node_modules/sharp");
+const { chromium } = require((() => { try { return require.resolve("playwright"); } catch { return require("path").resolve(__dirname, "../../kalio-marketplace/node_modules/playwright"); } })());
+const sharp = require((() => { try { return require.resolve("sharp"); } catch { return require("path").resolve(__dirname, "../../kalio-marketplace/node_modules/sharp"); } })());
 const base = (process.argv[2] || "https://pralino.selldone.shop").replace(/\/$/, "");
 const OUT = path.resolve(__dirname, "../docs/screenshots");
 fs.mkdirSync(OUT, { recursive: true });
@@ -114,10 +114,10 @@ async function shoot(phone, mode, jobs, after) {
       },
     ],
   ]);
-  // the cover: the desktop home and the phone home on Pralino's cream, side by side
+  // the cover: the desktop home and the phone home on the Tan family's plate tint, side by side
   const desk = await sharp(path.join(OUT, "desktop-home.jpg")).resize(1760, 1100).toBuffer();
   const ph = await sharp(path.join(OUT, "phone-home.jpg")).resize(476, 1030).toBuffer();
-  await sharp({ create: { width: 2400, height: 1260, channels: 3, background: "#f3e9de" } })
+  await sharp({ create: { width: 2400, height: 1260, channels: 3, background: "#fdf2e7" } })
     .composite([{ input: desk, left: 70, top: 80 }, { input: ph, left: 1880, top: 115 }])
     .jpeg({ quality: 84 })
     .toFile(path.join(OUT, "cover.jpg"));
