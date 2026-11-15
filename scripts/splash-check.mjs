@@ -118,7 +118,16 @@ if (MODE === "dev") {
   const PORT = Number(process.env.PORT || 9152);
   const BASE = `http://localhost:${PORT}`;
   const MIME = { ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp", ".woff2": "font/woff2", ".json": "application/json" };
-  let html = await (await fetch(`${SHOP}/?pralino-splash-check=${Date.now()}`, { headers: { Accept: "text/html" } })).text();
+  let html = "";
+  for (let attempt = 1; !html; attempt++) {
+    try {
+      html = await (await fetch(`${SHOP}/?pralino-splash-check=${Date.now()}`, { headers: { Accept: "text/html" } })).text();
+    } catch (e) {
+      if (attempt === 4) throw e;
+      console.log(`(the storefront HTML did not come: ${e.cause?.code || e.message}; again in ${attempt * 5}s)`);
+      await sleep(attempt * 5000);
+    }
+  }
   const before = html;
   html = html
     .replace(/https?:\\\/\\\/[^"]*?\\\/layouts\\\/\d+\\\/releases\\\/[0-9A-Za-z]{26}\\\/app\\\/shop\.(js|css)/g, (_m, ext) => `http:\\/\\/localhost:${PORT}\\/__pralino\\/app\\/shop.${ext}`)
