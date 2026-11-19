@@ -54,6 +54,8 @@ for (const W of WIDTHS) {
     } catch {}
   }, MODE);
   const page = await ctx.newPage();
+  /* no step may wait forever: fail it and say where */
+  page.setDefaultTimeout(60000);
   const errors = [];
   const blocked = [];
   page.on("pageerror", (e) => errors.push(String(e).slice(0, 240)));
@@ -271,6 +273,47 @@ for (const W of WIDTHS) {
       else await page.keyboard.press("Escape");
       await page.waitForSelector(".s--storefront-master-payment-dialog .v-card", { state: "hidden", timeout: 10000 }).catch(() => bad(W, "the payment window did not close with its ✕"));
       await sleep(1500);
+    }
+
+    // ── the detour (19 Nov 2026): pickup, then back to a delivery way. The buyer's address must still be on the
+    //    card and Place order must open the payment window (before 1.0.13 the address was gone and Place order
+    //    opened the address sheet instead).
+    const pk = wayInfo.find((w) => w.pickup);
+    if (pk && home) {
+      for (const w of [pk, home]) {
+        await ways().nth(w.i).scrollIntoViewIfNeeded();
+        await ways().nth(w.i).click();
+        await sleep(3500);
+      }
+      const chip = page.locator("#co-delivery .wins .wchip:not([disabled])").first();
+      if ((await chip.count()) && !(await page.locator("#co-delivery .wins .wchip[aria-checked='true']").count())) {
+        await chip.click();
+        await sleep(2500);
+      }
+      const addr = await page.evaluate(() => (document.querySelector("#co-address .addr-card")?.textContent || "").replace(/\s+/g, " ").trim());
+      console.log(`  detour "${pk.name}" → "${home.name}": address card "${addr || "(none)"}"`);
+      if (!addr) bad(W, `after "${pk.name}" and back to "${home.name}" the delivery address is gone`);
+      const place = page.locator("#co-pay button.place");
+      if (await place.count()) {
+        await place.scrollIntoViewIfNeeded();
+        await place.click();
+        const opened = await page
+          .waitForSelector(".s--storefront-master-payment-dialog .v-card", { state: "visible", timeout: 20000 })
+          .then(() => true)
+          .catch(() => false);
+        if (!opened) {
+          bad(W, `after the detour, Place order on "${home.name}" did not open the payment window`);
+          await shot("12-detour-noplace", true);
+        } else {
+          console.log(`  detour: Place order on "${home.name}" → payment window`);
+          await shot("12-detour-payment");
+          const x = page.locator(".s--storefront-master-payment-dialog .v-toolbar .v-btn").last();
+          if (await x.count()) await x.click();
+          else await page.keyboard.press("Escape");
+          await page.waitForSelector(".s--storefront-master-payment-dialog .v-card", { state: "hidden", timeout: 10000 }).catch(() => bad(W, "the payment window did not close with its ✕"));
+          await sleep(1500);
+        }
+      } else bad(W, `after the detour: no Place order button`);
     }
   } catch (e) {
     bad(W, "walk stopped: " + e.message.split("\n")[0]);

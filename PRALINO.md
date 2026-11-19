@@ -88,6 +88,7 @@ Uploads: `bash "../new-shop-kits/upload-guard.sh" env LAYOUT_ID=42 SELLDONE_CLI_
 
 | Version | Date | Layout | Deploy | What |
 | --- | --- | --- | --- | --- |
+| 1.0.13 | 19 Nov 2026 | 42 | 763 | Checkout: the buyer's delivery address comes back after a detour through pickup (before, the courier, then pickup, then the courier again left an empty address, and Place order opened the address sheet instead of the payment window). Same change as layout-base da6d73f. Packed with `scripts/package-layout.mjs` (a Node port of Selldone's packager) on a computer without Python; PROD-CHECK OK; server js/css match. Pinned on pralino.selldone.shop (1252) only. The walk (`scripts/pralino-checkout-walk.mjs`) now ends with the detour: pickup, then back to the courier, Place order must open the payment window. |
 | 1.0.12 | 16 Nov 2026 | 42 | 686 (release `01M7HHHHMHN3ETYPVX43P879KZ`) | Compare labels as tall as their row, so a long value scrolled under a one-line label never shows below it. Pinned on 1252 |
 | 1.0.11 | 16 Nov 2026 | 42 | 685 | Compare while scrolled: the sticky labels mask the column gap (`box-shadow`, mirrored for RTL), each group heading stays at the start |
 | 1.0.10 | 16 Nov 2026 | 42 | 683 | **Sage is the default palette** (the owner: green, so Pralino differs from Domino's brown; Codex had already listed Pralino as official layout 13 with sage, built as 1.0.8). Carries the 1.0.9 compare fix. The domain loader turned sage too |

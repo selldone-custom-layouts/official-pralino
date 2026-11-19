@@ -47,7 +47,13 @@ echo "java-mime:$J shop.js-imports:$S files:$N (Pralino: at most 300)"
 node --use-system-ca scripts/pralino-prod-check.mjs dist/app || { echo "PROD-CHECK FAILED: not uploading"; exit 1; }
 
 # 6. Package (always --force, or an old dist.zip is kept) and prove the ZIP is this build.
-python "$PACKAGER" dist dist.zip --manifest manifest.json --force
+# Without a working Python (Windows' "python" alias only opens the Store), the Node port of the same packager
+# and validator (scripts/package-layout.mjs, jszip) builds the same archive.
+if python --version >/dev/null 2>&1; then
+  python "$PACKAGER" dist dist.zip --manifest manifest.json --force
+else
+  node scripts/package-layout.mjs dist dist.zip --manifest manifest.json --force
+fi
 unzip -p dist.zip app/shop.js | cmp - dist/app/shop.js && echo "zip matches dist"
 
 # 7. Upload, then check on the server, not by exit code.
