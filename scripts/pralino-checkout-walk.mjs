@@ -263,9 +263,11 @@ for (const W of WIDTHS) {
       });
       console.log(`  way "${w.name}": "${label}" → payment window [${pay.box}]${pay.over ? " SIDE-SCROLL" : ""}: ${pay.text}`);
       if (pay.box[2] > W + 1 || pay.box[0] < -1) bad(W, `payment window is off the screen: ${pay.box}`);
-      /* the button's total and the payment window's total are the same bill (a stale bill shows a different one) */
-      const btnTotal = (label.match(/$[d.,]+/) || [])[0];
-      const payTotal = (pay.text.match(/TOTAL PAYMENTs*($[d.,]+)/i) || [])[1];
+      /* the button's total (read now, the bill settled) and the payment window's total are the same bill (a stale
+         bill shows a different one; this regex was broken until 1.0.14 and never compared anything) */
+      const nowLabel = ((await place.textContent()) || "").replace(/\s+/g, " ").trim();
+      const btnTotal = (nowLabel.match(/\$[\d.,]+/) || [])[0];
+      const payTotal = (pay.text.match(/TOTAL PAYMENT\s*(\$[\d.,]+)/i) || [])[1];
       if (btnTotal && payTotal && btnTotal !== payTotal) bad(W, `way "${w.name}": the button says ${btnTotal}, the payment window ${payTotal}`);
       await shot(`10-payment-${slug(w.name)}`);
       const x = page.locator(".s--storefront-master-payment-dialog .v-toolbar .v-btn").last();
