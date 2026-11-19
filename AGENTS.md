@@ -26,7 +26,7 @@ When a merchant asks for a theme ("use the rose theme", "my brand colour is #F5C
 
 | Setting | Allowed values |
 | --- | --- |
-| `palette` | `"tan"` (the brand; the default), `"rose"`, `"sage"`, `"slate"`, `"ink"` |
+| `palette` | `"sage"` (the default since 1.0.9), `"tan"` (the original brand), `"rose"`, `"slate"`, `"ink"` |
 | `brandColor` | any `"#RRGGBB"`; when set it replaces `palette` (the whole page takes this colour's family) |
 | `mode` | `"light"` (white and the soft tint; the default) or `"dark"` (the family's night) |
 | `themeSwitcher` | `"showcase"` (the visitor switcher shows only on the Layout's own showcase shop, Bakio 15740; the default), `"on"` (the merchant's visitors get the Theme row in the footer), `"off"` |
@@ -39,7 +39,7 @@ Worked examples (change only these lines; leave the rest of the file as it is):
 - **"Make it dark"**: `mode: "dark"`.
 - **"Let visitors switch themes"**: `themeSwitcher: "on"`.
 - **"Remove the switcher"**: `themeSwitcher: "off"`. On a merchant's own shop it is already hidden with `"showcase"`.
-- **"Go back to the original colours"**: remove `brandColor` and set `palette: "tan", mode: "light"`.
+- **"Go back to the original colours"**: remove `brandColor` and set `palette: "sage", mode: "light"`.
 
 The switcher itself is the shared package in `components/theme-switcher/` (the same code as every other Layout; see its PORTING.md in the kit). Pralino's palettes are in `components/pralino/pralino-theme.ts`, the family that paints every ground from the palette in `components/pralino/pralino-family.ts`, and the Tan defaults for both modes (and the shape scale: circle, 8 px panels, 4 px inner parts) in `style/pralino-theme.scss`; do not edit them for a merchant's theme.
 

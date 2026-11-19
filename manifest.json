@@ -3,8 +3,8 @@
   "deploy_path": "",
   "package": "pralino-classic-patisserie",
   "name": "Pralino Classic Patisserie",
-  "version": "1.0.7",
+  "version": "1.0.12",
   "storefront": true,
   "backoffice": false,
-  "description": "A classic, editorial pâtisserie for a single bakery: white and soft-tint bands, near-black ink and a tan accent, Cormorant Garamond over Mulish, and big photography. A white header with the shop's name as a centred serif wordmark; a hero with the counter photo bleeding to the edge, a framed inset across the seam and the most-ordered collections on its dark corner; the shop in numbers and its story; the four best-selling collections as photo rows; how ordering works; an offer card beside the ways to receive an order; a gallery of the collections; today's selection as numbered rows; a full-width photo band; a marquee of the collections and the journal. One colour family follows the chosen palette (Tan, Rose, Sage, Slate, Ink or any custom colour), one small-radius shape language, light by default with a dark mode, all from the footer's Theme row."
+  "description": "A classic, editorial pâtisserie for a single bakery: white and soft-tint bands, near-black ink and a sage green accent, Cormorant Garamond over Mulish, and big photography. A white header with the shop's name as a centred serif wordmark; a hero with the counter photo bleeding to the edge, a framed inset across the seam and the most-ordered collections on its dark corner; the shop in numbers and its story; the four best-selling collections as photo rows; how ordering works; an offer card beside the ways to receive an order; a gallery of the collections; today's selection as numbered rows; a full-width photo band; a marquee of the collections and the journal. One colour family follows the chosen palette (Tan, Rose, Sage, Slate, Ink or any custom colour), one small-radius shape language, light by default with a dark mode, all from the footer's Theme row."
 }

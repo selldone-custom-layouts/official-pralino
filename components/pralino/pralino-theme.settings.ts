@@ -5,7 +5,7 @@
  * shop that does not show the visitor switcher (see themeSwitcher) they are the only theme. After a
  * change: build and upload (bash scripts/release.sh <new-version> desk), see AGENTS.md "Theme".
  *
- * palette        one of: "tan" (the brand, the default), "rose", "sage", "slate", "ink"
+ * palette        one of: "sage" (the default), "tan", "rose", "slate", "ink"
  * brandColor     any colour, "#RRGGBB"; when set it replaces `palette` (the whole page — bands, plates,
  *                lines, words, the dark bars — takes this colour's family, and its buttons and links are
  *                made readable automatically, in light and dark)
@@ -18,7 +18,7 @@
 import type { ThemeSettings } from "../theme-switcher/theme-switcher";
 
 export const THEME_SETTINGS: ThemeSettings = {
-  palette: "tan",
+  palette: "sage", // the owner (16 Nov 2026): green, so Pralino differs from Domino's brown
   // brandColor: "#F5C400",
   mode: "light",
   themeSwitcher: "showcase",

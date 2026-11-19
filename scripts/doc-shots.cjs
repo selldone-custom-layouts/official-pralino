@@ -54,7 +54,7 @@ async function shoot(phone, mode, jobs, after) {
   });
   await ctx.addInitScript((m) => {
     try {
-      localStorage.setItem("pralino-theme", JSON.stringify({ palette: "tan", mode: m }));
+      localStorage.setItem("pralino-theme", JSON.stringify({ palette: "sage", mode: m }));
     } catch (e) {}
   }, mode);
   const pg = await ctx.newPage();
@@ -114,10 +114,10 @@ async function shoot(phone, mode, jobs, after) {
       },
     ],
   ]);
-  // the cover: the desktop home and the phone home on the Tan family's plate tint, side by side
+  // the cover: the desktop home and the phone home on the Sage family's plate tint (the default palette since 1.0.9), side by side
   const desk = await sharp(path.join(OUT, "desktop-home.jpg")).resize(1760, 1100).toBuffer();
   const ph = await sharp(path.join(OUT, "phone-home.jpg")).resize(476, 1030).toBuffer();
-  await sharp({ create: { width: 2400, height: 1260, channels: 3, background: "#fdf2e7" } })
+  await sharp({ create: { width: 2400, height: 1260, channels: 3, background: "#eef7ec" } })
     .composite([{ input: desk, left: 70, top: 80 }, { input: ph, left: 1880, top: 115 }])
     .jpeg({ quality: 84 })
     .toFile(path.join(OUT, "cover.jpg"));

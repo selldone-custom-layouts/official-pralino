@@ -37,7 +37,7 @@
 - **one shape language**: circles for round things (the −% roundel, icon buttons, the mark), 8 px panels and photos, 4 px inner parts (buttons, chips, fields, plates); square only where a band meets the window's edge;
 - big photography in every section (the shop's own photos, with drawn or cut-out fallbacks), faint line drawings of pastries in the title bands;
 - flat buttons, hover changes the colour only, no line under any word or icon, selection rings inside the box;
-- light by default, with a dark mode in the same family; a **Theme** row in the footer on the showcase shop: five palettes (Tan, Rose, Sage, Slate, Ink), a **Custom colour** and Light / Dark;
+- light by default, with a dark mode in the same family; a **Theme** row in the footer on the showcase shop: five palettes (Sage by default, Tan, Rose, Slate, Ink), a **Custom colour** and Light / Dark;
 - it says **bag**, never cart; every word it writes is in English and Arabic (right to left).
 
 It runs on **[pralino.selldone.shop](https://pralino.selldone.shop)**, one domain of the Selldone shop Bakio (Selldone lets each domain of a shop carry its own Layout; the shop's default and its other domains keep theirs).

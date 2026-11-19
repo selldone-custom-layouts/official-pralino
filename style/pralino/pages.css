@@ -548,9 +548,22 @@ html.pr-dark .tri.photo:is(.pr,.pr *) img { filter: brightness(.84) saturate(.95
 .cmp-s:is(.pr,.pr *) { padding-top: 26px; }
 .cmp-bar:is(.pr,.pr *) { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 20px; margin-bottom: 18px; }
 .cmp-sw:is(.pr,.pr *) { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14.5px; }
-.cmp-row:is(.pr,.pr *) { display: grid; grid-template-columns: 200px repeat(var(--pr-n), minmax(0, 1fr)); gap: 0 14px; }
+/* A product column is never narrower than 244 px, so its running text (the "why" lines) stays at least 240 px wide
+   (text-column rule); the label column gives way first (200 → 140 px). When four still don't fit (a 1024 px window),
+   the heads and the rows scroll sideways together and the labels stay put. */
+.cmp-row:is(.pr,.pr *) { --pr-lab: 200px; --pr-lab-min: 140px; display: grid; grid-template-columns: minmax(var(--pr-lab-min), var(--pr-lab)) repeat(var(--pr-n), minmax(244px, 1fr)); gap: 0 14px; min-width: calc(var(--pr-lab-min) + var(--pr-n) * (244px + 14px)); }
+.cmp-heads:is(.pr,.pr *), .cmp-body:is(.pr,.pr *) { overflow-x: auto; scrollbar-width: none; }
+.cmp-heads:is(.pr,.pr *)::-webkit-scrollbar, .cmp-body:is(.pr,.pr *)::-webkit-scrollbar { display: none; }
+/* while the table is scrolled, the labels cover the column gap too (the text sliding under them never shows beside a
+   label) and each group's heading stays at the start */
+.cmp-row:is(.pr,.pr *) > .cl.lab { position: sticky; inset-inline-start: 0; z-index: 1; background: var(--pr-bg); box-shadow: 14px 0 0 var(--pr-bg); }
+.cmp-row:is(.pr,.pr *) > .cl.lab:dir(rtl) { box-shadow: -14px 0 0 var(--pr-bg); }
+/* a label as tall as its row, so a long value scrolled under it never shows below a one-line label */
+.cmp-body:is(.pr,.pr *) .cmp-row > .cl.lab { align-self: stretch; align-items: flex-start; }
+.cmp-body:is(.pr,.pr *) .cl.lab .dot { margin-top: calc((1.5em - 8px) / 2); }
+.cmp-gh:is(.pr,.pr *) { position: sticky; inset-inline-start: 0; width: max-content; max-width: 100%; }
 .cmp-heads:is(.pr,.pr *) { position: sticky; top: var(--pr-hdr-h); z-index: 6; background: var(--pr-bg); padding-block: 12px; }
-.cmp-row.hd:is(.pr,.pr *) { grid-template-columns: 200px repeat(var(--pr-n), minmax(0, 1fr)); align-items: stretch; }
+.cmp-row.hd:is(.pr,.pr *) { align-items: stretch; }
 .cmp-row.hd:is(.pr,.pr *) > .cl { display: flex; }
 .cl.lab:is(.pr,.pr *) { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--pr-muted); }
 .cmp-row.hd:is(.pr,.pr *) .cl.lab { flex-direction: column; align-items: flex-start; justify-content: flex-end; padding-bottom: 12px; }
@@ -586,9 +599,11 @@ html.pr-dark .tri.photo:is(.pr,.pr *) img { filter: brightness(.84) saturate(.95
 .all-k:is(.pr,.pr *) { color: var(--pr-muted); }
 .only-diff:is(.pr,.pr *) [data-same] { display: none; }
 .why-l:is(.pr,.pr *) { display: grid; gap: 6px; }
-.why-l:is(.pr,.pr *) li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; line-height: 1.5; }
+/* the tick floats beside the first line, so the text runs the cell's full width */
+.why-l:is(.pr,.pr *) li { display: flow-root; line-height: 1.5; }
+.why-l:is(.pr,.pr *) li > span:not(.ck) { display: block; }
 .why-l:is(.pr,.pr *) b { font-weight: 600; display: block; }
-.why-l:is(.pr,.pr *) .ck { margin-top: 2px; }
+.why-l:is(.pr,.pr *) .ck { float: inline-start; margin-top: 2px; margin-inline-end: 8px; }
 .nr:is(.pr,.pr *) { display: inline-flex; align-items: center; gap: 6px; color: var(--pr-muted); }
 .nr:is(.pr,.pr *) .i { width: 16px; height: 16px; }
 .cmp-share:is(.pr,.pr *) { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 14px; align-items: center; margin-top: 40px; padding: 20px 24px; background: var(--pr-surface); border-radius: var(--pr-r-card); }
@@ -622,7 +637,7 @@ select.inp:is(.pr,.pr *) { -webkit-appearance: none; appearance: none; backgroun
   .bt-sum:is(.pr,.pr *) { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
   .bt-sum:is(.pr,.pr *) .btn { margin-inline-start: auto; }
   .bt-sv:is(.pr,.pr *) { margin: 0; }
-  .cmp-row:is(.pr,.pr *), .cmp-row.hd:is(.pr,.pr *) { grid-template-columns: 150px repeat(var(--pr-n), minmax(0, 1fr)); }
+  .cmp-row:is(.pr,.pr *) { --pr-lab: 150px; --pr-lab-min: 120px; }
 }
 @media (max-width: 979px) {
   .pd-in:is(.pr,.pr *) { grid-template-columns: 1fr; }
@@ -635,7 +650,7 @@ select.inp:is(.pr,.pr *) { -webkit-appearance: none; appearance: none; backgroun
   /* compare: heads and rows scroll sideways together, labels ride along */
   .cmp-heads:is(.pr,.pr *), .cmp-body:is(.pr,.pr *) { overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--pr-gut) * -1); padding-inline: var(--pr-gut); }
   .cmp-heads:is(.pr,.pr *)::-webkit-scrollbar, .cmp-body:is(.pr,.pr *)::-webkit-scrollbar { display: none; }
-  .cmp-row:is(.pr,.pr *), .cmp-row.hd:is(.pr,.pr *) { grid-template-columns: repeat(var(--pr-n), 168px); width: max-content; }
+  .cmp-row:is(.pr,.pr *), .cmp-row.hd:is(.pr,.pr *) { grid-template-columns: repeat(var(--pr-n), 168px); width: max-content; min-width: 0; }
   .cmp-row:is(.pr,.pr *) > .cl.lab { grid-column: 1 / -1; position: sticky; inset-inline-start: 0; width: max-content; max-width: calc(100vw - 2 * var(--pr-gut)); }
   .cmp-row.hd:is(.pr,.pr *) > .cl.lab { display: none; }
   .cmp-body:is(.pr,.pr *) .cmp-row { row-gap: 6px; }

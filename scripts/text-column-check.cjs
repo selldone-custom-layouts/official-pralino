@@ -36,8 +36,11 @@ function audit([MIN, wide]) {
      text is laid out but not seen */
   const clipped = (el, q) => {
     let L = q.left, R = q.right, T = q.top, B = q.bottom;
-    for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+    /* from the element itself: its own overflow and a screen-reader-only clip (`.sr`: 1 px, clip: rect(0 0 0 0)) hide
+       its words too (Pralino 1.0.12: "(differs)" inside a sticky label was read as drawn over the label) */
+    for (let p = el; p && p !== document.body; p = p.parentElement) {
       const cs = getComputedStyle(p);
+      if (cs.position === "absolute" && /rect(0(px)?,? 0(px)?,? 0(px)?,? 0(px)?)/.test(cs.clip)) return null;
       if (/(hidden|clip|auto|scroll)/.test(cs.overflowX + cs.overflowY)) {
         const b = p.getBoundingClientRect();
         L = Math.max(L, b.left); R = Math.min(R, b.right); T = Math.max(T, b.top); B = Math.min(B, b.bottom);

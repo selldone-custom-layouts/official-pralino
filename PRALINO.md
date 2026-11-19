@@ -88,5 +88,11 @@ Uploads: `bash "../new-shop-kits/upload-guard.sh" env LAYOUT_ID=42 SELLDONE_CLI_
 
 | Version | Date | Layout | Deploy | What |
 | --- | --- | --- | --- | --- |
+| 1.0.12 | 16 Nov 2026 | 42 | 686 (release `01M7HHHHMHN3ETYPVX43P879KZ`) | Compare labels as tall as their row, so a long value scrolled under a one-line label never shows below it. Pinned on 1252 |
+| 1.0.11 | 16 Nov 2026 | 42 | 685 | Compare while scrolled: the sticky labels mask the column gap (`box-shadow`, mirrored for RTL), each group heading stays at the start |
+| 1.0.10 | 16 Nov 2026 | 42 | 683 | **Sage is the default palette** (the owner: green, so Pralino differs from Domino's brown; Codex had already listed Pralino as official layout 13 with sage, built as 1.0.8). Carries the 1.0.9 compare fix. The domain loader turned sage too |
+| 1.0.9 | 16 Nov 2026 | 42 | 682 | Compare: a product column never under 244 px, so the "why" text stays at least 240 px wide (the fast runner found 155 px at 1024); the label column gives way 200 → 140 px, then heads and rows scroll sideways together with sticky labels; the tick floats beside the text. Tan; superseded by 1.0.10 the same morning |
+| 1.0.8 | 15 Nov 2026 | 42 | 674 | Built by Codex for Selldone's official Layouts list (sage palette). Not pinned on 1252; the official listing points at it |
+| 1.0.7 | 15 Nov 2026 | 42 | 670 | http:// visitors moved to https:// first thing (`kalio-https.ts`) |
 | 1.0.1 | 15 Nov 2026 | 42 | 665 (release `01M7FH1DAVTTJSQD9T292STEF0`) | No half-made facts on first paint ("Open 0 days a week"); one 1920 px page frame, nothing sized from the window (the zoom-out bug), the wrap growing to 1600 px; the in-app splash; a window kept from another way cleared. 283 files. Dev checks for these fixes at 0, bundle check OK, splash checks at 0; verified on the server (`extracting:false`, `error:null`, shop.js and shop.css match). The coordinator pins it |
 | 1.0.0 | 15 Nov 2026 | 42 | 664 (release `01M7F0PA2A9CJDRR8NVXB3SB76`) | First upload: every page in the A mockups on Selldone's real flows, one colour family, one shape language, Arabic mirrored. 281 files. 49 dev checks TOTAL 0; production-bundle check OK before upload; verified on the server (`extracting:false`, `error:null`, shop.js and shop.css match). Pinned on pralino.selldone.shop (domain 1252) by the coordinator |
